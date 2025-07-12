@@ -10,7 +10,10 @@
     "titlePlaceholder": "Краткое описание дня...",
     "contentLabel": "Содержание",
     "contentPlaceholder": "Расскажите о своем дне, мыслях, чувствах...",
-    "saveButton": "Сохранить и проанализировать",
+    "saveButton": "Сохранить",
+    "savingButton": "Сохранение...",
+    "saveSuccess": "Запись успешно сохранена!",
+    "saveError": "Не удалось сохранить запись. Попробуйте еще раз.",
     "voiceRecording": {
       "startButton": "Начать запись",
       "stopButton": "Остановить запись",

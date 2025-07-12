@@ -1,9 +1,22 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useCallback,
+  useEffect,
+} from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, CheckCircle, AlertTriangle, Info } from 'lucide-react';
-import { useAlert } from '@/hooks/use-alert';
+import { AlertCircle, CheckCircle, AlertTriangle, Info, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+interface AlertState {
+  message: string | null;
+  type: 'error' | 'success' | 'warning' | 'info';
+  isVisible: boolean;
+}
 
 interface AlertContextType {
   showError: (message: string) => void;
@@ -29,15 +42,66 @@ interface AlertProviderProps {
 }
 
 export function AlertProvider({ children }: AlertProviderProps) {
-  const {
-    alert,
-    showError,
-    showSuccess,
-    showWarning,
-    showInfo,
-    hideAlert,
-    clearAlert,
-  } = useAlert();
+  const [alert, setAlert] = useState<AlertState>({
+    message: null,
+    type: 'error',
+    isVisible: false,
+  });
+
+  const hideAlert = useCallback(() => {
+    setAlert(prev => ({ ...prev, isVisible: false }));
+  }, []);
+
+  // Автоматическое скрытие алертов через 5 секунд
+  useEffect(() => {
+    if (alert.isVisible && alert.message) {
+      const timer = setTimeout(() => {
+        hideAlert();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alert.isVisible, alert.message, hideAlert]);
+
+  const showError = useCallback((message: string) => {
+    setAlert({
+      message,
+      type: 'error',
+      isVisible: true,
+    });
+  }, []);
+
+  const showSuccess = useCallback((message: string) => {
+    setAlert({
+      message,
+      type: 'success',
+      isVisible: true,
+    });
+  }, []);
+
+  const showWarning = useCallback((message: string) => {
+    setAlert({
+      message,
+      type: 'warning',
+      isVisible: true,
+    });
+  }, []);
+
+  const showInfo = useCallback((message: string) => {
+    setAlert({
+      message,
+      type: 'info',
+      isVisible: true,
+    });
+  }, []);
+
+  const clearAlert = useCallback(() => {
+    setAlert({
+      message: null,
+      type: 'error',
+      isVisible: false,
+    });
+  }, []);
 
   const getAlertIcon = () => {
     switch (alert.type) {
@@ -59,11 +123,11 @@ export function AlertProvider({ children }: AlertProviderProps) {
       case 'error':
         return 'destructive';
       case 'success':
-        return 'default';
+        return 'success';
       case 'warning':
-        return 'default';
+        return 'warning';
       case 'info':
-        return 'default';
+        return 'info';
       default:
         return 'default';
     }
@@ -71,13 +135,17 @@ export function AlertProvider({ children }: AlertProviderProps) {
 
   const getAlertClassName = () => {
     const baseClasses =
-      'fixed top-4 right-4 z-50 max-w-sm transition-all duration-300';
+      'fixed top-4 right-4 z-[9999] max-w-sm transition-all duration-300 ease-in-out shadow-lg rounded-lg';
 
     if (alert.isVisible) {
       return `${baseClasses} opacity-100 translate-y-0`;
     } else {
       return `${baseClasses} opacity-0 -translate-y-2 pointer-events-none`;
     }
+  };
+
+  const handleClose = () => {
+    hideAlert();
   };
 
   return (
@@ -95,9 +163,22 @@ export function AlertProvider({ children }: AlertProviderProps) {
 
       <div className={getAlertClassName()}>
         {alert.message && (
-          <Alert variant={getAlertVariant() as 'default' | 'destructive'}>
+          <Alert
+            variant={getAlertVariant() as 'default' | 'destructive'}
+            className="relative"
+          >
             {getAlertIcon()}
-            <AlertDescription>{alert.message}</AlertDescription>
+            <AlertDescription className="pr-8">
+              {alert.message}
+            </AlertDescription>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClose}
+              className="absolute top-2 right-2 h-6 w-6 p-0 hover:bg-background/80"
+            >
+              <X className="h-3 w-3" />
+            </Button>
           </Alert>
         )}
       </div>

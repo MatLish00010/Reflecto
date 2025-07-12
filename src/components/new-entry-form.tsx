@@ -5,17 +5,53 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { AudioInputTabs } from '@/components/audio-input-tabs';
 import { useTranslation } from '@/contexts/translation-context';
+import { useUserContext } from '@/contexts/user-context';
+import { useAlertContext } from '@/components/alert-provider';
 
 export function NewEntryForm() {
   const [content, setContent] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
   const { t } = useTranslation();
+  const { user } = useUserContext();
+  const { showSuccess, showError } = useAlertContext();
 
   const handleRecordingComplete = (text: string) => {
     setContent(prev => prev + (prev ? '\n' : '') + text);
   };
 
-  const handleSave = () => {
-    console.log('Saving entry:', { content });
+  const handleSave = async () => {
+    if (!user || !content.trim()) return;
+
+    setIsSaving(true);
+    try {
+      const response = await fetch('/api/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          note: content.trim(),
+          userId: user.id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save note');
+      }
+
+      const { note } = await response.json();
+      console.log('Note saved successfully:', note);
+
+      // Clear the form after successful save
+      setContent('');
+      showSuccess(t('newEntry.saveSuccess'));
+    } catch (error) {
+      console.error('Error saving note:', error);
+      showError(t('newEntry.saveError'));
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -38,9 +74,9 @@ export function NewEntryForm() {
       <Button
         onClick={handleSave}
         className="w-full"
-        disabled={!content.trim()}
+        disabled={!content.trim() || !user || isSaving}
       >
-        {t('newEntry.saveButton')}
+        {isSaving ? t('newEntry.savingButton') : t('newEntry.saveButton')}
       </Button>
     </div>
   );

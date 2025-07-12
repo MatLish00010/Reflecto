@@ -10,7 +10,10 @@
     "titlePlaceholder": "Brief description of the day...",
     "contentLabel": "Content",
     "contentPlaceholder": "Tell about your day, thoughts, feelings...",
-    "saveButton": "Save and Analyze",
+    "saveButton": "Save",
+    "savingButton": "Saving...",
+    "saveSuccess": "Note saved successfully!",
+    "saveError": "Failed to save note. Please try again.",
     "voiceRecording": {
       "startButton": "Start Recording",
       "stopButton": "Stop Recording",
