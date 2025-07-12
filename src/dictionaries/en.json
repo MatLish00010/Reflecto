@@ -53,5 +53,14 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "user": {
+    "loading": "Loading user information...",
+    "error": "Error loading user",
+    "notFound": "User not found",
+    "info": "User Information",
+    "id": "User ID",
+    "fingerprint": "Browser Fingerprint",
+    "createdAt": "Created At"
   }
 }

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { AlertProvider } from '@/components/alert-provider';
 import { TranslationProvider } from '@/contexts/translation-context';
+import { UserProvider } from '@/contexts/user-context';
 import { PageHeader } from '@/components/page-header';
 import { getDictionary } from '@/dictionaries';
 
@@ -58,14 +59,16 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider dict={dict}>
-            <AlertProvider>
-              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-                <div className="max-w-4xl mx-auto">
-                  <PageHeader />
-                  {children}
+            <UserProvider>
+              <AlertProvider>
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+                  <div className="max-w-4xl mx-auto">
+                    <PageHeader />
+                    {children}
+                  </div>
                 </div>
-              </div>
-            </AlertProvider>
+              </AlertProvider>
+            </UserProvider>
           </TranslationProvider>
         </ThemeProvider>
       </body>
