@@ -1,0 +1,25 @@
+{
+  "app": {
+    "title": "AI Diary",
+    "description": "Write down your thoughts and get AI analysis"
+  },
+  "newEntry": {
+    "title": "New Entry",
+    "description": "Describe your day, thoughts or events",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Brief description of the day...",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Tell about your day, thoughts, feelings...",
+    "saveButton": "Save and Analyze"
+  },
+  "aiAnalysis": {
+    "title": "AI Analysis",
+    "description": "Artificial intelligence will analyze your entries",
+    "emptyState": "Create your first entry to get AI analysis"
+  },
+  "history": {
+    "title": "Entry History",
+    "description": "Your previous entries and analyses",
+    "emptyState": "Your entries will be displayed here"
+  }
+} 

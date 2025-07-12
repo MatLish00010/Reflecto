@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { getDictionary } from "@/dictionaries";
 
-import "./globals.css";
+import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,18 +15,35 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "AI Дневник",
-  description: "Записывайте свои мысли и получайте AI-анализ",
-};
+export async function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'ru' }]
+}
 
-export default function RootLayout({
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: 'en' | 'ru' }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const dict = await getDictionary(lang)
+  
+  return {
+    title: dict.app.title,
+    description: dict.app.description,
+  }
+}
+
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
+  params: Promise<{ lang: 'en' | 'ru' }>
 }>) {
+  const { lang } = await params
+  
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -40,4 +58,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+} 
