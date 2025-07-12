@@ -10,7 +10,14 @@
     "titlePlaceholder": "Краткое описание дня...",
     "contentLabel": "Содержание",
     "contentPlaceholder": "Расскажите о своем дне, мыслях, чувствах...",
-    "saveButton": "Сохранить и проанализировать"
+    "saveButton": "Сохранить и проанализировать",
+    "voiceRecording": {
+      "startButton": "Начать запись",
+      "stopButton": "Остановить запись",
+      "recordingIndicator": "Идет запись...",
+      "processingText": "Обработка аудио...",
+      "errorMessage": "Ошибка при распознавании речи. Попробуйте еще раз."
+    }
   },
   "aiAnalysis": {
     "title": "AI Анализ",

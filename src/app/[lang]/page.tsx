@@ -1,18 +1,22 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
+import { NewEntryForm } from "@/components/new-entry-form";
 import { getDictionary } from "@/dictionaries";
 
 export default async function Home({
   params,
 }: {
-  params: Promise<{ lang: 'en' | 'ru' }>
+  params: Promise<{ lang: "en" | "ru" }>;
 }) {
-  const { lang } = await params
-  const dict = await getDictionary(lang)
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
@@ -34,43 +38,22 @@ export default async function Home({
           <Card>
             <CardHeader>
               <CardTitle>{dict.newEntry.title}</CardTitle>
-              <CardDescription>
-                {dict.newEntry.description}
-              </CardDescription>
+              <CardDescription>{dict.newEntry.description}</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label htmlFor="title" className="block text-sm font-medium mb-2">
-                  {dict.newEntry.titleLabel}
-                </label>
-                <Input
-                  id="title"
-                  placeholder={dict.newEntry.titlePlaceholder}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <label htmlFor="content" className="block text-sm font-medium mb-2">
-                  {dict.newEntry.contentLabel}
-                </label>
-                <Textarea
-                  id="content"
-                  placeholder={dict.newEntry.contentPlaceholder}
-                  className="min-h-[200px]"
-                />
-              </div>
-              <Button className="w-full">
-                {dict.newEntry.saveButton}
-              </Button>
+            <CardContent>
+              <NewEntryForm
+                contentLabel={dict.newEntry.contentLabel}
+                contentPlaceholder={dict.newEntry.contentPlaceholder}
+                saveButton={dict.newEntry.saveButton}
+                voiceRecording={dict.newEntry.voiceRecording}
+              />
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
               <CardTitle>{dict.aiAnalysis.title}</CardTitle>
-              <CardDescription>
-                {dict.aiAnalysis.description}
-              </CardDescription>
+              <CardDescription>{dict.aiAnalysis.description}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">
@@ -83,9 +66,7 @@ export default async function Home({
         <Card className="mt-8">
           <CardHeader>
             <CardTitle>{dict.history.title}</CardTitle>
-            <CardDescription>
-              {dict.history.description}
-            </CardDescription>
+            <CardDescription>{dict.history.description}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
@@ -96,4 +77,4 @@ export default async function Home({
       </div>
     </div>
   );
-} 
+}
