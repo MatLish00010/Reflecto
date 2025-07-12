@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AlertProvider } from "@/components/alert-provider";
+import { TranslationProvider } from "@/contexts/translation-context";
 import { getDictionary } from "@/dictionaries";
 
 import "../globals.css";
@@ -42,6 +43,7 @@ export default async function RootLayout({
   params: Promise<{ lang: 'en' | 'ru' }>
 }>) {
   const { lang } = await params
+  const dict = await getDictionary(lang)
   
   return (
     <html lang={lang} suppressHydrationWarning>
@@ -54,9 +56,11 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AlertProvider>
-            {children}
-          </AlertProvider>
+          <TranslationProvider dict={dict}>
+            <AlertProvider>
+              {children}
+            </AlertProvider>
+          </TranslationProvider>
         </ThemeProvider>
       </body>
     </html>

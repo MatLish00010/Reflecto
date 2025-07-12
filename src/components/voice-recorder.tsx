@@ -2,34 +2,28 @@
 
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Mic, MicOff, Square, RotateCcw } from 'lucide-react'
+import { Mic, Square, RotateCcw } from 'lucide-react'
 import { useAlertContext } from '@/components/alert-provider'
+import { useTranslation } from '@/contexts/translation-context'
 
 interface VoiceRecorderProps {
   onRecordingComplete: (text: string) => void
   isRecording: boolean
   onRecordingChange: (recording: boolean) => void
   disabled?: boolean
-  translations: {
-    startButton: string
-    stopButton: string
-    recordingIndicator: string
-    processingText: string
-    errorMessage: string
-  }
 }
 
 export function VoiceRecorder({ 
   onRecordingComplete, 
   isRecording, 
   onRecordingChange,
-  disabled = false,
-  translations
+  disabled = false
 }: VoiceRecorderProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
   const { showError } = useAlertContext()
+  const { t } = useTranslation()
 
   const startRecording = async () => {
     try {
@@ -59,14 +53,14 @@ export function VoiceRecorder({
           
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({}))
-            throw new Error(errorData.error || 'Error processing audio')
+            throw new Error(errorData.error || t('newEntry.voiceRecording.errorMessage'))
           }
           
           const { text } = await response.json()
           onRecordingComplete(text)
         } catch (error) {
           console.error('Error processing audio:', error)
-          const errorMessage = error instanceof Error ? error.message : translations.errorMessage
+          const errorMessage = error instanceof Error ? error.message : t('newEntry.voiceRecording.errorMessage')
           showError(errorMessage)
           onRecordingComplete('')
         } finally {
@@ -101,7 +95,7 @@ export function VoiceRecorder({
     return (
       <Button variant="outline" disabled className="w-full">
         <RotateCcw className="w-4 h-4 mr-2 animate-spin" />
-        {translations.processingText}
+        {t('newEntry.voiceRecording.processingText')}
       </Button>
     )
   }
@@ -117,7 +111,7 @@ export function VoiceRecorder({
             className="flex-1"
           >
             <Mic className="w-4 h-4 mr-2" />
-            {translations.startButton}
+            {t('newEntry.voiceRecording.startButton')}
           </Button>
         ) : (
                   <Button 
@@ -126,7 +120,7 @@ export function VoiceRecorder({
           className="flex-1"
         >
           <Square className="w-4 h-4 mr-2" />
-          {translations.stopButton}
+          {t('newEntry.voiceRecording.stopButton')}
         </Button>
         )}
         
@@ -144,7 +138,7 @@ export function VoiceRecorder({
       {isRecording && (
         <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
           <div className="w-2 h-2 bg-red-600 dark:bg-red-400 rounded-full animate-pulse"></div>
-          {translations.recordingIndicator}
+          {t('newEntry.voiceRecording.recordingIndicator')}
         </div>
       )}
     </div>

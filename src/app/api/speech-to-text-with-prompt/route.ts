@@ -50,25 +50,28 @@ export async function POST(request: NextRequest) {
         promptUsed: !!prompt
       })
       
-    } catch (openaiError: any) {
+    } catch (openaiError: unknown) {
       console.error('OpenAI API error:', openaiError)
       
+      const error = openaiError as { status?: number };
+      
       // Handle specific OpenAI errors
-      if (openaiError.status === 401) {
-        return NextResponse.json(
-          { error: 'Invalid OpenAI API key' },
-          { status: 401 }
-        )
-      } else if (openaiError.status === 413) {
-        return NextResponse.json(
-          { error: 'File too large (maximum 25MB)' },
-          { status: 413 }
-        )
-      } else if (openaiError.status === 400) {
-        return NextResponse.json(
-          { error: 'Unsupported audio file format or invalid prompt' },
-          { status: 400 }
-        )
+      switch (error.status) {
+        case 401:
+          return NextResponse.json(
+            { error: 'Invalid OpenAI API key' },
+            { status: error.status }
+          )
+        case 413:
+          return NextResponse.json(
+            { error: 'File too large (maximum 25MB)' },
+            { status: error.status }
+          )
+        case 400:
+          return NextResponse.json(
+            { error: 'Unsupported audio file format or invalid prompt' },
+            { status: error.status }
+          )
       }
       
       return NextResponse.json(

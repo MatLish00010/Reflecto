@@ -35,8 +35,10 @@ export async function POST(request: NextRequest) {
         text: transcription,
         confidence: 1.0,
       });
-    } catch (openaiError: any) {
-      if (openaiError.code === "insufficient_quota") {
+    } catch (openaiError: unknown) {
+      const error = openaiError as { code?: string; status?: number };
+      
+      if (error.code === "insufficient_quota") {
         return NextResponse.json(
           {
             error:
@@ -46,21 +48,21 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      switch (openaiError.status) {
+      switch (error.status) {
         case 400:
           return NextResponse.json(
             { error: "Unsupported audio file format" },
-            { status: openaiError.status }
+            { status: error.status }
           );
         case 401:
           return NextResponse.json(
             { error: "Invalid OpenAI API key" },
-            { status: openaiError.status }
+            { status: error.status }
           );
         case 413:
           return NextResponse.json(
             { error: "File too large (maximum 25MB)" },
-            { status: openaiError.status }
+            { status: error.status }
           );
         case 429:
           return NextResponse.json(
@@ -68,7 +70,7 @@ export async function POST(request: NextRequest) {
               error:
                 "OpenAI quota exceeded. Please try again later or upgrade your plan.",
             },
-            { status: openaiError.status }
+            { status: error.status }
           );
       }
 
@@ -77,7 +79,7 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

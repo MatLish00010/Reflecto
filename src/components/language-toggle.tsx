@@ -9,15 +9,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Globe } from "lucide-react"
+import { useTranslation } from "@/contexts/translation-context"
 
 const languages = [
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'ru', flag: '🇷🇺' },
+  { code: 'en', flag: '🇺🇸' },
 ]
 
 export function LanguageToggle() {
   const router = useRouter()
   const pathname = usePathname()
+  const { t } = useTranslation()
 
   const currentLang = pathname.split('/')[1] || 'ru'
 
@@ -44,7 +46,7 @@ export function LanguageToggle() {
             className={currentLang === language.code ? "bg-accent" : ""}
           >
             <span className="mr-2">{language.flag}</span>
-            {language.name}
+            {language.code === 'ru' ? t('languages.russian') : t('languages.english')}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

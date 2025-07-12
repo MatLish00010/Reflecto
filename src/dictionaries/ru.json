@@ -16,7 +16,10 @@
       "stopButton": "Остановить запись",
       "recordingIndicator": "Идет запись...",
       "processingText": "Обработка аудио...",
-      "errorMessage": "Ошибка при распознавании речи. Попробуйте еще раз."
+      "errorMessage": "Ошибка при распознавании речи. Попробуйте еще раз.",
+      "speechRecognition": "Распознавание речи",
+      "recognizesSpeech": "Распознает речь на исходном языке",
+      "errorAccessingMicrophone": "Ошибка доступа к микрофону"
     }
   },
   "aiAnalysis": {
@@ -28,5 +31,27 @@
     "title": "История записей",
     "description": "Ваши предыдущие записи и анализы",
     "emptyState": "Здесь будут отображаться ваши записи"
+  },
+  "languages": {
+    "russian": "Русский",
+    "english": "English"
+  },
+  "errors": {
+    "audioFileNotFound": "Аудиофайл не найден",
+    "openaiKeyNotConfigured": "Ключ OpenAI API не настроен",
+    "internalServerError": "Внутренняя ошибка сервера",
+    "errorProcessingAudio": "Ошибка обработки аудио",
+    "unsupportedAudioFormat": "Неподдерживаемый формат аудиофайла",
+    "invalidOpenaiKey": "Недействительный ключ OpenAI API",
+    "fileTooLarge": "Файл слишком большой (максимум 25МБ)",
+    "openaiQuotaExceeded": "Превышен лимит OpenAI. Попробуйте позже или обновите план.",
+    "errorProcessingAudioOpenai": "Ошибка обработки аудио через OpenAI",
+    "contextError": "useAlertContext должен использоваться внутри AlertProvider"
+  },
+  "theme": {
+    "toggleTheme": "Переключить тему",
+    "light": "Светлая",
+    "dark": "Темная",
+    "system": "Системная"
   }
 } 

@@ -16,7 +16,10 @@
       "stopButton": "Stop Recording",
       "recordingIndicator": "Recording...",
       "processingText": "Processing audio...",
-      "errorMessage": "Error recognizing speech. Please try again."
+      "errorMessage": "Error recognizing speech. Please try again.",
+      "speechRecognition": "Speech Recognition",
+      "recognizesSpeech": "Recognizes speech in the original language",
+      "errorAccessingMicrophone": "Error accessing microphone"
     }
   },
   "aiAnalysis": {
@@ -28,5 +31,27 @@
     "title": "Entry History",
     "description": "Your previous entries and analyses",
     "emptyState": "Your entries will be displayed here"
+  },
+  "languages": {
+    "russian": "Русский",
+    "english": "English"
+  },
+  "errors": {
+    "audioFileNotFound": "Audio file not found",
+    "openaiKeyNotConfigured": "OpenAI API key is not configured",
+    "internalServerError": "Internal server error",
+    "errorProcessingAudio": "Error processing audio",
+    "unsupportedAudioFormat": "Unsupported audio file format",
+    "invalidOpenaiKey": "Invalid OpenAI API key",
+    "fileTooLarge": "File too large (maximum 25MB)",
+    "openaiQuotaExceeded": "OpenAI quota exceeded. Please try again later or upgrade your plan.",
+    "errorProcessingAudioOpenai": "Error processing audio through OpenAI",
+    "contextError": "useAlertContext must be used within AlertProvider"
+  },
+  "theme": {
+    "toggleTheme": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   }
 } 

@@ -2,21 +2,15 @@
 
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Square, RotateCcw } from "lucide-react";
+import { Mic, Square, RotateCcw } from "lucide-react";
 import { useAlertContext } from "@/components/alert-provider";
+import { useTranslation } from "@/contexts/translation-context";
 
 interface EnhancedVoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
   isRecording: boolean;
   onRecordingChange: (recording: boolean) => void;
   disabled?: boolean;
-  translations: {
-    startButton: string;
-    stopButton: string;
-    recordingIndicator: string;
-    processingText: string;
-    errorMessage: string;
-  };
 }
 
 export function EnhancedVoiceRecorder({
@@ -24,12 +18,12 @@ export function EnhancedVoiceRecorder({
   isRecording,
   onRecordingChange,
   disabled = false,
-  translations,
 }: EnhancedVoiceRecorderProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const { showError } = useAlertContext();
+  const { t } = useTranslation();
 
   const startRecording = async () => {
     try {
@@ -61,17 +55,21 @@ export function EnhancedVoiceRecorder({
 
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || "Error processing audio");
+            throw new Error(
+              errorData.error || t("newEntry.voiceRecording.errorMessage")
+            );
           }
-         
+
           const { text } = await response.json();
           onRecordingComplete(text);
         } catch (error) {
           console.error("Error processing audio:", error);
           const errorMessage =
-            error instanceof Error ? error.message : translations.errorMessage;
+            error instanceof Error
+              ? error.message
+              : t("newEntry.voiceRecording.errorMessage");
           showError(errorMessage);
-          onRecordingComplete('');
+          onRecordingComplete("");
         } finally {
           setIsProcessing(false);
         }
@@ -83,7 +81,10 @@ export function EnhancedVoiceRecorder({
       onRecordingChange(true);
     } catch (error) {
       console.error("Error accessing microphone:", error);
-      const errorMessage = error instanceof Error ? error.message : "Error accessing microphone";
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : t("newEntry.voiceRecording.errorAccessingMicrophone");
       showError(errorMessage);
     }
   };
@@ -107,10 +108,10 @@ export function EnhancedVoiceRecorder({
       <div className="space-y-2">
         <Button variant="outline" disabled className="w-full">
           <RotateCcw className="w-4 h-4 mr-2 animate-spin" />
-          {translations.processingText}
+          {t("newEntry.voiceRecording.processingText")}
         </Button>
         <div className="text-sm text-muted-foreground text-center">
-          Speech Recognition
+          {t("newEntry.voiceRecording.speechRecognition")}
         </div>
       </div>
     );
@@ -118,7 +119,6 @@ export function EnhancedVoiceRecorder({
 
   return (
     <div className="space-y-3">
-      {/* Recording Controls */}
       <div className="flex gap-2">
         {!isRecording ? (
           <Button
@@ -128,7 +128,7 @@ export function EnhancedVoiceRecorder({
             className="flex-1"
           >
             <Mic className="w-4 h-4 mr-2" />
-            {translations.startButton}
+            {t("newEntry.voiceRecording.startButton")}
           </Button>
         ) : (
           <Button
@@ -137,7 +137,7 @@ export function EnhancedVoiceRecorder({
             className="flex-1"
           >
             <Square className="w-4 h-4 mr-2" />
-            {translations.stopButton}
+            {t("newEntry.voiceRecording.stopButton")}
           </Button>
         )}
 
@@ -151,13 +151,12 @@ export function EnhancedVoiceRecorder({
       {isRecording && (
         <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
           <div className="w-2 h-2 bg-red-600 dark:bg-red-400 rounded-full animate-pulse"></div>
-          {translations.recordingIndicator}
+          {t("newEntry.voiceRecording.recordingIndicator")}
         </div>
       )}
 
-      {/* Mode Description */}
       <div className="text-xs text-muted-foreground text-center">
-        Recognizes speech in the original language
+        {t("newEntry.voiceRecording.recognizesSpeech")}
       </div>
     </div>
   );
