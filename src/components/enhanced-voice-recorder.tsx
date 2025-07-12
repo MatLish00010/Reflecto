@@ -22,6 +22,7 @@ export function EnhancedVoiceRecorder({
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const isResetRef = useRef(false);
   const { showError } = useAlertContext();
   const { t } = useTranslation();
 
@@ -39,6 +40,13 @@ export function EnhancedVoiceRecorder({
       };
 
       mediaRecorder.onstop = async () => {
+        // Если запись была сброшена, не обрабатываем аудио
+        if (isResetRef.current) {
+          isResetRef.current = false;
+          stream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
         setIsProcessing(true);
         const audioBlob = new Blob(audioChunksRef.current, {
           type: "audio/wav",
@@ -97,10 +105,14 @@ export function EnhancedVoiceRecorder({
   };
 
   const resetRecording = () => {
-    audioChunksRef.current = [];
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current = null;
+    if (mediaRecorderRef.current && isRecording) {
+      isResetRef.current = true;
+      mediaRecorderRef.current.stop();
+      onRecordingChange(false);
     }
+    
+    audioChunksRef.current = [];
+    mediaRecorderRef.current = null;
   };
 
   if (isProcessing) {
