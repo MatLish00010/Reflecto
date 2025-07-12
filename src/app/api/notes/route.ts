@@ -5,6 +5,8 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
+    const from = searchParams.get('from');
+    const to = searchParams.get('to');
 
     if (!userId) {
       return NextResponse.json(
@@ -15,11 +17,20 @@ export async function GET(request: NextRequest) {
 
     const supabase = await createClient();
 
-    const { data: notes, error } = await supabase
+    let query = supabase
       .from('notes')
       .select('*')
       .eq('user_id', parseInt(userId))
       .order('created_at', { ascending: false });
+
+    if (from) {
+      query = query.gte('created_at', from);
+    }
+    if (to) {
+      query = query.lte('created_at', to);
+    }
+
+    const { data: notes, error } = await query;
 
     if (error) {
       return NextResponse.json(
@@ -51,7 +62,6 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
 
-    // Always create a new note
     const { data: newNote, error: insertError } = await supabase
       .from('notes')
       .insert([

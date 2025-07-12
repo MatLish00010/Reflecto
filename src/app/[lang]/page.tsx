@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/card';
 import { NewEntryForm } from '@/components/new-entry-form';
 import { UserInfo } from '@/components/user-info';
+import { History } from '@/components/history';
 import { getDictionary } from '@/dictionaries';
 
 export default async function Home({
@@ -62,9 +63,7 @@ export default async function Home({
           <CardDescription>{t('history.description')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>{t('history.emptyState')}</p>
-          </div>
+          <History />
         </CardContent>
       </Card>
     </>

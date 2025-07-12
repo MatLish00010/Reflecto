@@ -33,7 +33,19 @@
   "history": {
     "title": "Entry History",
     "description": "Your previous entries and analyses",
-    "emptyState": "Your entries will be displayed here"
+    "emptyState": "Your entries will be displayed here",
+    "loading": "Loading entries...",
+    "fetchError": "Error loading entries",
+    "deleteSuccess": "Entry deleted successfully",
+    "deleteError": "Error deleting entry",
+    "updateSuccess": "Entry updated successfully",
+    "updateError": "Error updating entry",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "editPlaceholder": "Edit your entry...",
+    "showMore": "Show more",
+    "showLess": "Show less"
   },
   "languages": {
     "russian": "Русский",
