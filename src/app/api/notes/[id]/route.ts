@@ -3,11 +3,12 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { note } = await request.json();
-    const noteId = parseInt(params.id);
+    const { id } = await params;
+    const noteId = parseInt(id);
 
     if (!note || isNaN(noteId)) {
       return NextResponse.json(
@@ -44,10 +45,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const noteId = parseInt(params.id);
+    const { id } = await params;
+    const noteId = parseInt(id);
 
     if (isNaN(noteId)) {
       return NextResponse.json(
