@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Mic, MicOff, Square, RotateCcw } from 'lucide-react'
+import { useAlertContext } from '@/components/alert-provider'
 
 interface VoiceRecorderProps {
   onRecordingComplete: (text: string) => void
@@ -28,6 +29,7 @@ export function VoiceRecorder({
   const [isProcessing, setIsProcessing] = useState(false)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
+  const { showError } = useAlertContext()
 
   const startRecording = async () => {
     try {
@@ -56,14 +58,17 @@ export function VoiceRecorder({
           })
           
           if (!response.ok) {
-            throw new Error('Ошибка при обработке аудио')
+            const errorData = await response.json().catch(() => ({}))
+            throw new Error(errorData.error || 'Error processing audio')
           }
           
           const { text } = await response.json()
           onRecordingComplete(text)
         } catch (error) {
-          console.error('Ошибка при обработке аудио:', error)
-          onRecordingComplete(translations.errorMessage)
+          console.error('Error processing audio:', error)
+          const errorMessage = error instanceof Error ? error.message : translations.errorMessage
+          showError(errorMessage)
+          onRecordingComplete('')
         } finally {
           setIsProcessing(false)
         }
@@ -74,7 +79,7 @@ export function VoiceRecorder({
       mediaRecorder.start()
       onRecordingChange(true)
     } catch (error) {
-      console.error('Ошибка при получении доступа к микрофону:', error)
+      console.error('Error accessing microphone:', error)
     }
   }
 

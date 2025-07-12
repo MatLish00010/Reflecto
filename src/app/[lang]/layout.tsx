@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AlertProvider } from "@/components/alert-provider";
 import { getDictionary } from "@/dictionaries";
 
 import "../globals.css";
@@ -53,7 +54,9 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <AlertProvider>
+            {children}
+          </AlertProvider>
         </ThemeProvider>
       </body>
     </html>

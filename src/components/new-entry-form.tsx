@@ -1,39 +1,38 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { VoiceRecorder } from "@/components/voice-recorder"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { AudioInputTabs } from "@/components/audio-input-tabs";
 
 interface NewEntryFormProps {
-  contentLabel: string
-  contentPlaceholder: string
-  saveButton: string
+  contentLabel: string;
+  contentPlaceholder: string;
+  saveButton: string;
   voiceRecording: {
-    startButton: string
-    stopButton: string
-    recordingIndicator: string
-    processingText: string
-    errorMessage: string
-  }
+    startButton: string;
+    stopButton: string;
+    recordingIndicator: string;
+    processingText: string;
+    errorMessage: string;
+  };
 }
 
 export function NewEntryForm({
   contentLabel,
   contentPlaceholder,
   saveButton,
-  voiceRecording
+  voiceRecording,
 }: NewEntryFormProps) {
-  const [content, setContent] = useState('')
-  const [isRecording, setIsRecording] = useState(false)
+  const [content, setContent] = useState("");
 
   const handleRecordingComplete = (text: string) => {
-    setContent(prev => prev + (prev ? '\n' : '') + text)
-  }
+    setContent((prev) => prev + (prev ? "\n" : "") + text);
+  };
 
   const handleSave = () => {
-    console.log('Сохранение записи:', { content })
-  }
+    console.log("Saving entry:", { content });
+  };
 
   return (
     <div className="space-y-4">
@@ -49,22 +48,21 @@ export function NewEntryForm({
           className="min-h-[200px]"
         />
         <div className="mt-2">
-          <VoiceRecorder
-            onRecordingComplete={handleRecordingComplete}
-            isRecording={isRecording}
-            onRecordingChange={setIsRecording}
-            disabled={false}
-            translations={voiceRecording}
+          <AudioInputTabs
+            onAudioProcessed={handleRecordingComplete}
+            translations={{
+              voiceRecording,
+            }}
           />
         </div>
       </div>
-      <Button 
-        onClick={handleSave} 
+      <Button
+        onClick={handleSave}
         className="w-full"
         disabled={!content.trim()}
       >
         {saveButton}
       </Button>
     </div>
-  )
-} 
+  );
+}

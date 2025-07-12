@@ -22,7 +22,7 @@ export default async function Home({
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="max-w-4xl mx-auto">
         <header className="text-center py-8 relative">
-          <div className="absolute top-0 right-0 flex gap-2">
+          <div className="absolute top-0 right-0 flex items-center gap-2">
             <LanguageToggle />
             <ThemeToggle />
           </div>
