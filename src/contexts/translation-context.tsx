@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
 
@@ -7,7 +7,9 @@ interface TranslationContextType {
   dict: Record<string, unknown>;
 }
 
-const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
+const TranslationContext = createContext<TranslationContextType | undefined>(
+  undefined
+);
 
 export function useTranslation() {
   const context = useContext(TranslationContext);
@@ -22,11 +24,14 @@ interface TranslationProviderProps {
   dict: Record<string, unknown>;
 }
 
-export function TranslationProvider({ children, dict }: TranslationProviderProps) {
+export function TranslationProvider({
+  children,
+  dict,
+}: TranslationProviderProps) {
   const t = (key: string) => {
     const keys = key.split('.');
     let value: unknown = dict;
-    
+
     for (const k of keys) {
       if (value && typeof value === 'object' && k in value) {
         value = (value as Record<string, unknown>)[k];
@@ -35,7 +40,7 @@ export function TranslationProvider({ children, dict }: TranslationProviderProps
         return key;
       }
     }
-    
+
     return typeof value === 'string' ? value : key;
   };
 
@@ -44,4 +49,4 @@ export function TranslationProvider({ children, dict }: TranslationProviderProps
       {children}
     </TranslationContext.Provider>
   );
-} 
+}

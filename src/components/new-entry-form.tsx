@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { AudioInputTabs } from "@/components/audio-input-tabs";
-import { useTranslation } from "@/contexts/translation-context";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { AudioInputTabs } from '@/components/audio-input-tabs';
+import { useTranslation } from '@/contexts/translation-context';
 
 export function NewEntryForm() {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const { t } = useTranslation();
 
   const handleRecordingComplete = (text: string) => {
-    setContent((prev) => prev + (prev ? "\n" : "") + text);
+    setContent(prev => prev + (prev ? '\n' : '') + text);
   };
 
   const handleSave = () => {
-    console.log("Saving entry:", { content });
+    console.log('Saving entry:', { content });
   };
 
   return (
@@ -27,14 +27,12 @@ export function NewEntryForm() {
         <Textarea
           id="content"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={e => setContent(e.target.value)}
           placeholder={t('newEntry.contentPlaceholder')}
           className="min-h-[200px]"
         />
         <div className="mt-2">
-          <AudioInputTabs
-            onAudioProcessed={handleRecordingComplete}
-          />
+          <AudioInputTabs onAudioProcessed={handleRecordingComplete} />
         </div>
       </div>
       <Button

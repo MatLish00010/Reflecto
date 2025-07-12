@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Mic, Square, RotateCcw } from "lucide-react";
-import { useAlertContext } from "@/components/alert-provider";
-import { useTranslation } from "@/contexts/translation-context";
+import { useState, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Mic, Square, RotateCcw } from 'lucide-react';
+import { useAlertContext } from '@/components/alert-provider';
+import { useTranslation } from '@/contexts/translation-context';
 
 interface EnhancedVoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
@@ -33,7 +33,7 @@ export function EnhancedVoiceRecorder({
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (event) => {
+      mediaRecorder.ondataavailable = event => {
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data);
         }
@@ -43,56 +43,56 @@ export function EnhancedVoiceRecorder({
         // Если запись была сброшена, не обрабатываем аудио
         if (isResetRef.current) {
           isResetRef.current = false;
-          stream.getTracks().forEach((track) => track.stop());
+          stream.getTracks().forEach(track => track.stop());
           return;
         }
 
         setIsProcessing(true);
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/wav",
+          type: 'audio/wav',
         });
 
         try {
           const formData = new FormData();
-          formData.append("audio", audioBlob);
+          formData.append('audio', audioBlob);
 
-          const response = await fetch("/api/speech-to-text", {
-            method: "POST",
+          const response = await fetch('/api/speech-to-text', {
+            method: 'POST',
             body: formData,
           });
 
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             throw new Error(
-              errorData.error || t("newEntry.voiceRecording.errorMessage")
+              errorData.error || t('newEntry.voiceRecording.errorMessage')
             );
           }
 
           const { text } = await response.json();
           onRecordingComplete(text);
         } catch (error) {
-          console.error("Error processing audio:", error);
+          console.error('Error processing audio:', error);
           const errorMessage =
             error instanceof Error
               ? error.message
-              : t("newEntry.voiceRecording.errorMessage");
+              : t('newEntry.voiceRecording.errorMessage');
           showError(errorMessage);
-          onRecordingComplete("");
+          onRecordingComplete('');
         } finally {
           setIsProcessing(false);
         }
 
-        stream.getTracks().forEach((track) => track.stop());
+        stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorder.start();
       onRecordingChange(true);
     } catch (error) {
-      console.error("Error accessing microphone:", error);
+      console.error('Error accessing microphone:', error);
       const errorMessage =
         error instanceof Error
           ? error.message
-          : t("newEntry.voiceRecording.errorAccessingMicrophone");
+          : t('newEntry.voiceRecording.errorAccessingMicrophone');
       showError(errorMessage);
     }
   };
@@ -110,7 +110,7 @@ export function EnhancedVoiceRecorder({
       mediaRecorderRef.current.stop();
       onRecordingChange(false);
     }
-    
+
     audioChunksRef.current = [];
     mediaRecorderRef.current = null;
   };
@@ -120,10 +120,10 @@ export function EnhancedVoiceRecorder({
       <div className="space-y-2">
         <Button variant="outline" disabled className="w-full">
           <RotateCcw className="w-4 h-4 mr-2 animate-spin" />
-          {t("newEntry.voiceRecording.processingText")}
+          {t('newEntry.voiceRecording.processingText')}
         </Button>
         <div className="text-sm text-muted-foreground text-center">
-          {t("newEntry.voiceRecording.speechRecognition")}
+          {t('newEntry.voiceRecording.speechRecognition')}
         </div>
       </div>
     );
@@ -140,7 +140,7 @@ export function EnhancedVoiceRecorder({
             className="flex-1"
           >
             <Mic className="w-4 h-4 mr-2" />
-            {t("newEntry.voiceRecording.startButton")}
+            {t('newEntry.voiceRecording.startButton')}
           </Button>
         ) : (
           <Button
@@ -149,7 +149,7 @@ export function EnhancedVoiceRecorder({
             className="flex-1"
           >
             <Square className="w-4 h-4 mr-2" />
-            {t("newEntry.voiceRecording.stopButton")}
+            {t('newEntry.voiceRecording.stopButton')}
           </Button>
         )}
 
@@ -163,12 +163,12 @@ export function EnhancedVoiceRecorder({
       {isRecording && (
         <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
           <div className="w-2 h-2 bg-red-600 dark:bg-red-400 rounded-full animate-pulse"></div>
-          {t("newEntry.voiceRecording.recordingIndicator")}
+          {t('newEntry.voiceRecording.recordingIndicator')}
         </div>
       )}
 
       <div className="text-xs text-muted-foreground text-center">
-        {t("newEntry.voiceRecording.recognizesSpeech")}
+        {t('newEntry.voiceRecording.recognizesSpeech')}
       </div>
     </div>
   );

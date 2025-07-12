@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { EnhancedVoiceRecorder } from './enhanced-voice-recorder'
+import { useState } from 'react';
+import { EnhancedVoiceRecorder } from './enhanced-voice-recorder';
 
 interface AudioInputTabsProps {
-  onAudioProcessed: (text: string) => void
-  disabled?: boolean
+  onAudioProcessed: (text: string) => void;
+  disabled?: boolean;
 }
 
-export function AudioInputTabs({ 
-  onAudioProcessed, 
-  disabled = false
+export function AudioInputTabs({
+  onAudioProcessed,
+  disabled = false,
 }: AudioInputTabsProps) {
-  const [isRecording, setIsRecording] = useState(false)
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleRecordingComplete = (text: string) => {
-    onAudioProcessed(text)
-  }
+    onAudioProcessed(text);
+  };
 
   return (
     <div className="space-y-4">
@@ -27,5 +27,5 @@ export function AudioInputTabs({
         disabled={disabled}
       />
     </div>
-  )
-} 
+  );
+}

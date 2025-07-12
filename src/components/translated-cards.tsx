@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Card,
@@ -6,9 +6,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { NewEntryForm } from "@/components/new-entry-form";
-import { useTranslation } from "@/contexts/translation-context";
+} from '@/components/ui/card';
+import { NewEntryForm } from '@/components/new-entry-form';
+import { useTranslation } from '@/contexts/translation-context';
 
 export function TranslatedCards() {
   const { t } = useTranslation();
@@ -52,4 +52,4 @@ export function TranslatedCards() {
       </Card>
     </>
   );
-} 
+}
