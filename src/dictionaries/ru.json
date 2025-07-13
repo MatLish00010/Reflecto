@@ -34,22 +34,12 @@
     "generateButton": "Создать резюме",
     "refresh": "Обновить",
     "summaryTitle": "AI-резюме",
-    "mood": "Настроение",
-    "productivity": "Продуктивность",
-    "keyInsights": "Ключевые выводы",
+    "mainStory": "Основной сюжет дня",
+    "keyEvents": "Ключевые события",
+    "emotionalMoments": "Эмоциональные моменты",
+    "observations": "Мои наблюдения",
     "recommendations": "Рекомендации",
-    "mood": {
-      "positive": "Позитивное",
-      "neutral": "Нейтральное",
-      "negative": "Негативное"
-    },
-    "productivity": {
-      "high": "Высокая",
-      "medium": "Средняя",
-      "low": "Низкая"
-    },
-    "moodTitle": "Настроение",
-    "productivityTitle": "Продуктивность"
+    "fetchError": "Ошибка генерации summary"
   },
   "history": {
     "title": "История записей",

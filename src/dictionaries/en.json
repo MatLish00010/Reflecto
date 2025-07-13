@@ -34,22 +34,12 @@
     "generateButton": "Generate Summary",
     "refresh": "Refresh",
     "summaryTitle": "AI Summary",
-    "mood": "Mood",
-    "productivity": "Productivity",
-    "keyInsights": "Key Insights",
+    "mainStory": "Main Story of the Day",
+    "keyEvents": "Key Events",
+    "emotionalMoments": "Emotional Moments",
+    "observations": "My Observations",
     "recommendations": "Recommendations",
-    "mood": {
-      "positive": "Positive",
-      "neutral": "Neutral",
-      "negative": "Negative"
-    },
-    "productivity": {
-      "high": "High",
-      "medium": "Medium",
-      "low": "Low"
-    },
-    "moodTitle": "Mood",
-    "productivityTitle": "Productivity"
+    "fetchError": "Error generating summary"
   },
   "history": {
     "title": "Entry History",

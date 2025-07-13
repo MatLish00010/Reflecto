@@ -42,22 +42,22 @@ export default async function Home({
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('aiAnalysis.title')}</CardTitle>
-            <CardDescription>{t('aiAnalysis.description')}</CardDescription>
+            <CardTitle>{t('history.title')}</CardTitle>
+            <CardDescription>{t('history.description')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <AISummary />
+            <History />
           </CardContent>
         </Card>
       </div>
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>{t('history.title')}</CardTitle>
-          <CardDescription>{t('history.description')}</CardDescription>
+          <CardTitle>{t('aiAnalysis.title')}</CardTitle>
+          <CardDescription>{t('aiAnalysis.description')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <History />
+          <AISummary />
         </CardContent>
       </Card>
     </>
