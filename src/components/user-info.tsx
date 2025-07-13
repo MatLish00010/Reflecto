@@ -76,7 +76,10 @@ export function UserInfo({ initialUser }: UserInfoProps) {
         </p>
         <p>
           <strong>{t('user.createdAt')}:</strong>{' '}
-          {new Date(user.created_at).toLocaleString()}
+          {new Date(user.created_at)
+            .toISOString()
+            .slice(0, 19)
+            .replace('T', ' ')}
         </p>
       </div>
     </div>
