@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { requireAuth } from '@/lib/auth';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -7,6 +8,11 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
+    const authResult = await requireAuth(request);
+    if (!authResult.isAuthenticated) {
+      return authResult.response;
+    }
+
     const formData = await request.formData();
     const audioFile = formData.get('audio') as File;
 

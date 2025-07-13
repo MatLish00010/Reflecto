@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Tables } from '@/types/supabase';
 import { userKeys } from './use-user';
+import { noteKeys } from './use-notes';
+import { useUser } from './use-user';
 
 type User = Tables<'users'>;
 
@@ -33,10 +35,7 @@ export function useLogin() {
       return response.json();
     },
     onSuccess: data => {
-      // Invalidate and refetch user data
       queryClient.invalidateQueries({ queryKey: userKeys.all });
-
-      // Set user data in cache
       queryClient.setQueryData(userKeys.all, data.user);
     },
   });
@@ -44,6 +43,7 @@ export function useLogin() {
 
 export function useLogout() {
   const queryClient = useQueryClient();
+  const { user } = useUser();
 
   return useMutation({
     mutationFn: async () => {
@@ -58,12 +58,11 @@ export function useLogout() {
       return response.json();
     },
     onSuccess: () => {
-      // Clear user data from cache
       queryClient.setQueryData(userKeys.all, null);
-
-      // Invalidate all user-related queries
       queryClient.invalidateQueries({ queryKey: userKeys.all });
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      queryClient.invalidateQueries({
+        queryKey: noteKeys.lists(user?.id || 0),
+      });
     },
   });
 }

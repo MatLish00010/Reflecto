@@ -1,26 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { requireAuth } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
+    // Проверяем аутентификацию пользователя
+    const authResult = await requireAuth(request);
+    console.log('authResult', authResult);
+
+    if (!authResult.isAuthenticated) {
+      return authResult.response;
+    }
+
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
     const from = searchParams.get('from');
     const to = searchParams.get('to');
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
-      );
-    }
+    const userId = authResult.user!.id;
 
     const supabase = await createClient();
 
     let query = supabase
       .from('notes')
       .select('*')
-      .eq('user_id', parseInt(userId))
+      .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
     if (from) {
@@ -51,11 +54,16 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { note, userId } = await request.json();
+    const authResult = await requireAuth(request);
+    if (!authResult.isAuthenticated) {
+      return authResult.response;
+    }
 
-    if (!note || !userId) {
+    const { note } = await request.json();
+
+    if (!note) {
       return NextResponse.json(
-        { error: 'Note content and user ID are required' },
+        { error: 'Note content is required' },
         { status: 400 }
       );
     }
@@ -67,7 +75,7 @@ export async function POST(request: NextRequest) {
       .insert([
         {
           note,
-          user_id: userId,
+          user_id: authResult.user!.id,
           created_at: new Date().toISOString(),
         },
       ])

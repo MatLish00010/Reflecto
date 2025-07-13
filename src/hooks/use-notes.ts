@@ -4,7 +4,7 @@ import type { Tables } from '@/types/supabase';
 
 type Note = Tables<'notes'>;
 
-const noteKeys = {
+export const noteKeys = {
   all: (userId: number) => ['notes', userId] as const,
   lists: (userId: number) => [...noteKeys.all(userId), 'list'] as const,
   list: (userId: number, filters: { from?: string; to?: string }) =>
@@ -17,7 +17,7 @@ const noteKeys = {
 export function useNotesByDate(from?: string, to?: string) {
   const { user } = useUser();
 
-  return useQuery({
+  const query = useQuery({
     queryKey: noteKeys.list(user?.id || 0, { from, to }),
     queryFn: async () => {
       if (!user) throw new Error('User not found');
@@ -29,13 +29,25 @@ export function useNotesByDate(from?: string, to?: string) {
 
       const response = await fetch(`/api/notes?${params.toString()}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch notes');
+        if (response.status === 401) {
+          return [];
+        }
+
+        const errorData = await response
+          .json()
+          .catch(() => ({ error: 'Failed to fetch notes' }));
+        throw new Error(errorData.error || 'Failed to fetch notes');
       }
       const { notes } = await response.json();
       return notes as Note[];
     },
     enabled: !!user,
   });
+
+  return {
+    ...query,
+    data: query.data || [],
+  };
 }
 
 export function useCreateNote() {

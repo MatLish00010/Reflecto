@@ -4,15 +4,23 @@ import { useUser } from '@/hooks/use-user';
 import { useTranslation } from '@/contexts/translation-context';
 import { Button } from '@/components/ui/button';
 import { useLogout } from '@/hooks/use-auth';
+import type { Tables } from '@/types/supabase';
+import { useRouter } from 'next/navigation';
 
-export function UserInfo() {
-  const { user, loading, error } = useUser();
+interface UserInfoProps {
+  initialUser?: Tables<'users'> | null;
+}
+
+export function UserInfo({ initialUser }: UserInfoProps) {
+  const { user, loading, error } = useUser(initialUser);
   const { t } = useTranslation();
   const logoutMutation = useLogout();
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
       await logoutMutation.mutateAsync();
+      router.push('/login');
     } catch (error) {
       console.error('Logout error:', error);
     }

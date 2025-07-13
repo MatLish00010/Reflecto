@@ -28,7 +28,9 @@ export function NewEntryForm() {
       showSuccess(t('newEntry.saveSuccess'));
     } catch (error) {
       console.error('Error saving note:', error);
-      showError(t('newEntry.saveError'));
+      showError(
+        error instanceof Error ? error.message : t('newEntry.saveError')
+      );
     }
   };
 

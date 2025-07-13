@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { requireAuth } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authResult = await requireAuth(request);
+    if (!authResult.isAuthenticated) {
+      return authResult.response;
+    }
+
     const { note } = await request.json();
     const { id } = await params;
     const noteId = parseInt(id);
@@ -19,10 +25,25 @@ export async function PUT(
 
     const supabase = await createClient();
 
+    const { data: existingNote, error: checkError } = await supabase
+      .from('notes')
+      .select('id, user_id')
+      .eq('id', noteId)
+      .eq('user_id', authResult.user!.id)
+      .single();
+
+    if (checkError || !existingNote) {
+      return NextResponse.json(
+        { error: 'Note not found or access denied' },
+        { status: 404 }
+      );
+    }
+
     const { data: updatedNote, error } = await supabase
       .from('notes')
       .update({ note })
       .eq('id', noteId)
+      .eq('user_id', authResult.user!.id)
       .select()
       .single();
 
@@ -48,6 +69,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const authResult = await requireAuth(request);
+    if (!authResult.isAuthenticated) {
+      return authResult.response;
+    }
+
     const { id } = await params;
     const noteId = parseInt(id);
 
@@ -60,7 +86,25 @@ export async function DELETE(
 
     const supabase = await createClient();
 
-    const { error } = await supabase.from('notes').delete().eq('id', noteId);
+    const { data: existingNote, error: checkError } = await supabase
+      .from('notes')
+      .select('id, user_id')
+      .eq('id', noteId)
+      .eq('user_id', authResult.user!.id)
+      .single();
+
+    if (checkError || !existingNote) {
+      return NextResponse.json(
+        { error: 'Note not found or access denied' },
+        { status: 404 }
+      );
+    }
+
+    const { error } = await supabase
+      .from('notes')
+      .delete()
+      .eq('id', noteId)
+      .eq('user_id', authResult.user!.id);
 
     if (error) {
       return NextResponse.json(
