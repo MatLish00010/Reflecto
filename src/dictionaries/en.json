@@ -76,7 +76,8 @@
     "info": "User Information",
     "id": "User ID",
     "createdAt": "Created At",
-    "logout": "Logout"
+    "logout": "Logout",
+    "loggingOut": "Logging out..."
   },
   "login": {
     "title": "Login",
