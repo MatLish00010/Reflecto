@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import { NewEntryForm } from '@/components/new-entry-form';
 import { History } from '@/components/history';
+import { AISummary } from '@/components/ai-summary';
 
 export default async function Home({
   params,
@@ -45,9 +46,7 @@ export default async function Home({
             <CardDescription>{t('aiAnalysis.description')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              <p>{t('aiAnalysis.emptyState')}</p>
-            </div>
+            <AISummary />
           </CardContent>
         </Card>
       </div>

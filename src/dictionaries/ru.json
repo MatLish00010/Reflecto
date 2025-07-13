@@ -28,7 +28,28 @@
   "aiAnalysis": {
     "title": "AI Анализ",
     "description": "Искусственный интеллект проанализирует ваши записи",
-    "emptyState": "Создайте первую запись, чтобы получить AI-анализ"
+    "emptyState": "Создайте первую запись, чтобы получить AI-анализ",
+    "generateTitle": "Создать AI-резюме",
+    "generateDescription": "Нажмите кнопку ниже, чтобы проанализировать ваши записи",
+    "generateButton": "Создать резюме",
+    "refresh": "Обновить",
+    "summaryTitle": "AI-резюме",
+    "mood": "Настроение",
+    "productivity": "Продуктивность",
+    "keyInsights": "Ключевые выводы",
+    "recommendations": "Рекомендации",
+    "mood": {
+      "positive": "Позитивное",
+      "neutral": "Нейтральное",
+      "negative": "Негативное"
+    },
+    "productivity": {
+      "high": "Высокая",
+      "medium": "Средняя",
+      "low": "Низкая"
+    },
+    "moodTitle": "Настроение",
+    "productivityTitle": "Продуктивность"
   },
   "history": {
     "title": "История записей",

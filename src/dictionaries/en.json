@@ -28,7 +28,28 @@
   "aiAnalysis": {
     "title": "AI Analysis",
     "description": "Artificial intelligence will analyze your entries",
-    "emptyState": "Create your first entry to get AI analysis"
+    "emptyState": "Create your first entry to get AI analysis",
+    "generateTitle": "Generate AI Summary",
+    "generateDescription": "Click the button below to analyze your entries",
+    "generateButton": "Generate Summary",
+    "refresh": "Refresh",
+    "summaryTitle": "AI Summary",
+    "mood": "Mood",
+    "productivity": "Productivity",
+    "keyInsights": "Key Insights",
+    "recommendations": "Recommendations",
+    "mood": {
+      "positive": "Positive",
+      "neutral": "Neutral",
+      "negative": "Negative"
+    },
+    "productivity": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "moodTitle": "Mood",
+    "productivityTitle": "Productivity"
   },
   "history": {
     "title": "Entry History",
