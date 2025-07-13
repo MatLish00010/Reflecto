@@ -1,53 +1,36 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import type { User } from '@supabase/supabase-js';
 
-export interface AuthenticatedRequest extends NextRequest {
-  user?: {
-    id: number;
-    name?: string;
-  };
-}
-
-export async function authenticateUser(request: NextRequest): Promise<{
+export async function authenticateUser(): Promise<{
   isAuthenticated: boolean;
-  user?: { id: number; name?: string };
+  user?: User;
   error?: string;
 }> {
   try {
-    // Получаем userId из cookie
-    const cookieHeader = request.headers.get('cookie') || '';
-    const userIdMatch = cookieHeader.match(/userId=([^;]+)/);
-    const userId = userIdMatch ? userIdMatch[1] : null;
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-    if (!userId) {
+    if (error) {
+      return {
+        isAuthenticated: false,
+        error: error.message,
+      };
+    }
+
+    if (!user) {
       return {
         isAuthenticated: false,
         error: 'User not authenticated',
       };
     }
 
-    // Проверяем существование пользователя в базе данных
-    const supabase = await createClient();
-
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('id, name')
-      .eq('id', parseInt(userId))
-      .single();
-
-    if (error || !user) {
-      return {
-        isAuthenticated: false,
-        error: 'User not found',
-      };
-    }
-
     return {
       isAuthenticated: true,
-      user: {
-        id: user.id,
-        name: user.name || undefined,
-      },
+      user,
     };
   } catch (error) {
     console.error('Authentication error:', error);
@@ -58,12 +41,12 @@ export async function authenticateUser(request: NextRequest): Promise<{
   }
 }
 
-export async function requireAuth(request: NextRequest): Promise<{
+export async function requireAuth(): Promise<{
   isAuthenticated: boolean;
-  user?: { id: number; name?: string };
+  user?: User;
   response?: NextResponse;
 }> {
-  const authResult = await authenticateUser(request);
+  const authResult = await authenticateUser();
 
   if (!authResult.isAuthenticated) {
     return {

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
+import { createServerClient } from '@supabase/ssr';
 
 const locales = ['en', 'ru'];
 const defaultLocale = 'ru';
@@ -15,7 +16,7 @@ function getLocale(request: Request): string {
   return match(languages, locales, defaultLocale);
 }
 
-export function middleware(request: Request) {
+export async function middleware(request: Request) {
   const pathname = new URL(request.url).pathname;
 
   const pathnameHasLocale = locales.some(
@@ -36,17 +37,40 @@ export function middleware(request: Request) {
     return NextResponse.next();
   }
 
-  const cookieHeader = request.headers.get('cookie') || '';
-  const userIdMatch = cookieHeader.match(/userId=([^;]+)/);
-  const userId = userIdMatch ? userIdMatch[1] : null;
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return (
+            request.headers
+              .get('cookie')
+              ?.split(';')
+              .map(cookie => {
+                const [name, value] = cookie.trim().split('=');
+                return { name, value };
+              }) || []
+          );
+        },
+        setAll() {
+          // This is handled by the response
+        },
+      },
+    }
+  );
 
-  if (userId && pathname.includes('/login')) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user && pathname.includes('/login')) {
     const homeUrl = new URL(request.url);
     homeUrl.pathname = `/${locale}`;
     return NextResponse.redirect(homeUrl);
   }
 
-  if (!userId && !pathname.includes('/login')) {
+  if (!user && !pathname.includes('/login')) {
     const loginUrl = new URL(request.url);
     loginUrl.pathname = `/${locale}/login`;
     return NextResponse.redirect(loginUrl);
@@ -57,7 +81,14 @@ export function middleware(request: Request) {
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    '/((?!_next|api|_vercel|.*\\..*).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

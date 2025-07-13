@@ -1,5 +1,3 @@
-import { createClient } from '@/lib/supabase/server';
-import { cookies } from 'next/headers';
 import { getDictionary } from '@/dictionaries';
 import {
   Card,
@@ -29,26 +27,10 @@ export default async function Home({
     return (value as string) || key;
   };
 
-  // Get user data on server side
-  const cookieStore = await cookies();
-  const userId = cookieStore.get('userId')?.value;
-
-  let user = null;
-  if (userId) {
-    const supabase = await createClient();
-    const { data: userData } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', parseInt(userId))
-      .single();
-
-    user = userData;
-  }
-
   return (
     <>
       <div className="mb-6">
-        <UserInfo initialUser={user} />
+        <UserInfo />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">

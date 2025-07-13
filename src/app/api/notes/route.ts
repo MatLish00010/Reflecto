@@ -4,7 +4,7 @@ import { requireAuth } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireAuth(request);
+    const authResult = await requireAuth();
 
     if (!authResult.isAuthenticated) {
       return authResult.response;
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireAuth(request);
+    const authResult = await requireAuth();
     if (!authResult.isAuthenticated) {
       return authResult.response;
     }

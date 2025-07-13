@@ -3,30 +3,22 @@
 import { useUser } from '@/hooks/use-user';
 import { useTranslation } from '@/contexts/translation-context';
 import { Button } from '@/components/ui/button';
-import { useLogout } from '@/hooks/use-auth';
-import type { Tables } from '@/types/supabase';
-import { useRouter } from 'next/navigation';
+import { useSignOut } from '@/hooks/use-auth';
 
-interface UserInfoProps {
-  initialUser?: Tables<'users'> | null;
-}
-
-export function UserInfo({ initialUser }: UserInfoProps) {
-  const { user, loading, error } = useUser(initialUser);
+export function UserInfo() {
+  const { user, isLoading, error } = useUser();
   const { t } = useTranslation();
-  const logoutMutation = useLogout();
-  const router = useRouter();
+  const signOutMutation = useSignOut();
 
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     try {
-      await logoutMutation.mutateAsync();
-      router.push('/login');
+      await signOutMutation.mutateAsync();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('Sign out error:', error);
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
         <p className="text-blue-600 dark:text-blue-400">{t('user.loading')}</p>
@@ -63,16 +55,19 @@ export function UserInfo({ initialUser }: UserInfoProps) {
         <Button
           variant="outline"
           size="sm"
-          onClick={handleLogout}
-          disabled={logoutMutation.isPending}
+          onClick={handleSignOut}
+          disabled={signOutMutation.isPending}
           className="text-green-700 dark:text-green-300 border-green-300 dark:border-green-600 hover:bg-green-100 dark:hover:bg-green-800"
         >
-          {logoutMutation.isPending ? 'Logging out...' : t('user.logout')}
+          {signOutMutation.isPending ? 'Signing out...' : t('user.logout')}
         </Button>
       </div>
       <div className="space-y-1 text-sm text-green-700 dark:text-green-300">
         <p>
-          <strong>{t('user.id')}:</strong> {user.id}
+          <strong>Email:</strong> {user.email}
+        </p>
+        <p>
+          <strong>Name:</strong> {user.user_metadata?.name || 'Not set'}
         </p>
         <p>
           <strong>{t('user.createdAt')}:</strong>{' '}

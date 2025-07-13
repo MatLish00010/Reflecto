@@ -1,16 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/hooks/use-user';
 import type { Tables } from '@/types/supabase';
+import { useAlertContext } from '@/components/alert-provider';
 
 type Note = Tables<'notes'>;
 
 export const noteKeys = {
-  all: (userId: number) => ['notes', userId] as const,
-  lists: (userId: number) => [...noteKeys.all(userId), 'list'] as const,
-  list: (userId: number, filters: { from?: string; to?: string }) =>
+  all: (userId: string) => ['notes', userId] as const,
+  lists: (userId: string) => [...noteKeys.all(userId), 'list'] as const,
+  list: (userId: string, filters: { from?: string; to?: string }) =>
     [...noteKeys.lists(userId), filters] as const,
-  details: (userId: number) => [...noteKeys.all(userId), 'detail'] as const,
-  detail: (userId: number, noteId: number) =>
+  details: (userId: string) => [...noteKeys.all(userId), 'detail'] as const,
+  detail: (userId: string, noteId: number) =>
     [...noteKeys.details(userId), noteId] as const,
 };
 
@@ -18,12 +19,11 @@ export function useNotesByDate(from?: string, to?: string) {
   const { user } = useUser();
 
   const query = useQuery({
-    queryKey: noteKeys.list(user?.id || 0, { from, to }),
+    queryKey: noteKeys.list(user?.id || '', { from, to }),
     queryFn: async () => {
       if (!user) throw new Error('User not found');
 
       const params = new URLSearchParams();
-      params.append('userId', user.id.toString());
       if (from) params.append('from', from);
       if (to) params.append('to', to);
 
@@ -42,6 +42,7 @@ export function useNotesByDate(from?: string, to?: string) {
       return notes as Note[];
     },
     enabled: !!user,
+    retry: false,
   });
 
   return {
@@ -53,6 +54,7 @@ export function useNotesByDate(from?: string, to?: string) {
 export function useCreateNote() {
   const queryClient = useQueryClient();
   const { user } = useUser();
+  const { showError } = useAlertContext();
 
   return useMutation({
     mutationFn: async (note: string) => {
@@ -63,10 +65,8 @@ export function useCreateNote() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          note,
-          userId: user.id,
-        }),
+        credentials: 'include',
+        body: JSON.stringify({ note }),
       });
 
       if (!response.ok) {
@@ -78,8 +78,11 @@ export function useCreateNote() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: noteKeys.lists(user?.id || 0),
+        queryKey: noteKeys.lists(user?.id || ''),
       });
+    },
+    onError: error => {
+      showError(error.message);
     },
   });
 }
@@ -87,6 +90,7 @@ export function useCreateNote() {
 export function useUpdateNote() {
   const queryClient = useQueryClient();
   const { user } = useUser();
+  const { showError } = useAlertContext();
 
   return useMutation({
     mutationFn: async ({ noteId, note }: { noteId: number; note: string }) => {
@@ -95,6 +99,7 @@ export function useUpdateNote() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ note }),
       });
 
@@ -107,8 +112,11 @@ export function useUpdateNote() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: noteKeys.lists(user?.id || 0),
+        queryKey: noteKeys.lists(user?.id || ''),
       });
+    },
+    onError: error => {
+      showError(error.message);
     },
   });
 }
@@ -116,11 +124,13 @@ export function useUpdateNote() {
 export function useDeleteNote() {
   const queryClient = useQueryClient();
   const { user } = useUser();
+  const { showError } = useAlertContext();
 
   return useMutation({
     mutationFn: async (noteId: number) => {
       const response = await fetch(`/api/notes/${noteId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -132,8 +142,11 @@ export function useDeleteNote() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: noteKeys.lists(user?.id || 0),
+        queryKey: noteKeys.lists(user?.id || ''),
       });
+    },
+    onError: error => {
+      showError(error.message);
     },
   });
 }

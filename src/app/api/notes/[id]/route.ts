@@ -7,7 +7,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authResult = await requireAuth(request);
+    const authResult = await requireAuth();
     if (!authResult.isAuthenticated) {
       return authResult.response;
     }
@@ -69,7 +69,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authResult = await requireAuth(request);
+    const authResult = await requireAuth();
     if (!authResult.isAuthenticated) {
       return authResult.response;
     }

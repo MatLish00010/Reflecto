@@ -39,82 +39,24 @@ export type Database = {
   };
   public: {
     Tables: {
-      invites: {
-        Row: {
-          code: string;
-          created_at: string | null;
-          id: number;
-          used_at: string | null;
-          user_id: number | null;
-        };
-        Insert: {
-          code: string;
-          created_at?: string | null;
-          id?: number;
-          used_at?: string | null;
-          user_id?: number | null;
-        };
-        Update: {
-          code?: string;
-          created_at?: string | null;
-          id?: number;
-          used_at?: string | null;
-          user_id?: number | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'invites_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
       notes: {
         Row: {
           created_at: string;
           id: number;
           note: string | null;
-          user_id: number | null;
+          user_id: string | null;
         };
         Insert: {
           created_at?: string;
           id?: number;
           note?: string | null;
-          user_id?: number | null;
+          user_id?: string | null;
         };
         Update: {
           created_at?: string;
           id?: number;
           note?: string | null;
-          user_id?: number | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'notes_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      users: {
-        Row: {
-          created_at: string;
-          id: number;
-          name: string | null;
-        };
-        Insert: {
-          created_at?: string;
-          id?: number;
-          name?: string | null;
-        };
-        Update: {
-          created_at?: string;
-          id?: number;
-          name?: string | null;
+          user_id?: string | null;
         };
         Relationships: [];
       };

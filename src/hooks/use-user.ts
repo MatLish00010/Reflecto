@@ -1,46 +1,48 @@
 import { useQuery } from '@tanstack/react-query';
-import type { Tables } from '@/types/supabase';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
+import { useAlertContext } from '@/components/alert-provider';
 
-// userKeys аналогично noteKeys
 export const userKeys = {
   all: ['user'] as const,
 };
 
-type User = Tables<'users'>;
+export function useUser() {
+  const { showError } = useAlertContext();
 
-export function useUser(initialUser?: User | null) {
-  const {
-    data: user,
-    isLoading: loading,
-    error,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: userKeys.all,
     queryFn: async (): Promise<User> => {
-      const response = await fetch('/api/user/me', {
-        method: 'GET',
-        credentials: 'include', // Include cookies
-      });
+      const supabase = createClient();
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Not authenticated');
-        }
-        throw new Error('Failed to fetch user');
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error) {
+        throw new Error(error.message);
       }
 
-      const { user: userData } = await response.json();
-      return userData;
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
+
+      return user;
     },
-    initialData: initialUser,
     retry: false,
   });
 
+  // Показываем ошибку, если она есть
+  if (error) {
+    showError(error.message);
+  }
+
   return {
-    user: user || null,
-    loading,
+    user: data || null,
+    isLoading,
     error: error?.message || null,
-    isAuthenticated: !!user,
+    isAuthenticated: !!data,
     refetch,
   };
 }

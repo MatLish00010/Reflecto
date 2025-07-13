@@ -1,68 +1,168 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Tables } from '@/types/supabase';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 import { userKeys } from './use-user';
 import { noteKeys } from './use-notes';
-import { useUser } from './use-user';
+import { useAlertContext } from '@/components/alert-provider';
 
-type User = Tables<'users'>;
-
-interface LoginResponse {
-  user: User;
+interface SignInRequest {
+  email: string;
+  password: string;
 }
 
-interface LoginRequest {
-  code: string;
+interface SignUpRequest {
+  email: string;
+  password: string;
+  name: string;
 }
 
-export function useLogin() {
+export function useSignIn() {
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const { showError } = useAlertContext();
 
   return useMutation({
-    mutationFn: async (data: LoginRequest): Promise<LoginResponse> => {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+    mutationFn: async (data: SignInRequest): Promise<{ user: User }> => {
+      const supabase = createClient();
+
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to login');
+      if (error) {
+        throw new Error(error.message);
       }
 
-      return response.json();
+      if (!authData.user) {
+        throw new Error('Sign in failed');
+      }
+
+      return { user: authData.user };
     },
     onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: userKeys.all });
       queryClient.setQueryData(userKeys.all, data.user);
+      router.push('/');
+    },
+    onError: error => {
+      showError(error.message);
     },
   });
 }
 
-export function useLogout() {
+export function useSignUp() {
   const queryClient = useQueryClient();
-  const { user } = useUser();
+  const router = useRouter();
+  const { showError } = useAlertContext();
+
+  return useMutation({
+    mutationFn: async (data: SignUpRequest): Promise<{ user: User }> => {
+      const supabase = createClient();
+
+      const { data: authData, error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            name: data.name,
+          },
+        },
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (!authData.user) {
+        throw new Error('Sign up failed');
+      }
+
+      return { user: authData.user };
+    },
+    onSuccess: data => {
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
+      queryClient.setQueryData(userKeys.all, data.user);
+      router.push('/');
+    },
+    onError: error => {
+      showError(error.message);
+    },
+  });
+}
+
+export function useSignOut() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const { showError } = useAlertContext();
 
   return useMutation({
     mutationFn: async () => {
-      const response = await fetch('/api/logout', {
-        method: 'POST',
-      });
+      const supabase = createClient();
 
-      if (!response.ok) {
-        throw new Error('Failed to logout');
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        throw new Error(error.message);
       }
 
-      return response.json();
+      return { success: true };
     },
     onSuccess: () => {
+      router.push('/login');
       queryClient.setQueryData(userKeys.all, null);
       queryClient.invalidateQueries({ queryKey: userKeys.all });
-      queryClient.invalidateQueries({
-        queryKey: noteKeys.lists(user?.id || 0),
+      queryClient.invalidateQueries({ queryKey: noteKeys.all('') });
+    },
+    onError: error => {
+      showError(error.message);
+    },
+  });
+}
+
+export function useResetPassword() {
+  const { showError } = useAlertContext();
+
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const supabase = createClient();
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
       });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return { success: true };
+    },
+    onError: error => {
+      showError(error.message);
+    },
+  });
+}
+
+export function useUpdatePassword() {
+  const { showError } = useAlertContext();
+
+  return useMutation({
+    mutationFn: async (password: string) => {
+      const supabase = createClient();
+
+      const { error } = await supabase.auth.updateUser({
+        password: password,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return { success: true };
+    },
+    onError: error => {
+      showError(error.message);
     },
   });
 }

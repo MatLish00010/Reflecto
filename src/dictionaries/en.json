@@ -79,15 +79,29 @@
     "logout": "Logout",
     "loggingOut": "Logging out..."
   },
-  "login": {
-    "title": "Login",
-    "description": "Enter your invitation code to access the diary",
-    "codePlaceholder": "Enter your invitation code...",
-    "loginButton": "Login",
-    "loggingInButton": "Logging in...",
-    "invalidCode": "Invalid invitation code",
-    "codeRequired": "Invitation code is required",
-    "loginSuccess": "Successfully logged in!",
-    "loginError": "Failed to login. Please try again."
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signInDescription": "Enter your credentials to access your diary",
+    "signUpDescription": "Create a new account to start your diary",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email...",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password...",
+    "name": "Name",
+    "namePlaceholder": "Enter your name...",
+    "loading": "Loading...",
+    "signInSuccess": "Successfully signed in!",
+    "signUpSuccess": "Account created successfully!",
+    "error": "Authentication error. Please try again.",
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "needAccount": "Need an account? Sign up",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset Password",
+    "resetPasswordDescription": "Enter your email to receive a password reset link",
+    "resetPasswordSuccess": "Password reset email sent! Please check your inbox.",
+    "updatePassword": "Update Password",
+    "updatePasswordDescription": "Enter your new password",
+    "updatePasswordSuccess": "Password updated successfully!"
   }
 }
