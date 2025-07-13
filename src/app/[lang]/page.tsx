@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { NewEntryForm } from '@/components/new-entry-form';
-import { UserInfo } from '@/components/user-info';
 import { History } from '@/components/history';
 
 export default async function Home({
@@ -29,10 +28,6 @@ export default async function Home({
 
   return (
     <>
-      <div className="mb-6">
-        <UserInfo />
-      </div>
-
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
