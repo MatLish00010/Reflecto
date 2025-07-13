@@ -16,21 +16,50 @@ function getLocale(request: Request): string {
 }
 
 export function middleware(request: Request) {
-  // Check if there is any supported locale in the pathname
   const pathname = new URL(request.url).pathname;
+
+  // Check if there is any supported locale in the pathname
   const pathnameHasLocale = locales.some(
     locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (pathnameHasLocale) return;
+  // If no locale, redirect to add locale
+  if (!pathnameHasLocale) {
+    const locale = getLocale(request);
+    const newUrl = new URL(request.url);
+    newUrl.pathname = `/${locale}${pathname}`;
+    return NextResponse.redirect(newUrl);
+  }
 
-  // Redirect if there is no locale
-  const locale = getLocale(request);
-  const newUrl = new URL(request.url);
-  newUrl.pathname = `/${locale}${pathname}`;
-  // e.g. incoming request is /products
-  // The new URL is now /ru/products
-  return NextResponse.redirect(newUrl);
+  // Extract locale from pathname
+  const pathnameSegments = pathname.split('/');
+  const locale = pathnameSegments[1];
+
+  // Skip auth check for API routes
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+
+  // Check for user authentication via httpOnly cookie
+  const cookieHeader = request.headers.get('cookie') || '';
+  const userIdMatch = cookieHeader.match(/userId=([^;]+)/);
+  const userId = userIdMatch ? userIdMatch[1] : null;
+
+  // If user is authenticated and trying to access login page, redirect to home
+  if (userId && pathname.includes('/login')) {
+    const homeUrl = new URL(request.url);
+    homeUrl.pathname = `/${locale}`;
+    return NextResponse.redirect(homeUrl);
+  }
+
+  // If no user ID and not on login page, redirect to login
+  if (!userId && !pathname.includes('/login')) {
+    const loginUrl = new URL(request.url);
+    loginUrl.pathname = `/${locale}/login`;
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {

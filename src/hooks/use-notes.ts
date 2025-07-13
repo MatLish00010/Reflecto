@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useUserContext } from '@/contexts/user-context';
+import { useUser } from '@/hooks/use-user';
 import type { Tables } from '@/types/supabase';
 
 type Note = Tables<'notes'>;
@@ -15,7 +15,7 @@ const noteKeys = {
 };
 
 export function useNotesByDate(from?: string, to?: string) {
-  const { user } = useUserContext();
+  const { user } = useUser();
 
   return useQuery({
     queryKey: noteKeys.list(user?.id || 0, { from, to }),
@@ -40,7 +40,7 @@ export function useNotesByDate(from?: string, to?: string) {
 
 export function useCreateNote() {
   const queryClient = useQueryClient();
-  const { user } = useUserContext();
+  const { user } = useUser();
 
   return useMutation({
     mutationFn: async (note: string) => {
@@ -74,7 +74,7 @@ export function useCreateNote() {
 
 export function useUpdateNote() {
   const queryClient = useQueryClient();
-  const { user } = useUserContext();
+  const { user } = useUser();
 
   return useMutation({
     mutationFn: async ({ noteId, note }: { noteId: number; note: string }) => {
@@ -103,7 +103,7 @@ export function useUpdateNote() {
 
 export function useDeleteNote() {
   const queryClient = useQueryClient();
-  const { user } = useUserContext();
+  const { user } = useUser();
 
   return useMutation({
     mutationFn: async (noteId: number) => {

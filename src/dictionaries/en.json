@@ -75,7 +75,18 @@
     "notFound": "User not found",
     "info": "User Information",
     "id": "User ID",
-    "fingerprint": "Browser Fingerprint",
-    "createdAt": "Created At"
+    "createdAt": "Created At",
+    "logout": "Logout"
+  },
+  "login": {
+    "title": "Login",
+    "description": "Enter your invitation code to access the diary",
+    "codePlaceholder": "Enter your invitation code...",
+    "loginButton": "Login",
+    "loggingInButton": "Logging in...",
+    "invalidCode": "Invalid invitation code",
+    "codeRequired": "Invitation code is required",
+    "loginSuccess": "Successfully logged in!",
+    "loginError": "Failed to login. Please try again."
   }
 }

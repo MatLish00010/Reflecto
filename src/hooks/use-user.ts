@@ -1,48 +1,46 @@
-import { useState, useEffect } from 'react';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { useQuery } from '@tanstack/react-query';
 import type { Tables } from '@/types/supabase';
+
+// userKeys аналогично noteKeys
+export const userKeys = {
+  all: ['user'] as const,
+};
 
 type User = Tables<'users'>;
 
-export function useUser() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export function useUser(initialUser?: User | null) {
+  const {
+    data: user,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: userKeys.all,
+    queryFn: async (): Promise<User> => {
+      const response = await fetch('/api/user/me', {
+        method: 'GET',
+        credentials: 'include', // Include cookies
+      });
 
-  useEffect(() => {
-    async function initializeUser() {
-      try {
-        setLoading(true);
-
-        const fp = await FingerprintJS.load();
-        const result = await fp.get();
-        const visitorId = result.visitorId;
-
-        const response = await fetch('/api/user', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ fingerprint: visitorId }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to initialize user');
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Not authenticated');
         }
-
-        const { user: userData } = await response.json();
-        setUser(userData);
-      } catch (err) {
-        console.error('Error initializing user:', err);
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
+        throw new Error('Failed to fetch user');
       }
-    }
 
-    initializeUser();
-  }, []);
+      const { user: userData } = await response.json();
+      return userData;
+    },
+    initialData: initialUser,
+    retry: false,
+  });
 
-  return { user, loading, error };
+  return {
+    user: user || null,
+    loading,
+    error: error?.message || null,
+    isAuthenticated: !!user,
+    refetch,
+  };
 }
