@@ -12,8 +12,16 @@ import { Globe } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
 
 const languages = [
-  { code: 'ru', flag: '🇷🇺' },
-  { code: 'en', flag: '🇺🇸' },
+  { code: 'ru', flag: '🇷🇺', name: 'russian' },
+  { code: 'en', flag: '🇺🇸', name: 'english' },
+  // { code: 'de', flag: '🇩🇪', name: 'german' },
+  // { code: 'fr', flag: '🇫🇷', name: 'french' },
+  // { code: 'es', flag: '🇪🇸', name: 'spanish' },
+  // { code: 'it', flag: '🇮🇹', name: 'italian' },
+  // { code: 'pt', flag: '🇵🇹', name: 'portuguese' },
+  // { code: 'ja', flag: '🇯🇵', name: 'japanese' },
+  // { code: 'ko', flag: '🇰🇷', name: 'korean' },
+  // { code: 'zh', flag: '🇨🇳', name: 'chinese' },
 ];
 
 export function LanguageToggle() {
@@ -47,9 +55,7 @@ export function LanguageToggle() {
             className={currentLang === language.code ? 'bg-accent' : ''}
           >
             <span className="mr-2">{language.flag}</span>
-            {language.code === 'ru'
-              ? t('languages.russian')
-              : t('languages.english')}
+            {t(`languages.${language.name}`)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

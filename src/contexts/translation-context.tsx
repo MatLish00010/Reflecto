@@ -5,6 +5,7 @@ import { createContext, useContext, ReactNode } from 'react';
 interface TranslationContextType {
   t: (key: string) => string;
   dict: Record<string, unknown>;
+  lang: string;
 }
 
 const TranslationContext = createContext<TranslationContextType | undefined>(
@@ -22,11 +23,13 @@ export function useTranslation() {
 interface TranslationProviderProps {
   children: ReactNode;
   dict: Record<string, unknown>;
+  lang: string;
 }
 
 export function TranslationProvider({
   children,
   dict,
+  lang,
 }: TranslationProviderProps) {
   const t = (key: string) => {
     const keys = key.split('.');
@@ -45,7 +48,7 @@ export function TranslationProvider({
   };
 
   return (
-    <TranslationContext.Provider value={{ t, dict }}>
+    <TranslationContext.Provider value={{ t, dict, lang }}>
       {children}
     </TranslationContext.Provider>
   );

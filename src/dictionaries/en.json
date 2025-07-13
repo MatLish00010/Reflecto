@@ -56,11 +56,20 @@
     "cancel": "Cancel",
     "editPlaceholder": "Edit your entry...",
     "showMore": "Show more",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "selectDate": "Select date"
   },
   "languages": {
     "russian": "Русский",
-    "english": "English"
+    "english": "English",
+    "german": "Deutsch",
+    "french": "Français",
+    "spanish": "Español",
+    "italian": "Italiano",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "chinese": "中文"
   },
   "errors": {
     "audioFileNotFound": "Audio file not found",

@@ -21,13 +21,24 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateStaticParams() {
-  return [{ lang: 'en' }, { lang: 'ru' }];
+  return [
+    { lang: 'en' },
+    { lang: 'ru' },
+    { lang: 'de' },
+    { lang: 'fr' },
+    { lang: 'es' },
+    { lang: 'it' },
+    { lang: 'pt' },
+    { lang: 'ja' },
+    { lang: 'ko' },
+    { lang: 'zh' },
+  ];
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ lang: 'en' | 'ru' }>;
+  params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang);
@@ -43,7 +54,7 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ lang: 'en' | 'ru' }>;
+  params: Promise<{ lang: string }>;
 }>) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
@@ -59,7 +70,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TranslationProvider dict={dict}>
+          <TranslationProvider dict={dict} lang={lang}>
             <QueryProvider>
               <AlertProvider>
                 <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
