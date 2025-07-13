@@ -4,9 +4,7 @@ import { requireAuth } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
-    // Проверяем аутентификацию пользователя
     const authResult = await requireAuth(request);
-    console.log('authResult', authResult);
 
     if (!authResult.isAuthenticated) {
       return authResult.response;
