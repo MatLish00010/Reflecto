@@ -19,7 +19,7 @@ export function History() {
 
   const {
     data: notes = [],
-    isLoading,
+    isPending,
     error,
   } = useNotesByDate(todayStart.toISOString(), todayEnd.toISOString());
 
@@ -33,7 +33,7 @@ export function History() {
   const displayedNotes = showAll ? notes : notes.slice(0, 3);
   const hasMoreNotes = notes.length > 3;
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="space-y-2">
         {[...Array(3)].map((_, index) => (
