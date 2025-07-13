@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { requireAuth } from '@/lib/auth';
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { id }: { id: string }) {
   try {
     const authResult = await requireAuth(request);
     if (!authResult.isAuthenticated) {
@@ -13,7 +10,6 @@ export async function PUT(
     }
 
     const { note } = await request.json();
-    const { id } = await params;
     const noteId = parseInt(id);
 
     if (!note || isNaN(noteId)) {
@@ -64,17 +60,12 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: NextRequest, { id }: { id: string }) {
   try {
     const authResult = await requireAuth(request);
     if (!authResult.isAuthenticated) {
       return authResult.response;
     }
-
-    const { id } = await params;
     const noteId = parseInt(id);
 
     if (isNaN(noteId)) {
