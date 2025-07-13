@@ -13,7 +13,7 @@ import {
   Lightbulb,
   Target,
 } from 'lucide-react';
-import { useAISummary } from '@/hooks/use-ai-summary';
+import { useTodayAISummary, useSaveAISummary } from '@/hooks/use-ai-summary';
 import { useNotesByDate } from '@/hooks/use-notes';
 
 export function AISummary() {
@@ -26,24 +26,29 @@ export function AISummary() {
     todayStart.toISOString(),
     todayEnd.toISOString()
   );
-  const aiSummaryMutation = useAISummary();
+  const {
+    data: summary,
+    isPending: summaryLoading,
+    error: summaryError,
+  } = useTodayAISummary();
+  const saveSummaryMutation = useSaveAISummary();
 
   const handleGenerateSummary = () => {
-    aiSummaryMutation.mutate(
+    saveSummaryMutation.mutate(
       notes.map(n => n.note).filter((n): n is string => !!n)
     );
   };
 
   const handleRefresh = () => {
-    aiSummaryMutation.mutate(
+    saveSummaryMutation.mutate(
       notes.map(n => n.note).filter((n): n is string => !!n)
     );
   };
 
-  const summary = aiSummaryMutation.data;
-  const isLoading = aiSummaryMutation.isPending || notesLoading;
+  const isLoading =
+    summaryLoading || notesLoading || saveSummaryMutation.isPending;
   const hasData = !!summary;
-  const error = aiSummaryMutation.error;
+  const error = summaryError || saveSummaryMutation.error;
 
   if (isLoading) {
     return (
@@ -131,9 +136,12 @@ export function AISummary() {
           <Button
             onClick={handleGenerateSummary}
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            disabled={saveSummaryMutation.isPending}
           >
             <Sparkles className="h-4 w-4 mr-2" />
-            {t('aiAnalysis.generateButton')}
+            {saveSummaryMutation.isPending
+              ? t('newEntry.savingButton')
+              : t('aiAnalysis.generateButton')}
           </Button>
         </div>
       </div>
@@ -162,9 +170,12 @@ export function AISummary() {
           size="sm"
           onClick={handleRefresh}
           className="text-xs"
+          disabled={saveSummaryMutation.isPending}
         >
           <RefreshCw className="h-3 w-3 mr-1" />
-          {t('aiAnalysis.refresh')}
+          {saveSummaryMutation.isPending
+            ? t('newEntry.savingButton')
+            : t('aiAnalysis.refresh')}
         </Button>
       </div>
 

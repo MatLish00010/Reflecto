@@ -1,6 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 
 export const runtime = 'edge';
+
+function getTodayRange() {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+  return {
+    from: start.toISOString(),
+    to: end.toISOString(),
+  };
+}
+
+export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+  }
+  const { from, to } = getTodayRange();
+  const { data, error } = await supabase
+    .from('ai_summaries')
+    .select('*')
+    .eq('user_id', user.id)
+    .gte('created_at', from)
+    .lt('created_at', to)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+  if (error && error.code !== 'PGRST116') {
+    // PGRST116: No rows found
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  if (!data) {
+    return NextResponse.json({ summary: null });
+  }
+  return NextResponse.json({ summary: data.summary });
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,9 +49,19 @@ export async function POST(req: NextRequest) {
     if (!Array.isArray(notes) || notes.length === 0) {
       return NextResponse.json({ error: 'No notes provided' }, { status: 400 });
     }
-
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    if (userError || !user) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
     // Формируем промпт для ChatGPT
-    const prompt = `Вот записи пользователя за день:\n${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}\n\nКак профессиональный психолог, проанализируйте эти записи и создайте персонализированное саммари. 
+    const prompt = `Вот записи пользователя за день:
+${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
+
+Как профессиональный психолог, проанализируйте эти записи и создайте персонализированное саммари. 
 
 ВАЖНО: Определите язык записей пользователя и отвечайте на том же языке. Обращайтесь к пользователю на "вы" (например: "Вы сегодня ели...", "В ваших записях видно...") или "you" для английского.
 
@@ -68,7 +119,45 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
-
+    // Сохраняем или обновляем саммари за сегодня
+    const { from, to } = getTodayRange();
+    // Проверяем, есть ли уже саммари за сегодня
+    const { data: existing, error: selectError } = await supabase
+      .from('ai_summaries')
+      .select('*')
+      .eq('user_id', user.id)
+      .gte('created_at', from)
+      .lt('created_at', to)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+    if (selectError && selectError.code !== 'PGRST116') {
+      return NextResponse.json({ error: selectError.message }, { status: 500 });
+    }
+    if (existing) {
+      // Обновляем
+      const { error: updateError } = await supabase
+        .from('ai_summaries')
+        .update({ summary })
+        .eq('id', existing.id);
+      if (updateError) {
+        return NextResponse.json(
+          { error: updateError.message },
+          { status: 500 }
+        );
+      }
+    } else {
+      // Вставляем
+      const { error: insertError } = await supabase
+        .from('ai_summaries')
+        .insert({ user_id: user.id, summary });
+      if (insertError) {
+        return NextResponse.json(
+          { error: insertError.message },
+          { status: 500 }
+        );
+      }
+    }
     return NextResponse.json({ summary });
   } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

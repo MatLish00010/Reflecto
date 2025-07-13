@@ -39,6 +39,27 @@ export type Database = {
   };
   public: {
     Tables: {
+      ai_summaries: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          summary: Json;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: string;
+          summary: Json;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          summary?: Json;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       notes: {
         Row: {
           created_at: string;
