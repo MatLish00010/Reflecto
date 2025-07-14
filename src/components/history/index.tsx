@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '../../contexts/translation-context';
 import { useNotesByDate } from '../../hooks/use-notes';
 import { DatePicker } from './date-picker';
@@ -12,10 +12,13 @@ export function History() {
   const [showAll, setShowAll] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  const selectedDateStart = new Date(selectedDate);
-  selectedDateStart.setHours(0, 0, 0, 0);
-  const selectedDateEnd = new Date(selectedDate);
-  selectedDateEnd.setHours(23, 59, 59, 999);
+  const { selectedDateStart, selectedDateEnd } = useMemo(() => {
+    const start = new Date(selectedDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(selectedDate);
+    end.setHours(23, 59, 59, 999);
+    return { selectedDateStart: start, selectedDateEnd: end };
+  }, [selectedDate]);
 
   const {
     data: notes = [],
@@ -25,6 +28,10 @@ export function History() {
     selectedDateStart.toISOString(),
     selectedDateEnd.toISOString()
   );
+
+  const handleToggleShowAll = useCallback(() => {
+    setShowAll(prev => !prev);
+  }, []);
 
   if (isPending) {
     return (
@@ -40,22 +47,6 @@ export function History() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <DatePicker
-            selectedDate={selectedDate}
-            onDateSelect={setSelectedDate}
-          />
-        </div>
-        <div className="text-center py-4 text-red-500 dark:text-red-400">
-          <p>{t('history.fetchError')}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -64,13 +55,18 @@ export function History() {
           onDateSelect={setSelectedDate}
         />
       </div>
-
-      <NotesList
-        notes={notes}
-        showAll={showAll}
-        onToggleShowAll={() => setShowAll(!showAll)}
-        lang={lang}
-      />
+      {error ? (
+        <div className="text-center py-4 text-red-500 dark:text-red-400">
+          <p>{t('history.fetchError')}</p>
+        </div>
+      ) : (
+        <NotesList
+          notes={notes}
+          showAll={showAll}
+          onToggleShowAll={handleToggleShowAll}
+          lang={lang}
+        />
+      )}
     </div>
   );
 }
