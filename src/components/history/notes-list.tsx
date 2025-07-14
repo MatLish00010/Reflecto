@@ -3,13 +3,10 @@
 import { useTranslation } from '@/contexts/translation-context';
 import { NoteItem } from './note-item';
 import { ShowMoreButton } from './show-more-button';
+import type { Note } from '@/types/notes';
 
 interface NotesListProps {
-  notes: Array<{
-    id: number;
-    note: string | null;
-    created_at: string;
-  }>;
+  notes: Note[];
   showAll: boolean;
   onToggleShowAll: () => void;
 }

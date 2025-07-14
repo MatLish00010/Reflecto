@@ -6,13 +6,10 @@ import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { getTimeLocale } from '@/lib/locale-utils';
 import { useTranslation } from '@/contexts/translation-context';
 import { useState } from 'react';
+import type { Note } from '@/types/notes';
 
 interface NoteItemProps {
-  note: {
-    id: number;
-    note: string | null;
-    created_at: string;
-  };
+  note: Note;
 }
 
 export function NoteItem({ note }: NoteItemProps) {

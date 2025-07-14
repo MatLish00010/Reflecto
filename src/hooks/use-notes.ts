@@ -1,9 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/hooks/use-user';
-import type { Tables } from '@/types/supabase';
+import type { Note } from '@/types/notes';
 import { useAlertContext } from '@/components/alert-provider';
-
-type Note = Tables<'notes'>;
 
 export const noteKeys = {
   all: (userId: string) => ['notes', userId] as const,
