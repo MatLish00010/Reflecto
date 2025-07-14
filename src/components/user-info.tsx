@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useSignOut } from '@/hooks/use-auth';
 
 export function UserInfo() {
-  const { user, isLoading, error } = useUser();
+  const { user, isPending, error } = useUser();
   const { t } = useTranslation();
   const signOutMutation = useSignOut();
 
@@ -18,7 +18,7 @@ export function UserInfo() {
     }
   };
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
         <p className="text-blue-600 dark:text-blue-400">{t('user.loading')}</p>
@@ -30,7 +30,7 @@ export function UserInfo() {
     return (
       <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
         <p className="text-red-600 dark:text-red-400">
-          {t('user.error')}: {error}
+          {t('user.error')}: {error.message}
         </p>
       </div>
     );
@@ -59,7 +59,7 @@ export function UserInfo() {
           disabled={signOutMutation.isPending}
           className="text-green-700 dark:text-green-300 border-green-300 dark:border-green-600 hover:bg-green-100 dark:hover:bg-green-800"
         >
-          {signOutMutation.isPending ? 'Signing out...' : t('user.logout')}
+          {signOutMutation.isPending ? t('user.loggingOut') : t('user.logout')}
         </Button>
       </div>
       <div className="space-y-1 text-sm text-green-700 dark:text-green-300">

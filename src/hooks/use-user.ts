@@ -7,7 +7,7 @@ export const userKeys = {
 };
 
 export function useUser() {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, ...query } = useQuery({
     queryKey: userKeys.all,
     queryFn: async (): Promise<User> => {
       const supabase = createClient();
@@ -32,9 +32,7 @@ export function useUser() {
 
   return {
     user: data || null,
-    isLoading,
-    error: error?.message || null,
     isAuthenticated: !!data,
-    refetch,
+    ...query,
   };
 }
