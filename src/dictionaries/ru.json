@@ -57,7 +57,9 @@
     "editPlaceholder": "Редактируйте запись...",
     "showMore": "Показать еще",
     "showLess": "Скрыть",
-    "selectDate": "Выберите дату"
+    "selectDate": "Выберите дату",
+    "expand": "Развернуть",
+    "collapse": "Свернуть"
   },
   "languages": {
     "russian": "Русский",

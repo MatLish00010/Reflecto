@@ -57,7 +57,9 @@
     "editPlaceholder": "Edit your entry...",
     "showMore": "Show more",
     "showLess": "Show less",
-    "selectDate": "Select date"
+    "selectDate": "Select date",
+    "expand": "Expand",
+    "collapse": "Collapse"
   },
   "languages": {
     "russian": "Русский",

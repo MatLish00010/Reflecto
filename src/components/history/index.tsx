@@ -8,7 +8,7 @@ import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
 
 export function History() {
-  const { t, lang } = useTranslation();
+  const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -64,7 +64,6 @@ export function History() {
           notes={notes}
           showAll={showAll}
           onToggleShowAll={handleToggleShowAll}
-          lang={lang}
         />
       )}
     </div>
