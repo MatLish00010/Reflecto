@@ -39,7 +39,8 @@
     "emotionalMoments": "Эмоциональные моменты",
     "observations": "Мои наблюдения",
     "recommendations": "Рекомендации",
-    "fetchError": "Ошибка генерации summary"
+    "fetchError": "Ошибка генерации summary",
+    "selectDate": "Выберите дату"
   },
   "history": {
     "title": "История записей",

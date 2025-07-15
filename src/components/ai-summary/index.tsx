@@ -1,7 +1,10 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
-import { useTodayAISummary, useSaveAISummary } from '@/hooks/use-ai-summary';
+import { useCallback, useMemo, useState } from 'react';
+import {
+  useAISummaryByDateRange,
+  useSaveAISummary,
+} from '@/hooks/use-ai-summary';
 import { useNotesByDate } from '@/hooks/use-notes';
 import { AISummaryLoadingSkeleton } from './loading-skeleton';
 import { GeneratePrompt } from './generate-prompt';
@@ -10,21 +13,33 @@ import { SummaryHeader } from './summary-header';
 import { SummaryContent } from './summary-content';
 
 export function AISummary() {
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-  const todayEnd = new Date();
-  todayEnd.setHours(23, 59, 59, 999);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const selectedDateStart = useMemo(() => {
+    const start = new Date(selectedDate);
+    start.setHours(0, 0, 0, 0);
+    return start;
+  }, [selectedDate]);
+
+  const selectedDateEnd = useMemo(() => {
+    const end = new Date(selectedDate);
+    end.setHours(23, 59, 59, 999);
+    return end;
+  }, [selectedDate]);
 
   const { data: notes, isPending: notesLoading } = useNotesByDate(
-    todayStart.toISOString(),
-    todayEnd.toISOString()
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
   );
 
   const {
     data: summary,
     isPending: summaryLoading,
     error: summaryError,
-  } = useTodayAISummary();
+  } = useAISummaryByDateRange(
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
+  );
 
   const saveSummaryMutation = useSaveAISummary();
 
@@ -40,6 +55,10 @@ export function AISummary() {
   const handleRefresh = useCallback(() => {
     saveSummaryMutation.mutate(notesTexts);
   }, [saveSummaryMutation, notesTexts]);
+
+  const handleDateChange = useCallback((date: Date) => {
+    setSelectedDate(date);
+  }, []);
 
   const isLoading = useMemo(
     () => summaryLoading || notesLoading || saveSummaryMutation.isPending,
@@ -60,6 +79,8 @@ export function AISummary() {
   if (!hasData) {
     return (
       <GeneratePrompt
+        selectedDate={selectedDate}
+        onDateChange={handleDateChange}
         onGenerate={handleGenerateSummary}
         isGenerating={saveSummaryMutation.isPending}
       />
@@ -73,6 +94,8 @@ export function AISummary() {
   return (
     <div className="space-y-2">
       <SummaryHeader
+        selectedDate={selectedDate}
+        onDateChange={handleDateChange}
         onRefresh={handleRefresh}
         isRefreshing={saveSummaryMutation.isPending}
       />

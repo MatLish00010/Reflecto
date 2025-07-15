@@ -3,10 +3,10 @@ import { createClient } from '@/lib/supabase/server';
 
 export const runtime = 'edge';
 
-function getTodayRange() {
-  const start = new Date();
+function getDateRange(date: Date) {
+  const start = new Date(date);
   start.setHours(0, 0, 0, 0);
-  const end = new Date();
+  const end = new Date(date);
   end.setHours(23, 59, 59, 999);
   return {
     from: start.toISOString(),
@@ -14,16 +14,40 @@ function getTodayRange() {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const fromParam = searchParams.get('from');
+  const toParam = searchParams.get('to');
+
+  let from: string, to: string;
+
+  if (fromParam && toParam) {
+    from = fromParam;
+    to = toParam;
+  } else {
+    const dateParam = searchParams.get('date');
+    let targetDate: Date;
+    if (dateParam) {
+      targetDate = new Date(dateParam);
+      if (isNaN(targetDate.getTime())) {
+        return NextResponse.json({ error: 'Invalid date' }, { status: 400 });
+      }
+    } else {
+      targetDate = new Date();
+    }
+    const range = getDateRange(targetDate);
+    from = range.from;
+    to = range.to;
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
   if (userError || !user) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 400 });
   }
-  const { from, to } = getTodayRange();
   const { data, error } = await supabase
     .from('ai_summaries')
     .select('*')
@@ -34,7 +58,6 @@ export async function GET() {
     .limit(1)
     .single();
   if (error && error.code !== 'PGRST116') {
-    // PGRST116: No rows found
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   if (!data) {
@@ -45,7 +68,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { notes } = await req.json(); // notes: string[]
+    const { notes } = await req.json();
     if (!Array.isArray(notes) || notes.length === 0) {
       return NextResponse.json({ error: 'No notes provided' }, { status: 400 });
     }
@@ -57,7 +80,7 @@ export async function POST(req: NextRequest) {
     if (userError || !user) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
-    // Формируем промпт для ChatGPT
+
     const prompt = `Вот записи пользователя за день:
 ${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
 
@@ -119,9 +142,8 @@ ${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
         { status: 500 }
       );
     }
-    // Сохраняем или обновляем саммари за сегодня
-    const { from, to } = getTodayRange();
-    // Проверяем, есть ли уже саммари за сегодня
+    const { from, to } = getDateRange(new Date());
+
     const { data: existing, error: selectError } = await supabase
       .from('ai_summaries')
       .select('*')
@@ -135,7 +157,6 @@ ${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
       return NextResponse.json({ error: selectError.message }, { status: 500 });
     }
     if (existing) {
-      // Обновляем
       const { error: updateError } = await supabase
         .from('ai_summaries')
         .update({ summary })
@@ -147,7 +168,6 @@ ${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
         );
       }
     } else {
-      // Вставляем
       const { error: insertError } = await supabase
         .from('ai_summaries')
         .insert({ user_id: user.id, summary });

@@ -1,13 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { Brain, Sparkles } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
+import { DateSelector } from './date-selector';
 
 interface GeneratePromptProps {
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
   onGenerate: () => void;
   isGenerating: boolean;
 }
 
 export function GeneratePrompt({
+  selectedDate,
+  onDateChange,
   onGenerate,
   isGenerating,
 }: GeneratePromptProps) {
@@ -27,6 +32,7 @@ export function GeneratePrompt({
             {t('aiAnalysis.generateDescription')}
           </p>
         </div>
+        <DateSelector selectedDate={selectedDate} onDateChange={onDateChange} />
         <Button
           onClick={onGenerate}
           className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 dark:from-blue-500 dark:via-purple-500 dark:to-indigo-500 dark:hover:from-blue-600 dark:hover:via-purple-600 dark:hover:to-indigo-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"

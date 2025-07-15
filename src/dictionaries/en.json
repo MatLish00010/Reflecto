@@ -39,7 +39,8 @@
     "emotionalMoments": "Emotional Moments",
     "observations": "My Observations",
     "recommendations": "Recommendations",
-    "fetchError": "Error generating summary"
+    "fetchError": "Error generating summary",
+    "selectDate": "Select date"
   },
   "history": {
     "title": "Entry History",
