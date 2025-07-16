@@ -1,19 +1,20 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import {
   useAISummaryByDateRange,
   useSaveAISummary,
 } from '@/hooks/use-ai-summary';
 import { useNotesByDate } from '@/hooks/use-notes';
+import { useAlertContext } from '@/components/alert-provider';
 import { AISummaryLoadingSkeleton } from './loading-skeleton';
 import { GeneratePrompt } from './generate-prompt';
-import { ErrorMessage } from './error-message';
 import { SummaryHeader } from './summary-header';
 import { SummaryContent } from './summary-content';
 
 export function AISummary() {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const { showError } = useAlertContext();
 
   const selectedDateStart = useMemo(() => {
     const start = new Date(selectedDate);
@@ -72,6 +73,12 @@ export function AISummary() {
     [summaryError, saveSummaryMutation.error]
   );
 
+  useEffect(() => {
+    if (error) {
+      showError(error.message);
+    }
+  }, [error, showError]);
+
   if (isLoading) {
     return <AISummaryLoadingSkeleton />;
   }
@@ -83,12 +90,9 @@ export function AISummary() {
         onDateChange={handleDateChange}
         onGenerate={handleGenerateSummary}
         isGenerating={saveSummaryMutation.isPending}
+        hasNotes={notes.length > 0}
       />
     );
-  }
-
-  if (error) {
-    return <ErrorMessage />;
   }
 
   return (

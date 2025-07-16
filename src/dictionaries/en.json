@@ -40,7 +40,13 @@
     "observations": "My Observations",
     "recommendations": "Recommendations",
     "fetchError": "Error generating summary",
-    "selectDate": "Select date"
+    "selectDate": "Select date",
+    "noNotesTodayTitle": "No entries for today",
+    "noNotesTodayDescription": "Add your first entry to get AI analysis",
+    "noNotesTitle": "No entries for this date",
+    "noNotesDescription": "There are no entries for the selected date",
+    "addFirstNote": "Add your first note",
+    "selectAnotherDate": "Select another date"
   },
   "history": {
     "title": "Entry History",

@@ -35,7 +35,7 @@ export function NewEntryForm() {
   };
 
   return (
-    <div className="space-y-4">
+    <div id="new-entry-form" className="space-y-4">
       <div>
         <label htmlFor="content" className="block text-sm font-medium mb-2">
           {t('newEntry.contentLabel')}

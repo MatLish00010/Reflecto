@@ -40,7 +40,13 @@
     "observations": "Мои наблюдения",
     "recommendations": "Рекомендации",
     "fetchError": "Ошибка генерации summary",
-    "selectDate": "Выберите дату"
+    "selectDate": "Выберите дату",
+    "noNotesTodayTitle": "Нет записей за сегодня",
+    "noNotesTodayDescription": "Добавьте первую запись для получения AI-анализа",
+    "noNotesTitle": "Нет записей за эту дату",
+    "noNotesDescription": "Для выбранной даты нет записей",
+    "addFirstNote": "Добавьте первую запись",
+    "selectAnotherDate": "Выберите другую дату"
   },
   "history": {
     "title": "История записей",

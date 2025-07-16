@@ -78,7 +78,11 @@ export function useSaveAISummary() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes }),
       });
-      if (!res.ok) throw new Error('Failed to save summary');
+      if (!res.ok) {
+        const data = await res.json();
+
+        throw new Error(data.error);
+      }
       const data = await res.json();
       return data.summary;
     },
