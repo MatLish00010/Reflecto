@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/hooks/use-user';
+import { useTranslation } from '@/contexts/translation-context';
 
 export const aiSummaryKeys = {
   all: (userId: string) => ['ai-summary', userId] as const,
@@ -13,12 +14,14 @@ export const aiSummaryKeys = {
 };
 
 export function useAISummary() {
+  const { lang } = useTranslation();
+
   return useMutation({
     mutationFn: async (notes: string[]) => {
       const res = await fetch('/api/ai-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes }),
+        body: JSON.stringify({ notes, locale: lang }),
       });
       if (!res.ok) throw new Error('Failed to get summary');
       const data = await res.json();
@@ -70,13 +73,15 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
 export function useSaveAISummary() {
   const queryClient = useQueryClient();
   const { user } = useUser();
+  const { lang } = useTranslation();
+
   return useMutation({
     mutationFn: async (notes: string[]) => {
       if (!user) throw new Error('User not found');
       const res = await fetch('/api/ai-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes }),
+        body: JSON.stringify({ notes, locale: lang }),
       });
       if (!res.ok) {
         const data = await res.json();

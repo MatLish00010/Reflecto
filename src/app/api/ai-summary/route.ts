@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import {
+  getAISummaryPrompt,
+  getAISummarySystemPrompt,
+  type Locale,
+} from '../../../../prompts';
 
 export const runtime = 'edge';
 
@@ -68,10 +73,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { notes } = await req.json();
+    const { notes, locale = 'ru' } = await req.json();
     if (!Array.isArray(notes) || notes.length === 0) {
       return NextResponse.json({ error: 'No notes provided' }, { status: 400 });
     }
+
     const supabase = await createClient();
     const {
       data: { user },
@@ -81,27 +87,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    const prompt = `Вот записи пользователя за день:
-${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
-
-Как профессиональный психолог, проанализируйте эти записи и создайте персонализированное саммари. 
-
-ВАЖНО: Определите язык записей пользователя и отвечайте на том же языке. Обращайтесь к пользователю на "вы" (например: "Вы сегодня ели...", "В ваших записях видно...") или "you" для английского.
-
-Выделите:
-- Основной сюжет дня и ключевые события
-- Важные эмоциональные моменты и переживания
-- Ключевые темы, которые повторяются в записях
-- Ваши профессиональные наблюдения и выводы
-- Конкретные рекомендации или советы, основанные на вашем анализе
-
-Ответ верните в формате JSON с полями:
-- mainStory (строка) - основной сюжет дня
-- keyEvents (массив строк) - важные события
-- emotionalMoments (массив строк) - эмоциональные моменты
-- keyThemes (массив строк) - ключевые темы
-- observations (массив строк) - ваши профессиональные наблюдения
-- recommendations (массив строк) - рекомендации и советы`;
+    const prompt = getAISummaryPrompt(locale as Locale, notes);
+    const systemPrompt = getAISummarySystemPrompt(locale as Locale);
 
     const openaiRes = await fetch(
       'https://api.openai.com/v1/chat/completions',
@@ -112,12 +99,11 @@ ${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-4o-mini',
           messages: [
             {
               role: 'system',
-              content:
-                'Вы профессиональный психолог с многолетним опытом. Анализируйте записи клиента с эмпатией и профессионализмом. Давайте персонализированные, полезные выводы и рекомендации. Определяйте язык записей клиента и отвечайте на том же языке. Обращайтесь к клиенту на "вы" (русский) или "you" (английский).',
+              content: systemPrompt,
             },
             { role: 'user', content: prompt },
           ],
@@ -135,7 +121,8 @@ ${notes.map((n, i) => `${i + 1}. ${n}`).join('\n')}
     const content = data.choices?.[0]?.message?.content;
     let summary;
     try {
-      summary = JSON.parse(content);
+      const cleanedContent = content.replace(/```json\s*|\s*```/g, '').trim();
+      summary = JSON.parse(cleanedContent);
     } catch {
       return NextResponse.json(
         { error: 'Failed to parse summary' },
