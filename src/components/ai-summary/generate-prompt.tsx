@@ -88,7 +88,7 @@ export function GeneratePrompt({
         </p>
         <Button
           onClick={onGenerate}
-          className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 dark:from-blue-500 dark:via-purple-500 dark:to-indigo-500 dark:hover:from-blue-600 dark:hover:via-purple-600 dark:hover:to-indigo-600 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+          className="btn-gradient"
           disabled={isGenerating}
         >
           <Sparkles className="h-4 w-4 mr-2" />

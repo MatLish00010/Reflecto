@@ -1,6 +1,7 @@
 import { Clock, Heart, Lightbulb, Sparkles, Target } from 'lucide-react';
 import { SummaryCard } from './summary-card';
 import { ThemesTags } from './themes-tags';
+import { ShareButton } from './share-button';
 
 interface SummaryContentProps {
   summary: {
@@ -53,6 +54,10 @@ export function SummaryContent({ summary }: SummaryContentProps) {
       />
 
       <ThemesTags themes={summary.keyThemes || []} />
+
+      <div className="flex justify-center pt-4">
+        <ShareButton summary={summary} />
+      </div>
     </div>
   );
 }

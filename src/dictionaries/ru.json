@@ -39,6 +39,7 @@
     "emotionalMoments": "Эмоциональные моменты",
     "observations": "Мои наблюдения",
     "recommendations": "Рекомендации",
+    "keyThemes": "Ключевые темы",
     "fetchError": "Ошибка генерации summary",
     "selectDate": "Выберите дату",
     "noNotesTodayTitle": "Нет записей за сегодня",
@@ -46,7 +47,13 @@
     "noNotesTitle": "Нет записей за эту дату",
     "noNotesDescription": "Для выбранной даты нет записей",
     "addFirstNote": "Добавьте первую запись",
-    "selectAnotherDate": "Выберите другую дату"
+    "selectAnotherDate": "Выберите другую дату",
+    "share": "Поделиться",
+    "shareTitle": "AI-анализ дневника",
+    "copiedToClipboard": "Анализ скопирован в буфер обмена!",
+    "shareError": "Не удалось поделиться анализом",
+    "poweredBy": "Создано с помощью",
+    "tryItYourself": "Попробуйте сами"
   },
   "history": {
     "title": "История записей",

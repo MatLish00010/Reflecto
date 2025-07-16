@@ -39,6 +39,7 @@
     "emotionalMoments": "Emotional Moments",
     "observations": "My Observations",
     "recommendations": "Recommendations",
+    "keyThemes": "Key Themes",
     "fetchError": "Error generating summary",
     "selectDate": "Select date",
     "noNotesTodayTitle": "No entries for today",
@@ -46,7 +47,13 @@
     "noNotesTitle": "No entries for this date",
     "noNotesDescription": "There are no entries for the selected date",
     "addFirstNote": "Add your first note",
-    "selectAnotherDate": "Select another date"
+    "selectAnotherDate": "Select another date",
+    "share": "Share",
+    "shareTitle": "AI Diary Analysis",
+    "copiedToClipboard": "Analysis copied to clipboard!",
+    "shareError": "Failed to share analysis",
+    "poweredBy": "Powered by",
+    "tryItYourself": "Try it yourself"
   },
   "history": {
     "title": "Entry History",
