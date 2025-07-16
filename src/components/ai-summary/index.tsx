@@ -96,7 +96,7 @@ export function AISummary() {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <SummaryHeader
         selectedDate={selectedDate}
         onDateChange={handleDateChange}
