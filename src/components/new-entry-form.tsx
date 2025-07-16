@@ -53,7 +53,7 @@ export function NewEntryForm() {
       </div>
       <Button
         onClick={handleSave}
-        className="w-full"
+        className="w-full btn-gradient-scale"
         disabled={!content.trim() || createNoteMutation.isPending}
       >
         {createNoteMutation.isPending

@@ -88,7 +88,7 @@ export function GeneratePrompt({
         </p>
         <Button
           onClick={onGenerate}
-          className="btn-gradient"
+          className="btn-gradient-scale"
           disabled={isGenerating}
         >
           <Sparkles className="h-4 w-4 mr-2" />
