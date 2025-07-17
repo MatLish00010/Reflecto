@@ -50,12 +50,18 @@ export function AISummary() {
   );
 
   const handleGenerateSummary = useCallback(() => {
-    saveSummaryMutation.mutate(notesTexts);
-  }, [saveSummaryMutation, notesTexts]);
+    saveSummaryMutation.mutate({
+      notes: notesTexts,
+      date: selectedDate.toISOString(),
+    });
+  }, [saveSummaryMutation, notesTexts, selectedDate]);
 
   const handleRefresh = useCallback(() => {
-    saveSummaryMutation.mutate(notesTexts);
-  }, [saveSummaryMutation, notesTexts]);
+    saveSummaryMutation.mutate({
+      notes: notesTexts,
+      date: selectedDate.toISOString(),
+    });
+  }, [saveSummaryMutation, notesTexts, selectedDate]);
 
   const handleDateChange = useCallback((date: Date) => {
     setSelectedDate(date);

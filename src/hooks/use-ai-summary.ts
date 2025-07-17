@@ -17,11 +17,11 @@ export function useAISummary() {
   const { lang } = useTranslation();
 
   return useMutation({
-    mutationFn: async (notes: string[]) => {
+    mutationFn: async ({ notes, date }: { notes: string[]; date?: string }) => {
       const res = await fetch('/api/ai-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes, locale: lang }),
+        body: JSON.stringify({ notes, locale: lang, date }),
       });
       if (!res.ok) throw new Error('Failed to get summary');
       const data = await res.json();
@@ -76,12 +76,12 @@ export function useSaveAISummary() {
   const { lang } = useTranslation();
 
   return useMutation({
-    mutationFn: async (notes: string[]) => {
+    mutationFn: async ({ notes, date }: { notes: string[]; date?: string }) => {
       if (!user) throw new Error('User not found');
       const res = await fetch('/api/ai-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes, locale: lang }),
+        body: JSON.stringify({ notes, locale: lang, date }),
       });
       if (!res.ok) {
         const data = await res.json();

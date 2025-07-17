@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { notes, locale = 'ru' } = await req.json();
+    const { notes, locale = 'ru', date } = await req.json();
     if (!Array.isArray(notes) || notes.length === 0) {
       return NextResponse.json({ error: 'No notes provided' }, { status: 400 });
     }
@@ -129,7 +129,17 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
-    const { from, to } = getDateRange(new Date());
+
+    let targetDate: Date;
+    if (date) {
+      targetDate = new Date(date);
+      if (isNaN(targetDate.getTime())) {
+        return NextResponse.json({ error: 'Invalid date' }, { status: 400 });
+      }
+    } else {
+      targetDate = new Date();
+    }
+    const { from, to } = getDateRange(targetDate);
 
     const { data: existing, error: selectError } = await supabase
       .from('ai_summaries')
