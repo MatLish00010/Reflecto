@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
-import { ThemeProvider } from '@/components/theme-provider';
-import { AlertProvider } from '@/components/alert-provider';
-import { TranslationProvider } from '@/contexts/translation-context';
-import { QueryProvider } from '@/providers/query-provider';
-import { PageHeader } from '@/components/page-header';
-import { getDictionary } from '@/dictionaries';
+import { ThemeProvider } from '@/shared/providers/theme-provider';
+import { AlertProvider } from '@/shared/providers/alert-provider';
+import { TranslationProvider } from '@/shared/contexts/translation-context';
+import { QueryProvider } from '@/shared/providers/query-provider';
+import { PageHeader } from '@/widgets/page-header';
+import { getDictionary } from '@/shared/dictionaries';
 
 import '../globals.css';
 

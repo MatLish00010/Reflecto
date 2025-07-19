@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getCurrentDateUTC } from '@/lib/date-utils';
-import { requireAuth } from '@/lib/auth';
+import { createServerClient } from '@/shared/lib/server';
+import { getCurrentDateUTC } from '@/shared/lib/date-utils';
+import { requireAuth } from '@/shared/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     const userId = authResult.user!.id;
 
-    const supabase = await createClient();
+    const supabase = await await createServerClient();
 
     let query = supabase
       .from('notes')
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createClient();
+    const supabase = await await createServerClient();
 
     const { data: newNote, error: insertError } = await supabase
       .from('notes')

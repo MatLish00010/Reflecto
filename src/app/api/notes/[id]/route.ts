@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { requireAuth } from '@/lib/auth';
+import { createServerClient } from '@/shared/lib/server';
+import { requireAuth } from '@/shared/lib/auth';
 
 export async function PUT(
   request: NextRequest,
@@ -23,7 +23,7 @@ export async function PUT(
       );
     }
 
-    const supabase = await createClient();
+    const supabase = await await createServerClient();
 
     const { data: existingNote, error: checkError } = await supabase
       .from('notes')
@@ -83,7 +83,7 @@ export async function DELETE(
       );
     }
 
-    const supabase = await createClient();
+    const supabase = await await createServerClient();
 
     const { data: existingNote, error: checkError } = await supabase
       .from('notes')

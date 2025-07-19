@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth } from '@/shared/lib/auth';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

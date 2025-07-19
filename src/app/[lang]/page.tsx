@@ -1,13 +1,13 @@
-import { getDictionary } from '@/dictionaries';
+import { getDictionary } from '@/shared/dictionaries';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { NewEntryForm } from '@/components/new-entry-form';
-import { HistoryAndSummary } from '@/components/history-and-summary';
+} from '@/shared/ui/card';
+import { NewEntryForm } from '@/widgets/new-entry-form';
+import { HistoryAndSummary } from '@/widgets/history-and-summary';
 
 export default async function Home({
   params,
