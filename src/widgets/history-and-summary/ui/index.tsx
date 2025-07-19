@@ -83,8 +83,6 @@ export function HistoryAndSummary() {
             selectedDate={selectedDate}
             selectedDateStart={selectedDateStart}
             selectedDateEnd={selectedDateEnd}
-            onDateChange={handleDateChange}
-            showDatePicker={false}
           />
         </TabsContent>
 

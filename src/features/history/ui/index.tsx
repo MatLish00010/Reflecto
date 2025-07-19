@@ -4,32 +4,24 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useNotesByDate } from '@/entities/note';
 import { getDateRangeUTC } from '@/shared/lib/date-utils';
-import { DatePicker } from './date-picker';
 import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
 
 interface HistoryProps {
-  selectedDate?: Date;
+  selectedDate: Date;
   selectedDateStart?: Date;
   selectedDateEnd?: Date;
-  onDateChange?: (date: Date) => void;
-  showDatePicker?: boolean;
 }
 
 export function History({
   selectedDate: externalSelectedDate,
   selectedDateStart: externalSelectedDateStart,
   selectedDateEnd: externalSelectedDateEnd,
-  onDateChange: externalOnDateChange,
-  showDatePicker = true,
-}: HistoryProps = {}) {
+}: HistoryProps) {
   const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
-  const [internalSelectedDate, setInternalSelectedDate] = useState<Date>(
-    new Date()
-  );
 
-  const selectedDate = externalSelectedDate || internalSelectedDate;
+  const selectedDate = externalSelectedDate;
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
     if (externalSelectedDateStart && externalSelectedDateEnd) {
@@ -61,14 +53,6 @@ export function History({
   if (isPending) {
     return (
       <div className="space-y-4">
-        {showDatePicker && (
-          <div className="flex items-center justify-between">
-            <DatePicker
-              selectedDate={selectedDate}
-              onDateSelect={externalOnDateChange || setInternalSelectedDate}
-            />
-          </div>
-        )}
         <NotesSkeleton />
       </div>
     );
@@ -76,14 +60,6 @@ export function History({
 
   return (
     <div className="space-y-4">
-      {showDatePicker && (
-        <div className="flex items-center justify-between">
-          <DatePicker
-            selectedDate={selectedDate}
-            onDateSelect={externalOnDateChange || setInternalSelectedDate}
-          />
-        </div>
-      )}
       {error ? (
         <div className="text-center py-4 text-red-500 dark:text-red-400">
           <p>{t('history.fetchError')}</p>

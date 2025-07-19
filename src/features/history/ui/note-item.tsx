@@ -27,7 +27,7 @@ export function NoteItem({ note }: NoteItemProps) {
   const shouldShowExpandButton = noteText.length > 100;
   const displayText = isExpanded
     ? noteText
-    : noteText.slice(0, 100) + (shouldShowExpandButton ? '...' : '');
+    : noteText.slice(0, 300) + (shouldShowExpandButton ? '...' : '');
 
   return (
     <Card className="relative py-4 px-4 gap-1">
