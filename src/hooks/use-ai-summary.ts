@@ -70,18 +70,26 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
   });
 }
 
-export function useSaveAISummary() {
+export function useCreateSummary() {
   const queryClient = useQueryClient();
   const { user } = useUser();
   const { lang } = useTranslation();
 
   return useMutation({
-    mutationFn: async ({ notes, date }: { notes: string[]; date?: string }) => {
+    mutationFn: async ({
+      notes,
+      from,
+      to,
+    }: {
+      notes: string[];
+      from: string;
+      to: string;
+    }) => {
       if (!user) throw new Error('User not found');
       const res = await fetch('/api/ai-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes, locale: lang, date }),
+        body: JSON.stringify({ notes, locale: lang, from, to }),
       });
       if (!res.ok) {
         const data = await res.json();

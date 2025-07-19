@@ -1,12 +1,10 @@
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { Brain, Sparkles, Calendar, Plus } from 'lucide-react';
+import { Brain, Sparkles, Calendar } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
-import { DateSelector } from './date-selector';
 
 interface GeneratePromptProps {
   selectedDate: Date;
-  onDateChange: (date: Date) => void;
   onGenerate: () => void;
   isGenerating: boolean;
   hasNotes: boolean;
@@ -14,7 +12,6 @@ interface GeneratePromptProps {
 
 export function GeneratePrompt({
   selectedDate,
-  onDateChange,
   onGenerate,
   isGenerating,
   hasNotes,
@@ -25,16 +22,6 @@ export function GeneratePrompt({
     const today = new Date();
     return selectedDate.toDateString() === today.toDateString();
   }, [selectedDate]);
-
-  const scrollToNewEntryForm = () => {
-    const element = document.getElementById('new-entry-form');
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
-  };
 
   const renderContent = () => {
     if (!hasNotes) {
@@ -47,15 +34,6 @@ export function GeneratePrompt({
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 px-2 sm:px-0">
               {t('aiAnalysis.noNotesTodayDescription')}
             </p>
-            <button
-              onClick={scrollToNewEntryForm}
-              className="flex items-center justify-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors cursor-pointer mx-auto"
-            >
-              <Plus className="h-4 w-4" />
-              <span className="text-sm font-medium">
-                {t('aiAnalysis.addFirstNote')}
-              </span>
-            </button>
           </div>
         );
       } else {
@@ -105,12 +83,6 @@ export function GeneratePrompt({
       <div className="flex flex-col items-center space-y-4 sm:space-y-6">
         <div className="p-2 sm:p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
           <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 dark:text-blue-400" />
-        </div>
-        <div className="w-full max-w-xs sm:max-w-sm">
-          <DateSelector
-            selectedDate={selectedDate}
-            onDateChange={onDateChange}
-          />
         </div>
         <div className="w-full max-w-sm sm:max-w-md">{renderContent()}</div>
       </div>

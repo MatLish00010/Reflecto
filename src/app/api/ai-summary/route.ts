@@ -8,41 +8,16 @@ import {
 
 export const runtime = 'edge';
 
-function getDateRange(date: Date) {
-  const start = new Date(date);
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(date);
-  end.setHours(23, 59, 59, 999);
-  return {
-    from: start.toISOString(),
-    to: end.toISOString(),
-  };
-}
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const fromParam = searchParams.get('from');
-  const toParam = searchParams.get('to');
+  const from = searchParams.get('from');
+  const to = searchParams.get('to');
 
-  let from: string, to: string;
-
-  if (fromParam && toParam) {
-    from = fromParam;
-    to = toParam;
-  } else {
-    const dateParam = searchParams.get('date');
-    let targetDate: Date;
-    if (dateParam) {
-      targetDate = new Date(dateParam);
-      if (isNaN(targetDate.getTime())) {
-        return NextResponse.json({ error: 'Invalid date' }, { status: 400 });
-      }
-    } else {
-      targetDate = new Date();
-    }
-    const range = getDateRange(targetDate);
-    from = range.from;
-    to = range.to;
+  if (!from || !to) {
+    return NextResponse.json(
+      { error: 'from and to parameters are required' },
+      { status: 400 }
+    );
   }
 
   const supabase = await createClient();
@@ -73,9 +48,20 @@ export async function GET(request: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { notes, locale = 'ru', date } = await req.json();
+    const { notes, locale = 'ru', from, to } = await req.json();
+
+    console.log({
+      from,
+      to,
+    });
     if (!Array.isArray(notes) || notes.length === 0) {
       return NextResponse.json({ error: 'No notes provided' }, { status: 400 });
+    }
+    if (!from || !to) {
+      return NextResponse.json(
+        { error: 'from and to dates are required' },
+        { status: 400 }
+      );
     }
 
     const supabase = await createClient();
@@ -130,17 +116,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let targetDate: Date;
-    if (date) {
-      targetDate = new Date(date);
-      if (isNaN(targetDate.getTime())) {
-        return NextResponse.json({ error: 'Invalid date' }, { status: 400 });
-      }
-    } else {
-      targetDate = new Date();
-    }
-    const { from, to } = getDateRange(targetDate);
-
     const { data: existing, error: selectError } = await supabase
       .from('ai_summaries')
       .select('*')
@@ -165,9 +140,14 @@ export async function POST(req: NextRequest) {
         );
       }
     } else {
+      const summaryDate = new Date(from);
       const { error: insertError } = await supabase
         .from('ai_summaries')
-        .insert({ user_id: user.id, summary });
+        .insert({
+          user_id: user.id,
+          summary,
+          created_at: summaryDate.toISOString(),
+        });
       if (insertError) {
         return NextResponse.json(
           { error: insertError.message },

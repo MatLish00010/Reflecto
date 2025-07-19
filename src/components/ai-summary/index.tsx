@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import {
   useAISummaryByDateRange,
-  useSaveAISummary,
+  useCreateSummary,
 } from '@/hooks/use-ai-summary';
 import { useNotesByDate } from '@/hooks/use-notes';
 import { useAlertContext } from '@/components/alert-provider';
@@ -12,21 +12,37 @@ import { GeneratePrompt } from './generate-prompt';
 import { SummaryHeader } from './summary-header';
 import { SummaryContent } from './summary-content';
 
-export function AISummary() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+interface AISummaryProps {
+  selectedDate?: Date;
+  selectedDateStart?: Date;
+  selectedDateEnd?: Date;
+}
+
+export function AISummary({
+  selectedDate: externalSelectedDate,
+  selectedDateStart: externalSelectedDateStart,
+  selectedDateEnd: externalSelectedDateEnd,
+}: AISummaryProps = {}) {
+  const [internalSelectedDate] = useState(new Date());
   const { showError } = useAlertContext();
 
-  const selectedDateStart = useMemo(() => {
+  const selectedDate = externalSelectedDate || internalSelectedDate;
+
+  const internalSelectedDateStart = useMemo(() => {
     const start = new Date(selectedDate);
     start.setHours(0, 0, 0, 0);
     return start;
   }, [selectedDate]);
 
-  const selectedDateEnd = useMemo(() => {
+  const internalSelectedDateEnd = useMemo(() => {
     const end = new Date(selectedDate);
     end.setHours(23, 59, 59, 999);
     return end;
   }, [selectedDate]);
+
+  const selectedDateStart =
+    externalSelectedDateStart || internalSelectedDateStart;
+  const selectedDateEnd = externalSelectedDateEnd || internalSelectedDateEnd;
 
   const { data: notes, isPending: notesLoading } = useNotesByDate(
     selectedDateStart.toISOString(),
@@ -42,7 +58,7 @@ export function AISummary() {
     selectedDateEnd.toISOString()
   );
 
-  const saveSummaryMutation = useSaveAISummary();
+  const createSummaryMutation = useCreateSummary();
 
   const notesTexts = useMemo(
     () => notes.map(n => n.note).filter((n): n is string => !!n),
@@ -50,33 +66,31 @@ export function AISummary() {
   );
 
   const handleGenerateSummary = useCallback(() => {
-    saveSummaryMutation.mutate({
+    createSummaryMutation.mutate({
       notes: notesTexts,
-      date: selectedDate.toISOString(),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
-  }, [saveSummaryMutation, notesTexts, selectedDate]);
+  }, [createSummaryMutation, notesTexts, selectedDateStart, selectedDateEnd]);
 
   const handleRefresh = useCallback(() => {
-    saveSummaryMutation.mutate({
+    createSummaryMutation.mutate({
       notes: notesTexts,
-      date: selectedDate.toISOString(),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
-  }, [saveSummaryMutation, notesTexts, selectedDate]);
-
-  const handleDateChange = useCallback((date: Date) => {
-    setSelectedDate(date);
-  }, []);
+  }, [createSummaryMutation, notesTexts, selectedDateStart, selectedDateEnd]);
 
   const isLoading = useMemo(
-    () => summaryLoading || notesLoading || saveSummaryMutation.isPending,
-    [summaryLoading, notesLoading, saveSummaryMutation.isPending]
+    () => summaryLoading || notesLoading || createSummaryMutation.isPending,
+    [summaryLoading, notesLoading, createSummaryMutation.isPending]
   );
 
   const hasData = useMemo(() => !!summary, [summary]);
 
   const error = useMemo(
-    () => summaryError || saveSummaryMutation.error,
-    [summaryError, saveSummaryMutation.error]
+    () => summaryError || createSummaryMutation.error,
+    [summaryError, createSummaryMutation.error]
   );
 
   useEffect(() => {
@@ -93,9 +107,8 @@ export function AISummary() {
     return (
       <GeneratePrompt
         selectedDate={selectedDate}
-        onDateChange={handleDateChange}
         onGenerate={handleGenerateSummary}
-        isGenerating={saveSummaryMutation.isPending}
+        isGenerating={createSummaryMutation.isPending}
         hasNotes={notes.length > 0}
       />
     );
@@ -104,10 +117,8 @@ export function AISummary() {
   return (
     <div className="space-y-4">
       <SummaryHeader
-        selectedDate={selectedDate}
-        onDateChange={handleDateChange}
         onRefresh={handleRefresh}
-        isRefreshing={saveSummaryMutation.isPending}
+        isRefreshing={createSummaryMutation.isPending}
       />
       <SummaryContent summary={summary} />
     </div>

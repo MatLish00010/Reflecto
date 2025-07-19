@@ -7,8 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { NewEntryForm } from '@/components/new-entry-form';
-import { History } from '@/components/history';
-import { AISummary } from '@/components/ai-summary';
+import { HistoryAndSummary } from '@/components/history-and-summary';
 
 export default async function Home({
   params,
@@ -29,35 +28,23 @@ export default async function Home({
 
   return (
     <>
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('newEntry.title')}</CardTitle>
-            <CardDescription>{t('newEntry.description')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <NewEntryForm />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('history.title')}</CardTitle>
-            <CardDescription>{t('history.description')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <History />
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('newEntry.title')}</CardTitle>
+          <CardDescription>{t('newEntry.description')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <NewEntryForm />
+        </CardContent>
+      </Card>
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>{t('aiAnalysis.title')}</CardTitle>
-          <CardDescription>{t('aiAnalysis.description')}</CardDescription>
+          <CardTitle>{t('history.title')}</CardTitle>
+          <CardDescription>{t('history.description')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <AISummary />
+          <HistoryAndSummary />
         </CardContent>
       </Card>
     </>
