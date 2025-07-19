@@ -87,6 +87,12 @@ export function AISummary({
 
   const hasData = useMemo(() => !!summary, [summary]);
 
+  // Показываем лоадер если мутация завершилась успешно, но данные еще не обновились
+  const shouldShowLoading = useMemo(
+    () => isLoading || (createSummaryMutation.isSuccess && !summary),
+    [isLoading, createSummaryMutation.isSuccess, summary]
+  );
+
   const error = useMemo(
     () => summaryError || createSummaryMutation.error,
     [summaryError, createSummaryMutation.error]
@@ -98,11 +104,11 @@ export function AISummary({
     }
   }, [error, showError]);
 
-  if (isLoading) {
+  if (shouldShowLoading) {
     return <AISummaryLoadingSkeleton />;
   }
 
-  if (!hasData) {
+  if (!hasData && !createSummaryMutation.isSuccess) {
     return (
       <GeneratePrompt
         selectedDate={selectedDate}
