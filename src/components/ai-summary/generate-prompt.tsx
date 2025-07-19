@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Brain, Sparkles, Calendar } from 'lucide-react';
 import { useTranslation } from '@/contexts/translation-context';
+import { getDateRangeUTC } from '@/lib/date-utils';
 
 interface GeneratePromptProps {
   selectedDate: Date;
@@ -20,7 +21,9 @@ export function GeneratePrompt({
 
   const isToday = useMemo(() => {
     const today = new Date();
-    return selectedDate.toDateString() === today.toDateString();
+    const todayRange = getDateRangeUTC(today);
+    const selectedRange = getDateRangeUTC(selectedDate);
+    return todayRange.from === selectedRange.from;
   }, [selectedDate]);
 
   const renderContent = () => {

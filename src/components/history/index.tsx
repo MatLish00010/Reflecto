@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '../../contexts/translation-context';
 import { useNotesByDate } from '../../hooks/use-notes';
+import { getDateRangeUTC } from '@/lib/date-utils';
 import { DatePicker } from './date-picker';
 import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
@@ -37,11 +38,11 @@ export function History({
         selectedDateEnd: externalSelectedDateEnd,
       };
     }
-    const start = new Date(selectedDate);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(selectedDate);
-    end.setHours(23, 59, 59, 999);
-    return { selectedDateStart: start, selectedDateEnd: end };
+    const range = getDateRangeUTC(selectedDate);
+    return {
+      selectedDateStart: new Date(range.from),
+      selectedDateEnd: new Date(range.to),
+    };
   }, [selectedDate, externalSelectedDateStart, externalSelectedDateEnd]);
 
   const {

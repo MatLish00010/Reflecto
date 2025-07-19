@@ -14,6 +14,7 @@ import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { getDateFnsLocale } from '@/lib/locale-utils';
+import { getDateRangeUTC } from '@/lib/date-utils';
 import { History } from '@/components/history';
 import { AISummary } from '@/components/ai-summary';
 
@@ -23,11 +24,11 @@ export function HistoryAndSummary() {
   const [activeTab, setActiveTab] = useState('ai-summary');
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
-    const start = new Date(selectedDate);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(selectedDate);
-    end.setHours(23, 59, 59, 999);
-    return { selectedDateStart: start, selectedDateEnd: end };
+    const range = getDateRangeUTC(selectedDate);
+    return {
+      selectedDateStart: new Date(range.from),
+      selectedDateEnd: new Date(range.to),
+    };
   }, [selectedDate]);
 
   const handleDateChange = useCallback((date: Date) => {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { getCurrentDateUTC } from '@/lib/date-utils';
 import { requireAuth } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
         {
           note,
           user_id: authResult.user!.id,
-          created_at: new Date().toISOString(),
+          created_at: getCurrentDateUTC(),
         },
       ])
       .select()

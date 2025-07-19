@@ -7,6 +7,7 @@ import {
 } from '@/hooks/use-ai-summary';
 import { useNotesByDate } from '@/hooks/use-notes';
 import { useAlertContext } from '@/components/alert-provider';
+import { getDateRangeUTC } from '@/lib/date-utils';
 import { AISummaryLoadingSkeleton } from './loading-skeleton';
 import { GeneratePrompt } from './generate-prompt';
 import { SummaryHeader } from './summary-header';
@@ -29,15 +30,13 @@ export function AISummary({
   const selectedDate = externalSelectedDate || internalSelectedDate;
 
   const internalSelectedDateStart = useMemo(() => {
-    const start = new Date(selectedDate);
-    start.setHours(0, 0, 0, 0);
-    return start;
+    const range = getDateRangeUTC(selectedDate);
+    return new Date(range.from);
   }, [selectedDate]);
 
   const internalSelectedDateEnd = useMemo(() => {
-    const end = new Date(selectedDate);
-    end.setHours(23, 59, 59, 999);
-    return end;
+    const range = getDateRangeUTC(selectedDate);
+    return new Date(range.to);
   }, [selectedDate]);
 
   const selectedDateStart =
