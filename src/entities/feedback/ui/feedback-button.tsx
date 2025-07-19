@@ -4,11 +4,17 @@ import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { FeedbackModal } from './feedback-modal';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useUser } from '@/entities/user';
 import { Bug } from 'lucide-react';
 
 export function FeedbackButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
+  const { user } = useUser();
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
