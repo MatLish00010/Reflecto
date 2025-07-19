@@ -1,6 +1,7 @@
 import { LanguageToggle } from '@/features/language-toggle';
 import { ThemeToggle } from '@/features/theme-toggle';
 import { UserInfoDropdown } from './user-info-dropdown';
+import { FeedbackButton } from '@/entities/feedback';
 import { translate } from '@/shared/lib/utils';
 
 interface PageHeaderProps {
@@ -13,6 +14,7 @@ export function PageHeader({ dict }: PageHeaderProps) {
       <div className="flex justify-between items-start mb-6">
         <div className="flex-1" />
         <div className="flex items-center gap-2">
+          <FeedbackButton />
           <LanguageToggle />
           <ThemeToggle />
           <UserInfoDropdown />

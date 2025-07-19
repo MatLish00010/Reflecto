@@ -1,4 +1,13 @@
 export { Alert, AlertDescription, AlertTitle } from './alert';
+export {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './dialog';
 export { Button, buttonVariants } from './button';
 export { Calendar } from './calendar';
 export {

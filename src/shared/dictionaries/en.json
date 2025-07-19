@@ -139,5 +139,25 @@
     "updatePassword": "Update Password",
     "updatePasswordDescription": "Enter your new password",
     "updatePasswordSuccess": "Password updated successfully!"
+  },
+  "feedback": {
+    "title": "Feedback",
+    "description": "Report bugs or suggest improvements",
+    "button": "Feedback",
+    "modalTitle": "Send Feedback",
+    "modalDescription": "Help us improve by reporting bugs or suggesting new features",
+    "typeLabel": "Type",
+    "typeBug": "Bug Report",
+    "typeFeature": "Feature Request",
+    "typeImprovement": "Improvement Suggestion",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Brief description of the issue or suggestion...",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Please provide detailed information about the bug or suggestion...",
+    "submitButton": "Send Feedback",
+    "submittingButton": "Sending...",
+    "submitSuccess": "Feedback sent successfully! Thank you for your input.",
+    "submitError": "Failed to send feedback. Please try again.",
+    "closeButton": "Close"
   }
 }
