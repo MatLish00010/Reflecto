@@ -142,7 +142,10 @@
     "authRequired": "Authentication required to continue",
     "signInToViewHistory": "Sign in to view your diary history",
     "signInToViewAnalysis": "Sign in to view AI analysis of your entries",
-    "signInToContinue": "Sign in to continue"
+    "signInToContinue": "Sign in to continue",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "or": "or"
   },
   "feedback": {
     "title": "Feedback",

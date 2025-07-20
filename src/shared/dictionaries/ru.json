@@ -142,7 +142,10 @@
     "authRequired": "Требуется аутентификация для продолжения",
     "signInToViewHistory": "Войдите в систему, чтобы просмотреть историю ваших записей",
     "signInToViewAnalysis": "Войдите в систему, чтобы просмотреть AI-анализ ваших записей",
-    "signInToContinue": "Войдите в систему для продолжения"
+    "signInToContinue": "Войдите в систему для продолжения",
+    "signInWithGoogle": "Войти через Google",
+    "signUpWithGoogle": "Зарегистрироваться через Google",
+    "or": "или"
   },
   "feedback": {
     "title": "Обратная связь",
