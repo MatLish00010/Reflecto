@@ -148,7 +148,7 @@ export function ShareButton({ summary }: ShareButtonProps) {
   };
 
   return (
-    <Button onClick={handleShare} size="sm" className="btn-gradient-scale">
+    <Button onClick={handleShare} size="sm" variant="gradient">
       <Share2 className="h-4 w-4 mr-2" />
       {t('aiAnalysis.share')}
     </Button>

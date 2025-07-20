@@ -67,11 +67,7 @@ export function GeneratePrompt({
         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 px-2 sm:px-0">
           {t('aiAnalysis.generateDescription')}
         </p>
-        <Button
-          onClick={onGenerate}
-          className="btn-gradient-scale"
-          disabled={isGenerating}
-        >
+        <Button onClick={onGenerate} variant="gradient" disabled={isGenerating}>
           <Sparkles className="h-4 w-4 mr-2" />
           {isGenerating
             ? t('newEntry.savingButton')

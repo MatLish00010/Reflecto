@@ -14,27 +14,22 @@ export function useUser() {
       const supabase = createBrowserClient();
       const {
         data: { user },
+        error,
       } = await supabase.auth.getUser();
 
       if (error) {
-        safeSentry.captureException(error, {
-          tags: { operation: 'get_user' },
-        });
+        if (error.message !== 'Auth session missing!') {
+          safeSentry.captureException(error, {
+            tags: { operation: 'get_user' },
+          });
+        }
         throw new Error(error.message);
-      }
-
-      if (!user) {
-        const error = new Error('Not authenticated');
-        safeSentry.captureException(error, {
-          tags: { operation: 'get_user' },
-        });
-        throw error;
       }
 
       return user;
     },
     retry: false,
-    staleTime: 5 * 60 * 1000, // 5 минут
+    staleTime: 5 * 60 * 1000,
   });
 
   return {
