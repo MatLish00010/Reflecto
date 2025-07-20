@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import type { Note } from '@/shared/types/notes';
 import { useAlertContext } from '@/shared/providers/alert-provider';
-import * as Sentry from '@sentry/nextjs';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export const noteKeys = {
   all: (userId: string) => ['notes', userId] as const,
@@ -22,7 +22,9 @@ export function useNotesByDate(from?: string, to?: string) {
     queryFn: async () => {
       if (!user) {
         const error = new Error('User not found');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'fetch_notes' },
+        });
         throw error;
       }
 
@@ -40,7 +42,10 @@ export function useNotesByDate(from?: string, to?: string) {
           .json()
           .catch(() => ({ error: 'Failed to fetch notes' }));
         const error = new Error(errorData.error || 'Failed to fetch notes');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'fetch_notes' },
+          extra: { userId: user.id, from, to, status: response.status },
+        });
         throw error;
       }
       const { notes } = await response.json();
@@ -65,7 +70,9 @@ export function useCreateNote() {
     mutationFn: async (note: string) => {
       if (!user) {
         const error = new Error('User not found');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'create_note' },
+        });
         throw error;
       }
 
@@ -81,7 +88,14 @@ export function useCreateNote() {
       if (!response.ok) {
         const errorData = await response.json();
         const error = new Error(errorData.error || 'Failed to create note');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'create_note' },
+          extra: {
+            userId: user.id,
+            noteLength: note.length,
+            status: response.status,
+          },
+        });
         throw error;
       }
 
@@ -93,7 +107,10 @@ export function useCreateNote() {
       });
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'create_note' },
+        extra: { userId: user?.id },
+      });
       showError(error.message);
     },
   });
@@ -118,7 +135,15 @@ export function useUpdateNote() {
       if (!response.ok) {
         const errorData = await response.json();
         const error = new Error(errorData.error || 'Failed to update note');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'update_note' },
+          extra: {
+            userId: user?.id,
+            noteId,
+            noteLength: note.length,
+            status: response.status,
+          },
+        });
         throw error;
       }
 
@@ -130,7 +155,10 @@ export function useUpdateNote() {
       });
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'update_note' },
+        extra: { userId: user?.id },
+      });
       showError(error.message);
     },
   });
@@ -151,7 +179,10 @@ export function useDeleteNote() {
       if (!response.ok) {
         const errorData = await response.json();
         const error = new Error(errorData.error || 'Failed to delete note');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'delete_note' },
+          extra: { userId: user?.id, noteId, status: response.status },
+        });
         throw error;
       }
 
@@ -163,7 +194,10 @@ export function useDeleteNote() {
       });
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'delete_note' },
+        extra: { userId: user?.id },
+      });
       showError(error.message);
     },
   });

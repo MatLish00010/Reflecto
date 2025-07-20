@@ -7,6 +7,7 @@ import { AudioInputTabs } from '@/features/voice-recording';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useCreateNote } from '@/entities/note';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export function NewEntryForm() {
   const [content, setContent] = useState('');
@@ -21,17 +22,48 @@ export function NewEntryForm() {
   const handleSave = async () => {
     if (!content.trim()) return;
 
-    try {
-      await createNoteMutation.mutateAsync(content.trim());
+    return safeSentry.startSpanAsync(
+      {
+        op: 'ui.click',
+        name: 'Save Note',
+      },
+      async span => {
+        try {
+          span.setAttribute('component', 'NewEntryForm');
+          span.setAttribute('action', 'saveNote');
+          span.setAttribute('content.length', content.length);
 
-      setContent('');
-      showSuccess(t('newEntry.saveSuccess'));
-    } catch (error) {
-      console.error('Error saving note:', error);
-      showError(
-        error instanceof Error ? error.message : t('newEntry.saveError')
-      );
-    }
+          await createNoteMutation.mutateAsync(content.trim());
+
+          setContent('');
+          showSuccess(t('newEntry.saveSuccess'));
+
+          span.setAttribute('success', true);
+        } catch (error) {
+          safeSentry.captureException(error as Error, {
+            tags: {
+              component: 'NewEntryForm',
+              action: 'saveNote',
+            },
+            extra: {
+              contentLength: content.length,
+            },
+          });
+          span.setAttribute('error', true);
+
+          const { logger } = safeSentry;
+          logger.error('Error saving note', {
+            component: 'NewEntryForm',
+            contentLength: content.length,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
+
+          showError(
+            error instanceof Error ? error.message : t('newEntry.saveError')
+          );
+        }
+      }
+    );
   };
 
   return (

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { createBrowserClient } from '@/shared/lib/client';
 import type { User } from '@supabase/supabase-js';
-import * as Sentry from '@sentry/nextjs';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export const userKeys = {
   all: ['user'] as const,
@@ -19,13 +19,17 @@ export function useUser() {
       } = await supabase.auth.getUser();
 
       if (error) {
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_user' },
+        });
         throw new Error(error.message);
       }
 
       if (!user) {
         const error = new Error('Not authenticated');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_user' },
+        });
         throw error;
       }
 

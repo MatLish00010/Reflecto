@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
+import { safeSentry } from '@/shared/lib/sentry';
 
 interface TranslationContextType {
   t: (key: string) => string;
@@ -39,7 +40,13 @@ export function TranslationProvider({
       if (value && typeof value === 'object' && k in value) {
         value = (value as Record<string, unknown>)[k];
       } else {
-        console.warn(`Translation key not found: ${key}`);
+        const { logger } = safeSentry;
+        logger.warn('Translation key not found', {
+          component: 'TranslationProvider',
+          key,
+          lang,
+          availableKeys: Object.keys(dict),
+        });
         return key;
       }
     }
