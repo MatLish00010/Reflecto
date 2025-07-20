@@ -5,9 +5,12 @@
 import * as Sentry from '@sentry/nextjs';
 
 // Only initialize Sentry in production and if DSN is provided
-if (process.env.NODE_ENV === 'production' && process.env.SENTRY_DSN) {
+if (
+  process.env.NODE_ENV === 'production' &&
+  process.env.NEXT_PUBLIC_SENTRY_DSN
+) {
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
     // Add optional integrations for additional features
     integrations: [
@@ -39,7 +42,7 @@ if (process.env.NODE_ENV === 'production' && process.env.SENTRY_DSN) {
   // In development or when DSN is not provided, create a mock Sentry object to prevent errors
   if (process.env.NODE_ENV !== 'production') {
     console.log('Sentry disabled in development mode');
-  } else if (!process.env.SENTRY_DSN) {
+  } else if (!process.env.NEXT_PUBLIC_SENTRY_DSN) {
     console.warn('Sentry DSN not provided. Sentry will be disabled.');
   }
 }
