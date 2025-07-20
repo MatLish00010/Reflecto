@@ -5,10 +5,10 @@
 
 import * as Sentry from '@sentry/nextjs';
 
-// Only initialize Sentry in production
-if (process.env.NODE_ENV === 'production') {
+// Only initialize Sentry in production and if DSN is provided
+if (process.env.NODE_ENV === 'production' && process.env.SENTRY_DSN) {
   Sentry.init({
-    dsn: 'https://0d83c017a9e682f199afda2546c8e402@o4509699604480000.ingest.de.sentry.io/4509699605528656',
+    dsn: process.env.SENTRY_DSN,
 
     // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
     tracesSampleRate: 1,
@@ -27,6 +27,10 @@ if (process.env.NODE_ENV === 'production') {
     ],
   });
 } else {
-  // In development, create a mock Sentry object to prevent errors
-  console.log('Sentry disabled in development mode');
+  // In development or when DSN is not provided, create a mock Sentry object to prevent errors
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('Sentry disabled in development mode');
+  } else if (!process.env.SENTRY_DSN) {
+    console.warn('Sentry DSN not provided. Sentry will be disabled.');
+  }
 }

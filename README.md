@@ -36,3 +36,21 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 # aiDiary
+
+## Setup
+
+Before running the project, you need to set up environment variables. See [ENV_SETUP.md](./ENV_SETUP.md) for detailed instructions.
+
+Quick setup:
+
+1. Copy `env.example` to `.env.local`
+2. Fill in your API keys and configuration values
+3. Run the development server
+
+## Features
+
+- Voice recording and transcription
+- AI-powered note summarization
+- Multi-language support
+- User authentication
+- Error tracking with Sentry

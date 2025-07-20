@@ -219,6 +219,20 @@ The following environment variables control Sentry behavior:
 - `NODE_ENV`: Controls whether Sentry is enabled (only 'production' enables it)
 - `SENTRY_DSN`: The Sentry DSN (configured in the config files)
 
+### Setup Instructions
+
+1. Create a `.env.local` file in the project root
+2. Add your Sentry DSN:
+
+```bash
+# Sentry
+SENTRY_DSN=https://your-sentry-dsn-here@your-org.ingest.sentry.io/your-project-id
+```
+
+3. For production deployment, add the `SENTRY_DSN` environment variable to your hosting platform (Vercel, Netlify, etc.)
+
+**Important**: Never commit the actual DSN to version control. The `.env.local` file is already in `.gitignore`.
+
 ## Monitoring
 
 In production, you can monitor:
