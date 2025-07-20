@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/lib/supabase/server';
+import * as Sentry from '@sentry/nextjs';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,12 +11,15 @@ export async function POST(request: NextRequest) {
       error: authError,
     } = await supabase.auth.getUser();
     if (authError || !user) {
+      Sentry.captureException(authError || new Error('User not found'));
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
 
     if (!body.type || !body.title || !body.description) {
+      const error = new Error('Missing required fields');
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -23,6 +27,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (!['bug', 'feature', 'improvement'].includes(body.type)) {
+      const error = new Error('Invalid feedback type');
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Invalid feedback type' },
         { status: 400 }
@@ -42,6 +48,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Error creating feedback:', error);
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Failed to create feedback' },
         { status: 500 }
@@ -51,6 +58,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('Error in feedback POST:', error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -67,6 +75,7 @@ export async function GET() {
       error: authError,
     } = await supabase.auth.getUser();
     if (authError || !user) {
+      Sentry.captureException(authError || new Error('User not found'));
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -78,6 +87,7 @@ export async function GET() {
 
     if (error) {
       console.error('Error fetching feedback:', error);
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Failed to fetch feedback' },
         { status: 500 }
@@ -87,6 +97,7 @@ export async function GET() {
     return NextResponse.json(data || []);
   } catch (error) {
     console.error('Error in feedback GET:', error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

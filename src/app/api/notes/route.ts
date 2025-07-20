@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/shared/lib/server';
 import { getCurrentDateUTC } from '@/shared/lib/date-utils';
 import { requireAuth } from '@/shared/lib/auth';
+import * as Sentry from '@sentry/nextjs';
 
 export async function GET(request: NextRequest) {
   try {
@@ -35,6 +36,7 @@ export async function GET(request: NextRequest) {
     const { data: notes, error } = await query;
 
     if (error) {
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Failed to fetch notes' },
         { status: 500 }
@@ -44,6 +46,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ notes });
   } catch (error) {
     console.error('Error in notes GET API:', error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -61,6 +64,8 @@ export async function POST(request: NextRequest) {
     const { note } = await request.json();
 
     if (!note) {
+      const error = new Error('Note content is required');
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Note content is required' },
         { status: 400 }
@@ -82,6 +87,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError) {
+      Sentry.captureException(insertError);
       return NextResponse.json(
         { error: 'Failed to create note' },
         { status: 500 }
@@ -91,6 +97,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ note: newNote });
   } catch (error) {
     console.error('Error in notes API:', error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

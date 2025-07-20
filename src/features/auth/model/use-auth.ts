@@ -7,6 +7,7 @@ import type { User } from '@supabase/supabase-js';
 import { userKeys } from '@/entities/user';
 import { noteKeys } from '@/entities/note';
 import { useAlertContext } from '@/shared/providers/alert-provider';
+import * as Sentry from '@sentry/nextjs';
 
 interface SignInRequest {
   email: string;
@@ -34,11 +35,14 @@ export function useSignIn() {
       });
 
       if (error) {
+        Sentry.captureException(error);
         throw new Error(error.message);
       }
 
       if (!authData.user) {
-        throw new Error('Sign in failed');
+        const error = new Error('Sign in failed');
+        Sentry.captureException(error);
+        throw error;
       }
 
       return { user: authData.user };
@@ -49,6 +53,7 @@ export function useSignIn() {
       router.push('/');
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });
@@ -74,11 +79,14 @@ export function useSignUp() {
       });
 
       if (error) {
+        Sentry.captureException(error);
         throw new Error(error.message);
       }
 
       if (!authData.user) {
-        throw new Error('Sign up failed');
+        const error = new Error('Sign up failed');
+        Sentry.captureException(error);
+        throw error;
       }
 
       return { user: authData.user };
@@ -89,6 +97,7 @@ export function useSignUp() {
       router.push('/');
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });
@@ -106,6 +115,7 @@ export function useSignOut() {
       const { error } = await supabase.auth.signOut();
 
       if (error) {
+        Sentry.captureException(error);
         throw new Error(error.message);
       }
 
@@ -118,6 +128,7 @@ export function useSignOut() {
       queryClient.invalidateQueries({ queryKey: noteKeys.all('') });
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });
@@ -135,12 +146,14 @@ export function useResetPassword() {
       });
 
       if (error) {
+        Sentry.captureException(error);
         throw new Error(error.message);
       }
 
       return { success: true };
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });
@@ -158,12 +171,14 @@ export function useUpdatePassword() {
       });
 
       if (error) {
+        Sentry.captureException(error);
         throw new Error(error.message);
       }
 
       return { success: true };
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });

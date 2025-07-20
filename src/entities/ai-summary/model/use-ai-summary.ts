@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import * as Sentry from '@sentry/nextjs';
 
 export const aiSummaryKeys = {
   all: (userId: string) => ['ai-summary', userId] as const,
@@ -23,7 +24,11 @@ export function useAISummary() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes, locale: lang, date }),
       });
-      if (!res.ok) throw new Error('Failed to get summary');
+      if (!res.ok) {
+        const error = new Error('Failed to get summary');
+        Sentry.captureException(error);
+        throw error;
+      }
       const data = await res.json();
       return data.summary;
     },
@@ -35,9 +40,17 @@ export function useTodayAISummary() {
   return useQuery({
     queryKey: aiSummaryKeys.detail(user?.id || '', 'today'),
     queryFn: async () => {
-      if (!user) throw new Error('User not found');
+      if (!user) {
+        const error = new Error('User not found');
+        Sentry.captureException(error);
+        throw error;
+      }
       const res = await fetch('/api/ai-summary', { method: 'GET' });
-      if (!res.ok) throw new Error('Failed to fetch summary');
+      if (!res.ok) {
+        const error = new Error('Failed to fetch summary');
+        Sentry.captureException(error);
+        throw error;
+      }
       const data = await res.json();
       return data.summary;
     },
@@ -52,7 +65,11 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
   return useQuery({
     queryKey: aiSummaryKeys.list(user?.id || '', `${from}-${to}`),
     queryFn: async () => {
-      if (!user) throw new Error('User not found');
+      if (!user) {
+        const error = new Error('User not found');
+        Sentry.captureException(error);
+        throw error;
+      }
 
       const params = new URLSearchParams();
       if (from) params.append('from', from);
@@ -61,7 +78,11 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
       const res = await fetch(`/api/ai-summary?${params.toString()}`, {
         method: 'GET',
       });
-      if (!res.ok) throw new Error('Failed to fetch summary');
+      if (!res.ok) {
+        const error = new Error('Failed to fetch summary');
+        Sentry.captureException(error);
+        throw error;
+      }
       const data = await res.json();
       return data.summary;
     },
@@ -85,7 +106,11 @@ export function useCreateSummary() {
       from: string;
       to: string;
     }) => {
-      if (!user) throw new Error('User not found');
+      if (!user) {
+        const error = new Error('User not found');
+        Sentry.captureException(error);
+        throw error;
+      }
       const res = await fetch('/api/ai-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,8 +118,9 @@ export function useCreateSummary() {
       });
       if (!res.ok) {
         const data = await res.json();
-
-        throw new Error(data.error);
+        const error = new Error(data.error);
+        Sentry.captureException(error);
+        throw error;
       }
       const data = await res.json();
       return data.summary;

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import type { Note } from '@/shared/types/notes';
 import { useAlertContext } from '@/shared/providers/alert-provider';
+import * as Sentry from '@sentry/nextjs';
 
 export const noteKeys = {
   all: (userId: string) => ['notes', userId] as const,
@@ -19,7 +20,11 @@ export function useNotesByDate(from?: string, to?: string) {
   const query = useQuery({
     queryKey: noteKeys.list(user?.id || '', { from, to }),
     queryFn: async () => {
-      if (!user) throw new Error('User not found');
+      if (!user) {
+        const error = new Error('User not found');
+        Sentry.captureException(error);
+        throw error;
+      }
 
       const params = new URLSearchParams();
       if (from) params.append('from', from);
@@ -34,7 +39,9 @@ export function useNotesByDate(from?: string, to?: string) {
         const errorData = await response
           .json()
           .catch(() => ({ error: 'Failed to fetch notes' }));
-        throw new Error(errorData.error || 'Failed to fetch notes');
+        const error = new Error(errorData.error || 'Failed to fetch notes');
+        Sentry.captureException(error);
+        throw error;
       }
       const { notes } = await response.json();
       return notes as Note[];
@@ -56,7 +63,11 @@ export function useCreateNote() {
 
   return useMutation({
     mutationFn: async (note: string) => {
-      if (!user) throw new Error('User not found');
+      if (!user) {
+        const error = new Error('User not found');
+        Sentry.captureException(error);
+        throw error;
+      }
 
       const response = await fetch('/api/notes', {
         method: 'POST',
@@ -69,7 +80,9 @@ export function useCreateNote() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create note');
+        const error = new Error(errorData.error || 'Failed to create note');
+        Sentry.captureException(error);
+        throw error;
       }
 
       return response.json();
@@ -80,6 +93,7 @@ export function useCreateNote() {
       });
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });
@@ -103,7 +117,9 @@ export function useUpdateNote() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update note');
+        const error = new Error(errorData.error || 'Failed to update note');
+        Sentry.captureException(error);
+        throw error;
       }
 
       return response.json();
@@ -114,6 +130,7 @@ export function useUpdateNote() {
       });
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });
@@ -133,7 +150,9 @@ export function useDeleteNote() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete note');
+        const error = new Error(errorData.error || 'Failed to delete note');
+        Sentry.captureException(error);
+        throw error;
       }
 
       return response.json();
@@ -144,6 +163,7 @@ export function useDeleteNote() {
       });
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });

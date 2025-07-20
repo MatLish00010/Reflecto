@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { CreateFeedbackRequest, Feedback } from '@/shared/types';
 import { useAlertContext } from '@/shared/providers/alert-provider';
+import * as Sentry from '@sentry/nextjs';
 
 export const feedbackKeys = {
   all: (userId: string) => ['feedback', userId] as const,
@@ -15,7 +16,11 @@ export function useFeedback() {
   const query = useQuery({
     queryKey: feedbackKeys.list(user?.id || ''),
     queryFn: async (): Promise<Feedback[]> => {
-      if (!user) throw new Error('User not found');
+      if (!user) {
+        const error = new Error('User not found');
+        Sentry.captureException(error);
+        throw error;
+      }
 
       const response = await fetch('/api/feedback');
       if (!response.ok) {
@@ -26,7 +31,9 @@ export function useFeedback() {
         const errorData = await response
           .json()
           .catch(() => ({ error: 'Failed to fetch feedback' }));
-        throw new Error(errorData.error || 'Failed to fetch feedback');
+        const error = new Error(errorData.error || 'Failed to fetch feedback');
+        Sentry.captureException(error);
+        throw error;
       }
       return response.json();
     },
@@ -47,7 +54,11 @@ export function useCreateFeedback() {
 
   return useMutation({
     mutationFn: async (data: CreateFeedbackRequest): Promise<Feedback> => {
-      if (!user) throw new Error('User not found');
+      if (!user) {
+        const error = new Error('User not found');
+        Sentry.captureException(error);
+        throw error;
+      }
 
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -60,7 +71,9 @@ export function useCreateFeedback() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create feedback');
+        const error = new Error(errorData.error || 'Failed to create feedback');
+        Sentry.captureException(error);
+        throw error;
       }
 
       return response.json();
@@ -71,6 +84,7 @@ export function useCreateFeedback() {
       });
     },
     onError: error => {
+      Sentry.captureException(error);
       showError(error.message);
     },
   });

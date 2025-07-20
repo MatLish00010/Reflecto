@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/shared/lib/server';
 import { requireAuth } from '@/shared/lib/auth';
+import * as Sentry from '@sentry/nextjs';
 
 export async function PUT(
   request: NextRequest,
@@ -17,6 +18,8 @@ export async function PUT(
     const noteId = parseInt(id);
 
     if (!note || isNaN(noteId)) {
+      const error = new Error('Note content and valid note ID are required');
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Note content and valid note ID are required' },
         { status: 400 }
@@ -33,6 +36,9 @@ export async function PUT(
       .single();
 
     if (checkError || !existingNote) {
+      Sentry.captureException(
+        checkError || new Error('Note not found or access denied')
+      );
       return NextResponse.json(
         { error: 'Note not found or access denied' },
         { status: 404 }
@@ -48,6 +54,7 @@ export async function PUT(
       .single();
 
     if (error) {
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Failed to update note' },
         { status: 500 }
@@ -57,6 +64,7 @@ export async function PUT(
     return NextResponse.json({ note: updatedNote });
   } catch (error) {
     console.error('Error in notes update API:', error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -77,6 +85,8 @@ export async function DELETE(
     const noteId = parseInt(id);
 
     if (isNaN(noteId)) {
+      const error = new Error('Valid note ID is required');
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Valid note ID is required' },
         { status: 400 }
@@ -93,6 +103,9 @@ export async function DELETE(
       .single();
 
     if (checkError || !existingNote) {
+      Sentry.captureException(
+        checkError || new Error('Note not found or access denied')
+      );
       return NextResponse.json(
         { error: 'Note not found or access denied' },
         { status: 404 }
@@ -106,6 +119,7 @@ export async function DELETE(
       .eq('user_id', authResult.user!.id);
 
     if (error) {
+      Sentry.captureException(error);
       return NextResponse.json(
         { error: 'Failed to delete note' },
         { status: 500 }
@@ -115,6 +129,7 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error in notes delete API:', error);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

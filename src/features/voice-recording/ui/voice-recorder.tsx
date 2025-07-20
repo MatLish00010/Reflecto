@@ -5,6 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Mic, Square, RotateCcw } from 'lucide-react';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import * as Sentry from '@sentry/nextjs';
 
 interface VoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
@@ -63,7 +64,15 @@ export function VoiceRecorder({
           const { text } = await response.json();
           onRecordingComplete(text);
         } catch (error) {
-          console.error('Error processing audio:', error);
+          Sentry.captureException(error, {
+            tags: {
+              component: 'VoiceRecorder',
+              action: 'processAudio',
+            },
+            extra: {
+              audioSize: audioBlob.size,
+            },
+          });
           const errorMessage =
             error instanceof Error
               ? error.message
@@ -80,7 +89,20 @@ export function VoiceRecorder({
       mediaRecorder.start();
       onRecordingChange(true);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
+      Sentry.captureException(error, {
+        tags: {
+          component: 'VoiceRecorder',
+          action: 'accessMicrophone',
+        },
+        extra: {
+          userAgent: navigator.userAgent,
+        },
+      });
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : t('newEntry.voiceRecording.errorAccessingMicrophone');
+      showError(errorMessage);
     }
   };
 
