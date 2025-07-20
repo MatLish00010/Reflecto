@@ -1,57 +1,55 @@
 export const aiSummaryPrompts = {
-  ru: `Вот записи пользователя за день:
+  ru: `Вот записи вашего дневника за день:
 {notes}
 
-Как профессиональный психолог, проанализируйте эти записи и создайте персонализированное саммари. 
-
-ВАЖНО: Выполните анализ пошагово:
+Пожалуйста, выполните подробный психологический анализ этих записей в два шага:
 
 ШАГ 1 - Основной анализ:
-- Проанализируйте основной сюжет дня и ключевые события
-- Выделите важные эмоциональные моменты и переживания
-- Определите ключевые темы, которые повторяются в записях
-- Сформулируйте ваши профессиональные наблюдения и выводы
-- Подготовьте конкретные рекомендации или советы
+- Опишите общий сюжет дня, выделите ключевые события с привязкой к временным рамкам.
+- Отметьте самые яркие эмоциональные реакции и чувства, которые проявились.
+- Идентифицируйте повторяющиеся темы или мысли, которые проходят красной нитью.
+- Дайте профессиональные наблюдения с точки зрения психолога, объясняя возможные причины и влияние этих событий и эмоций.
+- Предложите конкретные, практичные рекомендации и советы, которые помогут разобраться с выявленными ситуациями и эмоциями.
 
-ШАГ 2 - Проверка обращения:
-- Убедитесь, что во всех частях анализа вы обращаетесь к пользователю на "вы" (например: "Вы сегодня ели...", "В ваших записях видно...")
-- НЕ используйте слова "пользователь", "клиент", "человек" - обращайтесь напрямую на "вы"
-- Если найдете неправильные обращения, исправьте их
+ШАГ 2 - Лингвистическая проверка:
+- Проследите, чтобы в ответе ко всем вашим наблюдениям и рекомендациям было обращение исключительно на "вы".
+- Исключите любые обращения типа "пользователь", "клиент" или "человек".
 
-Ответ верните в формате JSON с полями:
-- mainStory (строка) - основной сюжет дня
-- keyEvents (массив строк) - важные события
-- emotionalMoments (массив строк) - эмоциональные моменты
-- keyThemes (массив строк) - ключевые темы
-- observations (массив строк) - ваши профессиональные наблюдения
-- recommendations (массив строк) - рекомендации и советы`,
+Ответ оформите в формате JSON с полями:
+- mainStory (строка) — обобщённый сюжет дня
+- keyEvents (массив строк) — список ключевых событий
+- emotionalMoments (массив строк) — описание эмоциональных моментов
+- keyThemes (массив строк) — важные темы
+- observations (массив строк) — профессиональные наблюдения
+- recommendations (массив строк) — рекомендации и советы
 
-  en: `Here are the user's entries for the day:
+Дополнительно, постарайтесь использовать ясный и деликатный язык, чтобы обеспечить максимально полезный и понимаемый анализ.`,
+
+  en: `Here are your diary entries for the day:
 {notes}
 
-As a professional psychologist, analyze these entries and create a personalized summary.
-
-IMPORTANT: Perform the analysis step by step:
+Please perform a detailed psychological analysis of these entries in two steps:
 
 STEP 1 - Main Analysis:
-- Analyze the main storyline of the day and key events
-- Identify important emotional moments and experiences
-- Determine key themes that repeat in the entries
-- Formulate your professional observations and insights
-- Prepare specific recommendations or advice
+- Describe the overall storyline of the day, highlighting key events with time references.
+- Note the most vivid emotional reactions and feelings that emerged.
+- Identify recurring themes or thoughts that run as a common thread.
+- Provide professional observations from a psychologist's perspective, explaining possible causes and effects of these events and emotions.
+- Suggest specific, practical recommendations and advice that will help address the identified situations and emotions.
 
-STEP 2 - Address Verification:
-- Ensure that in all parts of the analysis you address the user as "you" (e.g., "You ate today...", "In your entries, I can see...")
-- DO NOT use words like "user", "client", "person" - address directly as "you"
-- If you find incorrect addressing, correct it
+STEP 2 - Linguistic Verification:
+- Ensure that in your response, all observations and recommendations address exclusively as "you".
+- Exclude any references like "user", "client", or "person".
 
-Return the answer in JSON format with fields:
-- mainStory (string) - main storyline of the day
-- keyEvents (array of strings) - important events
-- emotionalMoments (array of strings) - emotional moments
-- keyThemes (array of strings) - key themes
-- observations (array of strings) - your professional observations
-- recommendations (array of strings) - recommendations and advice`,
+Format your answer as JSON with fields:
+- mainStory (string) - summarized storyline of the day
+- keyEvents (array of strings) - list of key events
+- emotionalMoments (array of strings) - description of emotional moments
+- keyThemes (array of strings) - important themes
+- observations (array of strings) - professional observations
+- recommendations (array of strings) - recommendations and advice
+
+Additionally, try to use clear and sensitive language to ensure the most useful and understandable analysis.`,
 };
 
 export const aiSummarySystemPrompts = {
