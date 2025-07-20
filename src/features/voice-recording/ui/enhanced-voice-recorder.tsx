@@ -5,8 +5,9 @@ import { Button } from '@/shared/ui/button';
 import { Mic, Square, RotateCcw } from 'lucide-react';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { useUser } from '@/entities/user';
+import { safeSentry } from '@/shared/lib/sentry';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { useUser } from '@/entities';
 
 interface EnhancedVoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
@@ -36,74 +37,119 @@ export function EnhancedVoiceRecorder({
       return;
     }
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = event => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        // Если запись была сброшена, не обрабатываем аудио
-        if (isResetRef.current) {
-          isResetRef.current = false;
-          stream.getTracks().forEach(track => track.stop());
-          return;
-        }
-
-        setIsProcessing(true);
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: 'audio/wav',
-        });
-
+    return safeSentry.startSpanAsync(
+      {
+        op: 'ui.click',
+        name: 'Start Enhanced Voice Recording',
+      },
+      async span => {
         try {
-          const formData = new FormData();
-          formData.append('audio', audioBlob);
+          span.setAttribute('component', 'EnhancedVoiceRecorder');
+          span.setAttribute('action', 'startRecording');
 
-          const response = await fetch('/api/speech-to-text', {
-            method: 'POST',
-            body: formData,
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          const mediaRecorder = new MediaRecorder(stream);
+          mediaRecorderRef.current = mediaRecorder;
+          audioChunksRef.current = [];
+
+          mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+              audioChunksRef.current.push(event.data);
+            }
+          };
+
+          mediaRecorder.onstop = async () => {
+            // Если запись была сброшена, не обрабатываем аудио
+            if (isResetRef.current) {
+              isResetRef.current = false;
+              stream.getTracks().forEach(track => track.stop());
+              return;
+            }
+
+            setIsProcessing(true);
+            const audioBlob = new Blob(audioChunksRef.current, {
+              type: 'audio/wav',
+            });
+
+            try {
+              const formData = new FormData();
+              formData.append('audio', audioBlob);
+
+              const response = await fetch('/api/speech-to-text', {
+                method: 'POST',
+                body: formData,
+              });
+
+              if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                  errorData.error || t('newEntry.voiceRecording.errorMessage')
+                );
+              }
+
+              const { text } = await response.json();
+              onRecordingComplete(text);
+            } catch (error) {
+              safeSentry.captureException(error as Error, {
+                tags: {
+                  component: 'EnhancedVoiceRecorder',
+                  action: 'processAudio',
+                },
+                extra: {
+                  audioSize: audioBlob.size,
+                },
+              });
+
+              const { logger } = safeSentry;
+              logger.error('Error processing audio', {
+                component: 'EnhancedVoiceRecorder',
+                audioSize: audioBlob.size,
+                error: error instanceof Error ? error.message : 'Unknown error',
+              });
+
+              const errorMessage =
+                error instanceof Error
+                  ? error.message
+                  : t('newEntry.voiceRecording.errorMessage');
+              showError(errorMessage);
+              onRecordingComplete('');
+            } finally {
+              setIsProcessing(false);
+            }
+
+            stream.getTracks().forEach(track => track.stop());
+          };
+
+          mediaRecorder.start();
+          onRecordingChange(true);
+        } catch (error) {
+          safeSentry.captureException(error as Error, {
+            tags: {
+              component: 'EnhancedVoiceRecorder',
+              action: 'accessMicrophone',
+            },
+            extra: {
+              userAgent: navigator.userAgent,
+            },
           });
 
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(
-              errorData.error || t('newEntry.voiceRecording.errorMessage')
-            );
-          }
+          const { logger } = safeSentry;
+          logger.error('Error accessing microphone', {
+            component: 'EnhancedVoiceRecorder',
+            userAgent: navigator.userAgent,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
 
-          const { text } = await response.json();
-          onRecordingComplete(text);
-        } catch (error) {
-          console.error('Error processing audio:', error);
           const errorMessage =
             error instanceof Error
               ? error.message
-              : t('newEntry.voiceRecording.errorMessage');
+              : t('newEntry.voiceRecording.errorAccessingMicrophone');
           showError(errorMessage);
-          onRecordingComplete('');
-        } finally {
-          setIsProcessing(false);
         }
-
-        stream.getTracks().forEach(track => track.stop());
-      };
-
-      mediaRecorder.start();
-      onRecordingChange(true);
-    } catch (error) {
-      console.error('Error accessing microphone:', error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : t('newEntry.voiceRecording.errorAccessingMicrophone');
-      showError(errorMessage);
-    }
+      }
+    );
   };
 
   const stopRecording = () => {

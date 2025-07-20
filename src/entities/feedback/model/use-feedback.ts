@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { CreateFeedbackRequest, Feedback } from '@/shared/types';
 import { useAlertContext } from '@/shared/providers/alert-provider';
-import * as Sentry from '@sentry/nextjs';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export const feedbackKeys = {
   all: (userId: string) => ['feedback', userId] as const,
@@ -18,7 +18,9 @@ export function useFeedback() {
     queryFn: async (): Promise<Feedback[]> => {
       if (!user) {
         const error = new Error('User not found');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'fetch_feedback' },
+        });
         throw error;
       }
 
@@ -32,7 +34,10 @@ export function useFeedback() {
           .json()
           .catch(() => ({ error: 'Failed to fetch feedback' }));
         const error = new Error(errorData.error || 'Failed to fetch feedback');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'fetch_feedback' },
+          extra: { userId: user.id, status: response.status },
+        });
         throw error;
       }
       return response.json();
@@ -56,7 +61,9 @@ export function useCreateFeedback() {
     mutationFn: async (data: CreateFeedbackRequest): Promise<Feedback> => {
       if (!user) {
         const error = new Error('User not found');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'create_feedback' },
+        });
         throw error;
       }
 
@@ -72,7 +79,14 @@ export function useCreateFeedback() {
       if (!response.ok) {
         const errorData = await response.json();
         const error = new Error(errorData.error || 'Failed to create feedback');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'create_feedback' },
+          extra: {
+            userId: user.id,
+            feedbackType: data.type,
+            status: response.status,
+          },
+        });
         throw error;
       }
 
@@ -84,7 +98,10 @@ export function useCreateFeedback() {
       });
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'create_feedback' },
+        extra: { userId: user?.id },
+      });
       showError(error.message);
     },
   });

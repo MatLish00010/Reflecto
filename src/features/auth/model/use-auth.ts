@@ -6,7 +6,7 @@ import type { User } from '@supabase/supabase-js';
 import { userKeys } from '@/entities/user';
 import { noteKeys } from '@/entities/note';
 import { useAlertContext } from '@/shared/providers/alert-provider';
-import * as Sentry from '@sentry/nextjs';
+import { safeSentry } from '@/shared/lib/sentry';
 
 interface SignInRequest {
   email: string;
@@ -33,13 +33,19 @@ export function useSignIn() {
       });
 
       if (error) {
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'sign_in' },
+          extra: { email: data.email },
+        });
         throw new Error(error.message);
       }
 
       if (!authData.user) {
         const error = new Error('Sign in failed');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'sign_in' },
+          extra: { email: data.email },
+        });
         throw error;
       }
 
@@ -50,7 +56,9 @@ export function useSignIn() {
       queryClient.setQueryData(userKeys.all, data.user);
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'sign_in' },
+      });
       showError(error.message);
     },
   });
@@ -75,13 +83,19 @@ export function useSignUp() {
       });
 
       if (error) {
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'sign_up' },
+          extra: { email: data.email, name: data.name },
+        });
         throw new Error(error.message);
       }
 
       if (!authData.user) {
         const error = new Error('Sign up failed');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'sign_up' },
+          extra: { email: data.email, name: data.name },
+        });
         throw error;
       }
 
@@ -92,7 +106,9 @@ export function useSignUp() {
       queryClient.setQueryData(userKeys.all, data.user);
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'sign_up' },
+      });
       showError(error.message);
     },
   });
@@ -109,7 +125,9 @@ export function useSignOut() {
       const { error } = await supabase.auth.signOut();
 
       if (error) {
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'sign_out' },
+        });
         throw new Error(error.message);
       }
 
@@ -121,7 +139,9 @@ export function useSignOut() {
       queryClient.invalidateQueries({ queryKey: noteKeys.all('') });
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'sign_out' },
+      });
       showError(error.message);
     },
   });
@@ -139,14 +159,19 @@ export function useResetPassword() {
       });
 
       if (error) {
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'reset_password' },
+          extra: { email },
+        });
         throw new Error(error.message);
       }
 
       return { success: true };
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'reset_password' },
+      });
       showError(error.message);
     },
   });
@@ -164,14 +189,18 @@ export function useUpdatePassword() {
       });
 
       if (error) {
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'update_password' },
+        });
         throw new Error(error.message);
       }
 
       return { success: true };
     },
     onError: error => {
-      Sentry.captureException(error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'update_password' },
+      });
       showError(error.message);
     },
   });
