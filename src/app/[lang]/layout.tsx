@@ -10,6 +10,7 @@ import { PageHeader } from '@/widgets/page-header';
 import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
 import { getDictionary } from '@/shared/dictionaries';
 import { OnboardingGuide } from '@/features';
+import { QueryErrorHandler } from '@/shared/components/error-handler';
 
 import '../globals.css';
 
@@ -77,6 +78,8 @@ export default async function RootLayout({
             <QueryProvider>
               <AlertProvider>
                 <AuthModalProvider>
+                  {/* Global error handler for query param errors */}
+                  <QueryErrorHandler />
                   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
                     <div className="max-w-4xl mx-auto">
                       <PageHeader dict={dict} />
