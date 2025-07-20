@@ -14,6 +14,8 @@ import {
 import { useCreateFeedback } from '../model/use-feedback';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { SentryTestButton } from './sentry-test-button';
+import { SentryStatus } from './sentry-status';
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -132,6 +134,10 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             </Button>
           </div>
         </form>
+
+        {/* Sentry Status and Test Controls - Only visible in production */}
+        <SentryStatus />
+        <SentryTestButton />
       </DialogContent>
     </Dialog>
   );

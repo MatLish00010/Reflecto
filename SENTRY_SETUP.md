@@ -245,13 +245,41 @@ In production, you can monitor:
 - Component-specific error tracking
 - User interaction performance
 
+## Testing Sentry in Production
+
+### Built-in Test Tools
+
+The project includes built-in tools to test Sentry functionality in production:
+
+1. **Open the Feedback Modal** - Contains Sentry test controls
+2. **Check Status** - Shows current Sentry configuration
+3. **Test Different Features**:
+   - Client-side exceptions, messages, spans, and logs
+   - Server-side exceptions, messages, spans, and logs
+
+### Manual Testing
+
+You can also test Sentry manually:
+
+1. **Check Browser Console** - Look for Sentry initialization messages
+2. **Visit `/api/sentry-test`** - Returns current Sentry status
+3. **Send POST to `/api/sentry-test`** - Test server-side Sentry features
+
+### Verification Steps
+
+1. **Check Sentry Dashboard** - Events should appear within 1-2 minutes
+2. **Verify Environment** - Events should be tagged with 'production'
+3. **Check Performance** - Spans should appear in Performance tab
+4. **Review Logs** - Structured logs should be visible in Logs tab
+
 ## Troubleshooting
 
 ### Sentry Not Working in Production
 
 1. Check that `NODE_ENV` is set to 'production'
-2. Verify the DSN is correct in config files
+2. Verify the DSN is correct in environment variables
 3. Check browser console for any Sentry initialization errors
+4. Use the built-in test tools to verify functionality
 
 ### Development Logs Not Appearing
 
