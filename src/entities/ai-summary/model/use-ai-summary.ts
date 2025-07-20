@@ -1,6 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
-import { useTranslation } from '@/shared/contexts/translation-context';
 import { safeSentry } from '@/shared/lib/sentry';
 
 export const aiSummaryKeys = {
@@ -13,64 +12,6 @@ export const aiSummaryKeys = {
   detail: (userId: string, date: string) =>
     [...aiSummaryKeys.details(userId), date] as const,
 };
-
-export function useAISummary() {
-  const { lang } = useTranslation();
-
-  return useMutation({
-    mutationFn: async ({ notes, date }: { notes: string[]; date?: string }) => {
-      const res = await fetch('/api/ai-summary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes, locale: lang, date }),
-      });
-      if (!res.ok) {
-        const error = new Error('Failed to get summary');
-        safeSentry.captureException(error, {
-          tags: { operation: 'get_ai_summary' },
-          extra: {
-            notesCount: notes.length,
-            locale: lang,
-            date,
-            status: res.status,
-          },
-        });
-        throw error;
-      }
-      const data = await res.json();
-      return data.summary;
-    },
-  });
-}
-
-export function useTodayAISummary() {
-  const { user } = useUser();
-  return useQuery({
-    queryKey: aiSummaryKeys.detail(user?.id || '', 'today'),
-    queryFn: async () => {
-      if (!user) {
-        const error = new Error('User not found');
-        safeSentry.captureException(error, {
-          tags: { operation: 'get_today_ai_summary' },
-        });
-        throw error;
-      }
-      const res = await fetch('/api/ai-summary', { method: 'GET' });
-      if (!res.ok) {
-        const error = new Error('Failed to fetch summary');
-        safeSentry.captureException(error, {
-          tags: { operation: 'get_today_ai_summary' },
-          extra: { userId: user.id, status: res.status },
-        });
-        throw error;
-      }
-      const data = await res.json();
-      return data.summary;
-    },
-    enabled: !!user,
-    retry: false,
-  });
-}
 
 export function useAISummaryByDateRange(from?: string, to?: string) {
   const { user } = useUser();
@@ -109,56 +50,31 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
   });
 }
 
-export function useCreateSummary() {
-  const queryClient = useQueryClient();
+export function useTodayAISummary() {
   const { user } = useUser();
-  const { lang } = useTranslation();
-
-  return useMutation({
-    mutationFn: async ({
-      notes,
-      from,
-      to,
-    }: {
-      notes: string[];
-      from: string;
-      to: string;
-    }) => {
+  return useQuery({
+    queryKey: aiSummaryKeys.detail(user?.id || '', 'today'),
+    queryFn: async () => {
       if (!user) {
         const error = new Error('User not found');
         safeSentry.captureException(error, {
-          tags: { operation: 'create_ai_summary' },
+          tags: { operation: 'get_today_ai_summary' },
         });
         throw error;
       }
-      const res = await fetch('/api/ai-summary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes, locale: lang, from, to }),
-      });
+      const res = await fetch('/api/ai-summary', { method: 'GET' });
       if (!res.ok) {
-        const data = await res.json();
-        const error = new Error(data.error);
+        const error = new Error('Failed to fetch summary');
         safeSentry.captureException(error, {
-          tags: { operation: 'create_ai_summary' },
-          extra: {
-            userId: user.id,
-            notesCount: notes.length,
-            locale: lang,
-            from,
-            to,
-            status: res.status,
-          },
+          tags: { operation: 'get_today_ai_summary' },
+          extra: { userId: user.id, status: res.status },
         });
         throw error;
       }
       const data = await res.json();
       return data.summary;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: aiSummaryKeys.all(user?.id || ''),
-      });
-    },
+    enabled: !!user,
+    retry: false,
   });
 }

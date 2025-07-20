@@ -1,2 +1,1 @@
-export * from './model/use-feedback';
-export * from './ui';
+export { useFeedback, feedbackKeys } from './model/use-feedback';

@@ -1,7 +1,7 @@
 import { LanguageToggle } from '@/features/language-toggle';
 import { ThemeToggle } from '@/features/theme-toggle';
 import { UserInfoDropdown } from './user-info-dropdown';
-import { FeedbackButton } from '@/entities/feedback';
+import { FeedbackButton } from '@/features/feedback';
 import { translate } from '@/shared/lib/utils';
 
 interface PageHeaderProps {

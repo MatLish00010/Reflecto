@@ -5,7 +5,7 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
 import { getDateRangeUTC } from '@/shared/lib/date-utils';
 import { History } from '@/features/history';
-import { AISummary } from '@/entities/ai-summary';
+import { AISummary } from '@/features/ai-summary-generation';
 import { DatePicker } from './date-picker';
 import { useUser } from '@/entities/user';
 
