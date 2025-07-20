@@ -199,6 +199,19 @@ const { logger } = safeSentry;
 logger.info('User action completed', { action: 'save_note', userId: user.id });
 ```
 
+### 5. Component-Specific Context
+
+Always include component and action tags:
+
+```typescript
+safeSentry.captureException(error, {
+  tags: {
+    component: 'ComponentName',
+    action: 'specificAction',
+  },
+});
+```
+
 ## Environment Variables
 
 The following environment variables control Sentry behavior:
@@ -215,6 +228,8 @@ In production, you can monitor:
 - User sessions and replays
 - Console logs and structured data
 - Custom metrics and attributes
+- Component-specific error tracking
+- User interaction performance
 
 ## Troubleshooting
 
@@ -235,3 +250,9 @@ In production, you can monitor:
 1. Use spans to identify slow operations
 2. Check Sentry performance dashboard
 3. Monitor span attributes for bottlenecks
+
+### UI Component Issues
+
+1. Check component-specific error tracking
+2. Verify performance spans are properly configured
+3. Ensure structured logging is being used

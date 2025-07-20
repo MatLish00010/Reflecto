@@ -2,6 +2,7 @@ import { Share2 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
+import { safeSentry } from '@/shared/lib/sentry';
 
 interface ShareButtonProps {
   summary: {
@@ -72,31 +73,78 @@ export function ShareButton({ summary }: ShareButtonProps) {
   };
 
   const handleShare = async () => {
-    const text = formatSummaryForSharing();
+    return safeSentry.startSpanAsync(
+      {
+        op: 'ui.click',
+        name: 'Share AI Summary',
+      },
+      async span => {
+        try {
+          span.setAttribute('component', 'ShareButton');
+          span.setAttribute('action', 'shareSummary');
+          span.setAttribute('summary.hasMainStory', !!summary.mainStory);
+          span.setAttribute(
+            'summary.keyEventsCount',
+            summary.keyEvents?.length || 0
+          );
+          span.setAttribute(
+            'summary.themesCount',
+            summary.keyThemes?.length || 0
+          );
 
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: t('aiAnalysis.shareTitle'),
-          text: text,
-        });
-      } else {
-        await navigator.clipboard.writeText(text);
-        showSuccess(t('aiAnalysis.copiedToClipboard'));
-      }
-    } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        return;
-      }
+          const text = formatSummaryForSharing();
 
-      console.error('Error sharing:', error);
-      try {
-        await navigator.clipboard.writeText(text);
-        showSuccess(t('aiAnalysis.copiedToClipboard'));
-      } catch {
-        showError(t('aiAnalysis.shareError'));
+          if (navigator.share) {
+            await navigator.share({
+              title: t('aiAnalysis.shareTitle'),
+              text: text,
+            });
+            span.setAttribute('share.method', 'native');
+          } else {
+            await navigator.clipboard.writeText(text);
+            showSuccess(t('aiAnalysis.copiedToClipboard'));
+            span.setAttribute('share.method', 'clipboard');
+          }
+
+          span.setAttribute('success', true);
+        } catch (error) {
+          if (error instanceof Error && error.name === 'AbortError') {
+            span.setAttribute('share.aborted', true);
+            return;
+          }
+
+          safeSentry.captureException(error as Error, {
+            tags: {
+              component: 'ShareButton',
+              action: 'shareSummary',
+            },
+            extra: {
+              hasNativeShare: !!navigator.share,
+              hasClipboard: !!navigator.clipboard,
+            },
+          });
+          span.setAttribute('error', true);
+
+          const { logger } = safeSentry;
+          logger.error('Error sharing summary', {
+            component: 'ShareButton',
+            hasNativeShare: !!navigator.share,
+            hasClipboard: !!navigator.clipboard,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
+
+          try {
+            const text = formatSummaryForSharing();
+            await navigator.clipboard.writeText(text);
+            showSuccess(t('aiAnalysis.copiedToClipboard'));
+            span.setAttribute('fallback.success', true);
+          } catch {
+            showError(t('aiAnalysis.shareError'));
+            span.setAttribute('fallback.error', true);
+          }
+        }
       }
-    }
+    );
   };
 
   return (

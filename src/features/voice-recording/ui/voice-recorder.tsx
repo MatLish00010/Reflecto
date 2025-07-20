@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Mic, Square, RotateCcw } from 'lucide-react';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import * as Sentry from '@sentry/nextjs';
+import { safeSentry } from '@/shared/lib/sentry';
 
 interface VoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
@@ -27,83 +27,96 @@ export function VoiceRecorder({
   const { t } = useTranslation();
 
   const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = event => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        setIsProcessing(true);
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: 'audio/wav',
-        });
-
+    return safeSentry.startSpanAsync(
+      {
+        op: 'ui.click',
+        name: 'Start Voice Recording',
+      },
+      async span => {
         try {
-          const formData = new FormData();
-          formData.append('audio', audioBlob);
+          span.setAttribute('component', 'VoiceRecorder');
+          span.setAttribute('action', 'startRecording');
 
-          const response = await fetch('/api/speech-to-text', {
-            method: 'POST',
-            body: formData,
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
           });
+          const mediaRecorder = new MediaRecorder(stream);
+          mediaRecorderRef.current = mediaRecorder;
+          audioChunksRef.current = [];
 
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(
-              errorData.error || t('newEntry.voiceRecording.errorMessage')
-            );
-          }
+          mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+              audioChunksRef.current.push(event.data);
+            }
+          };
 
-          const { text } = await response.json();
-          onRecordingComplete(text);
+          mediaRecorder.onstop = async () => {
+            setIsProcessing(true);
+            const audioBlob = new Blob(audioChunksRef.current, {
+              type: 'audio/wav',
+            });
+
+            try {
+              const formData = new FormData();
+              formData.append('audio', audioBlob);
+
+              const response = await fetch('/api/speech-to-text', {
+                method: 'POST',
+                body: formData,
+              });
+
+              if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                  errorData.error || t('newEntry.voiceRecording.errorMessage')
+                );
+              }
+
+              const { text } = await response.json();
+              onRecordingComplete(text);
+            } catch (error) {
+              safeSentry.captureException(error as Error, {
+                tags: {
+                  component: 'VoiceRecorder',
+                  action: 'processAudio',
+                },
+                extra: {
+                  audioSize: audioBlob.size,
+                },
+              });
+              const errorMessage =
+                error instanceof Error
+                  ? error.message
+                  : t('newEntry.voiceRecording.errorMessage');
+              showError(errorMessage);
+              onRecordingComplete('');
+            } finally {
+              setIsProcessing(false);
+            }
+
+            stream.getTracks().forEach(track => track.stop());
+          };
+
+          mediaRecorder.start();
+          onRecordingChange(true);
         } catch (error) {
-          Sentry.captureException(error, {
+          safeSentry.captureException(error as Error, {
             tags: {
               component: 'VoiceRecorder',
-              action: 'processAudio',
+              action: 'accessMicrophone',
             },
             extra: {
-              audioSize: audioBlob.size,
+              userAgent: navigator.userAgent,
             },
           });
           const errorMessage =
             error instanceof Error
               ? error.message
-              : t('newEntry.voiceRecording.errorMessage');
+              : t('newEntry.voiceRecording.errorAccessingMicrophone');
           showError(errorMessage);
-          onRecordingComplete('');
-        } finally {
-          setIsProcessing(false);
         }
-
-        stream.getTracks().forEach(track => track.stop());
-      };
-
-      mediaRecorder.start();
-      onRecordingChange(true);
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: {
-          component: 'VoiceRecorder',
-          action: 'accessMicrophone',
-        },
-        extra: {
-          userAgent: navigator.userAgent,
-        },
-      });
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : t('newEntry.voiceRecording.errorAccessingMicrophone');
-      showError(errorMessage);
-    }
+      }
+    );
   };
 
   const stopRecording = () => {
