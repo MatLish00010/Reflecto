@@ -163,5 +163,31 @@
     "submitSuccess": "Feedback sent successfully! Thank you for your input.",
     "submitError": "Failed to send feedback. Please try again.",
     "closeButton": "Close"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to Reflecto! 🎉",
+      "description": "Your personal AI diary that helps you better understand yourself and your thoughts. Let's explore the main features!"
+    },
+    "entries": {
+      "title": "Write down your thoughts ✍️",
+      "description": "Add entries about your day, emotions, plans, or reflections. Use voice input for quick entry creation. For example: \"Today was a productive day - completed an important project and feel satisfied with the work done.\""
+    },
+    "summary": {
+      "title": "AI analyzes your entries 🧠",
+      "description": "Our AI creates smart summaries: daily from your entries, weekly from daily summaries, monthly from weekly summaries, and yearly from monthly summaries. This helps you see patterns and trends in your life!"
+    },
+    "security": {
+      "title": "Your data is secure 🔒",
+      "description": "All your entries and summaries are encrypted with your credentials. Data is stored encrypted in the database - only you can read it. Your privacy is our priority!"
+    },
+    "start": {
+      "title": "Ready to start? 🚀",
+      "description": "Great! Now you know all the main features of Reflecto. Create your first entry and start your journey to better self-understanding!"
+    },
+    "next": "Next",
+    "back": "Back",
+    "finish": "Get Started!",
+    "skip": "Skip"
   }
 }
