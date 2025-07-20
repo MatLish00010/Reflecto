@@ -143,7 +143,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <button
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+            className="text-sm text-blue-600 hover:underline dark:text-blue-400 cursor-pointer"
             disabled={signInMutation.isPending || signUpMutation.isPending}
           >
             {isSignUp ? t('auth.alreadyHaveAccount') : t('auth.needAccount')}

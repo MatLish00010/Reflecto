@@ -77,7 +77,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               onChange={e =>
                 setType(e.target.value as 'bug' | 'feature' | 'improvement')
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white cursor-pointer"
             >
               <option value="bug">{t('feedback.typeBug')}</option>
               <option value="feature">{t('feedback.typeFeature')}</option>

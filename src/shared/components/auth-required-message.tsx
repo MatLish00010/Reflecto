@@ -16,7 +16,7 @@ export function AuthRequiredMessage({ messageKey }: AuthRequiredMessageProps) {
       <p className="text-muted-foreground mb-4">{t(messageKey)}</p>
       <button
         onClick={openModal}
-        className="text-blue-600 hover:underline dark:text-blue-400"
+        className="text-blue-600 hover:underline dark:text-blue-400 cursor-pointer"
       >
         {t('auth.signIn')}
       </button>

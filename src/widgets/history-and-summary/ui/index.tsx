@@ -36,12 +36,8 @@ export function HistoryAndSummary() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="ai-summary" className="cursor-pointer">
-            {t('aiAnalysis.title')}
-          </TabsTrigger>
-          <TabsTrigger value="history" className="cursor-pointer">
-            {t('history.title')}
-          </TabsTrigger>
+          <TabsTrigger value="ai-summary">{t('aiAnalysis.title')}</TabsTrigger>
+          <TabsTrigger value="history">{t('history.title')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="history" className="space-y-4">
