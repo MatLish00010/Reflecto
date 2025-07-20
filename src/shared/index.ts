@@ -1,3 +1,4 @@
+export * from './components';
 export * from './ui';
 export * from './lib';
 export * from './types';

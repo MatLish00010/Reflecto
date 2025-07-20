@@ -1,7 +1,6 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@/shared/lib/client';
 import type { User } from '@supabase/supabase-js';
 import { userKeys } from '@/entities/user';
@@ -22,7 +21,6 @@ interface SignUpRequest {
 
 export function useSignIn() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { showError } = useAlertContext();
 
   return useMutation({
@@ -50,7 +48,6 @@ export function useSignIn() {
     onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: userKeys.all });
       queryClient.setQueryData(userKeys.all, data.user);
-      router.push('/');
     },
     onError: error => {
       Sentry.captureException(error);
@@ -61,7 +58,6 @@ export function useSignIn() {
 
 export function useSignUp() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { showError } = useAlertContext();
 
   return useMutation({
@@ -94,7 +90,6 @@ export function useSignUp() {
     onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: userKeys.all });
       queryClient.setQueryData(userKeys.all, data.user);
-      router.push('/');
     },
     onError: error => {
       Sentry.captureException(error);
@@ -105,7 +100,6 @@ export function useSignUp() {
 
 export function useSignOut() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { showError } = useAlertContext();
 
   return useMutation({
@@ -122,7 +116,6 @@ export function useSignOut() {
       return { success: true };
     },
     onSuccess: () => {
-      router.push('/login');
       queryClient.setQueryData(userKeys.all, null);
       queryClient.invalidateQueries({ queryKey: userKeys.all });
       queryClient.invalidateQueries({ queryKey: noteKeys.all('') });

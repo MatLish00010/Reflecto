@@ -138,7 +138,11 @@
     "resetPasswordSuccess": "Password reset email sent! Please check your inbox.",
     "updatePassword": "Update Password",
     "updatePasswordDescription": "Enter your new password",
-    "updatePasswordSuccess": "Password updated successfully!"
+    "updatePasswordSuccess": "Password updated successfully!",
+    "authRequired": "Authentication required to continue",
+    "signInToViewHistory": "Sign in to view your diary history",
+    "signInToViewAnalysis": "Sign in to view AI analysis of your entries",
+    "signInToContinue": "Sign in to continue"
   },
   "feedback": {
     "title": "Feedback",

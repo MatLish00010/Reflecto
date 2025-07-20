@@ -7,12 +7,16 @@ import { AudioInputTabs } from '@/features/voice-recording';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useCreateNote } from '@/entities/note';
+import { useUser } from '@/entities/user';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 
 export function NewEntryForm() {
   const [content, setContent] = useState('');
   const { t } = useTranslation();
   const { showSuccess, showError } = useAlertContext();
   const createNoteMutation = useCreateNote();
+  const { isAuthenticated } = useUser();
+  const { openModal } = useAuthModalContext();
 
   const handleRecordingComplete = (text: string) => {
     setContent(prev => prev + (prev ? '\n' : '') + text);
@@ -20,6 +24,11 @@ export function NewEntryForm() {
 
   const handleSave = async () => {
     if (!content.trim()) return;
+
+    if (!isAuthenticated) {
+      openModal();
+      return;
+    }
 
     try {
       await createNoteMutation.mutateAsync(content.trim());

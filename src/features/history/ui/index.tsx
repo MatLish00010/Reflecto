@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useNotesByDate } from '@/entities/note';
+import { AuthRequiredMessage } from '@/shared/components';
 import { getDateRangeUTC } from '@/shared/lib/date-utils';
 import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
@@ -11,12 +12,14 @@ interface HistoryProps {
   selectedDate: Date;
   selectedDateStart?: Date;
   selectedDateEnd?: Date;
+  isAuthenticated?: boolean;
 }
 
 export function History({
   selectedDate: externalSelectedDate,
   selectedDateStart: externalSelectedDateStart,
   selectedDateEnd: externalSelectedDateEnd,
+  isAuthenticated,
 }: HistoryProps) {
   const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
@@ -49,6 +52,10 @@ export function History({
   const handleToggleShowAll = useCallback(() => {
     setShowAll(prev => !prev);
   }, []);
+
+  if (!isAuthenticated) {
+    return <AuthRequiredMessage messageKey="auth.signInToViewHistory" />;
+  }
 
   if (isPending) {
     return (

@@ -5,6 +5,8 @@ import { Button } from '@/shared/ui/button';
 import { Mic, Square, RotateCcw } from 'lucide-react';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useUser } from '@/entities/user';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 
 interface EnhancedVoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
@@ -25,8 +27,15 @@ export function EnhancedVoiceRecorder({
   const isResetRef = useRef(false);
   const { showError } = useAlertContext();
   const { t } = useTranslation();
+  const { isAuthenticated } = useUser();
+  const { openModal } = useAuthModalContext();
 
   const startRecording = async () => {
+    if (!isAuthenticated) {
+      openModal();
+      return;
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);

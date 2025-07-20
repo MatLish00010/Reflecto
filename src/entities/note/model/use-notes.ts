@@ -64,7 +64,7 @@ export function useCreateNote() {
   return useMutation({
     mutationFn: async (note: string) => {
       if (!user) {
-        const error = new Error('User not found');
+        const error = new Error('Authentication required');
         Sentry.captureException(error);
         throw error;
       }

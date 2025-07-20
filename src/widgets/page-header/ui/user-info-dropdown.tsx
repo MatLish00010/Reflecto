@@ -4,6 +4,7 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { useUser } from '@/entities/user';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,16 +12,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { User } from 'lucide-react';
+import { User, LogIn } from 'lucide-react';
 import { UserInfo } from './user-info';
 import { LogoutButton } from './logout-button';
 
 export function UserInfoDropdown() {
   const { t } = useTranslation();
-  const { user, isPending, error } = useUser();
+  const { user, isAuthenticated, isPending, error } = useUser();
+  const { openModal } = useAuthModalContext();
 
   if (isPending) {
     return <Skeleton className="h-9 w-32" />;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <Button onClick={openModal} variant="outline" size="sm">
+        <LogIn className="w-4 h-4 mr-2" />
+        {t('auth.signIn')}
+      </Button>
+    );
   }
 
   if (error || !user) {

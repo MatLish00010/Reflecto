@@ -6,7 +6,9 @@ import {
   useCreateSummary,
 } from '@/entities/ai-summary';
 import { useNotesByDate } from '@/entities/note';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
+import { AuthRequiredMessage } from '@/shared/components';
 import { getDateRangeUTC } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton } from './loading-skeleton';
 import { GeneratePrompt } from './generate-prompt';
@@ -17,15 +19,18 @@ interface AISummaryProps {
   selectedDate?: Date;
   selectedDateStart?: Date;
   selectedDateEnd?: Date;
+  isAuthenticated?: boolean;
 }
 
 export function AISummary({
   selectedDate: externalSelectedDate,
   selectedDateStart: externalSelectedDateStart,
   selectedDateEnd: externalSelectedDateEnd,
+  isAuthenticated,
 }: AISummaryProps = {}) {
   const [internalSelectedDate] = useState(new Date());
   const { showError } = useAlertContext();
+  const { openModal } = useAuthModalContext();
 
   const selectedDate = externalSelectedDate || internalSelectedDate;
 
@@ -65,20 +70,42 @@ export function AISummary({
   );
 
   const handleGenerateSummary = useCallback(() => {
+    if (!isAuthenticated) {
+      openModal();
+      return;
+    }
     createSummaryMutation.mutate({
       notes: notesTexts,
       from: selectedDateStart.toISOString(),
       to: selectedDateEnd.toISOString(),
     });
-  }, [createSummaryMutation, notesTexts, selectedDateStart, selectedDateEnd]);
+  }, [
+    isAuthenticated,
+    openModal,
+    createSummaryMutation,
+    notesTexts,
+    selectedDateStart,
+    selectedDateEnd,
+  ]);
 
   const handleRefresh = useCallback(() => {
+    if (!isAuthenticated) {
+      openModal();
+      return;
+    }
     createSummaryMutation.mutate({
       notes: notesTexts,
       from: selectedDateStart.toISOString(),
       to: selectedDateEnd.toISOString(),
     });
-  }, [createSummaryMutation, notesTexts, selectedDateStart, selectedDateEnd]);
+  }, [
+    isAuthenticated,
+    openModal,
+    createSummaryMutation,
+    notesTexts,
+    selectedDateStart,
+    selectedDateEnd,
+  ]);
 
   const isLoading = useMemo(
     () => summaryLoading || notesLoading || createSummaryMutation.isPending,
@@ -87,7 +114,6 @@ export function AISummary({
 
   const hasData = useMemo(() => !!summary, [summary]);
 
-  // Показываем лоадер если мутация завершилась успешно, но данные еще не обновились
   const shouldShowLoading = useMemo(
     () => isLoading || (createSummaryMutation.isSuccess && !summary),
     [isLoading, createSummaryMutation.isSuccess, summary]
@@ -103,6 +129,10 @@ export function AISummary({
       showError(error.message);
     }
   }, [error, showError]);
+
+  if (!isAuthenticated) {
+    return <AuthRequiredMessage messageKey="auth.signInToViewAnalysis" />;
+  }
 
   if (shouldShowLoading) {
     return <AISummaryLoadingSkeleton />;

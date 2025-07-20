@@ -5,23 +5,29 @@ import { Button } from '@/shared/ui/button';
 import { FeedbackModal } from './feedback-modal';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useUser } from '@/entities/user';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { Bug } from 'lucide-react';
 
 export function FeedbackButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
-  const { user } = useUser();
+  const { isAuthenticated } = useUser();
+  const { openModal } = useAuthModalContext();
 
-  if (!user) {
-    return null;
-  }
+  const handleClick = () => {
+    if (!isAuthenticated) {
+      openModal();
+      return;
+    }
+    setIsModalOpen(true);
+  };
 
   return (
     <>
       <Button
         variant="outline"
         size="sm"
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleClick}
         className="flex items-center gap-2"
         title={t('feedback.description')}
       >

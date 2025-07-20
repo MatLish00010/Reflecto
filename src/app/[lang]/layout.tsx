@@ -4,8 +4,10 @@ import { Analytics } from '@vercel/analytics/next';
 import { ThemeProvider } from '@/shared/providers/theme-provider';
 import { AlertProvider } from '@/shared/providers/alert-provider';
 import { TranslationProvider } from '@/shared/contexts/translation-context';
+import { AuthModalProvider } from '@/shared/contexts/auth-modal-context';
 import { QueryProvider } from '@/shared/providers/query-provider';
 import { PageHeader } from '@/widgets/page-header';
+import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
 import { getDictionary } from '@/shared/dictionaries';
 
 import '../globals.css';
@@ -73,12 +75,15 @@ export default async function RootLayout({
           <TranslationProvider dict={dict} lang={lang}>
             <QueryProvider>
               <AlertProvider>
-                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-                  <div className="max-w-4xl mx-auto">
-                    <PageHeader dict={dict} />
-                    {children}
+                <AuthModalProvider>
+                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+                    <div className="max-w-4xl mx-auto">
+                      <PageHeader dict={dict} />
+                      {children}
+                    </div>
                   </div>
-                </div>
+                  <AuthModalWrapper />
+                </AuthModalProvider>
               </AlertProvider>
             </QueryProvider>
           </TranslationProvider>
