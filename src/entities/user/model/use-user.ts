@@ -23,7 +23,7 @@ export function useUser() {
             tags: { operation: 'get_user' },
           });
         }
-        throw new Error(error.message);
+        return null;
       }
 
       return user;
