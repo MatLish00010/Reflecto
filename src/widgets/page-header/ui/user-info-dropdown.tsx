@@ -18,10 +18,10 @@ import { LogoutButton } from './logout-button';
 
 export function UserInfoDropdown() {
   const { t } = useTranslation();
-  const { user, isAuthenticated, isPending, error } = useUser();
+  const { user, isAuthenticated, isLoading, error } = useUser();
   const { openModal } = useAuthModalContext();
 
-  if (isPending) {
+  if (isLoading) {
     return <Skeleton className="h-9 w-32" />;
   }
 

@@ -7,19 +7,18 @@ import { AuthRequiredMessage } from '@/shared/components';
 import { getDateRangeUTC } from '@/shared/lib/date-utils';
 import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
+import { useUser } from '@/entities';
 
 interface HistoryProps {
   selectedDate: Date;
   selectedDateStart?: Date;
   selectedDateEnd?: Date;
-  isAuthenticated?: boolean;
 }
 
 export function History({
   selectedDate: externalSelectedDate,
   selectedDateStart: externalSelectedDateStart,
   selectedDateEnd: externalSelectedDateEnd,
-  isAuthenticated,
 }: HistoryProps) {
   const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
@@ -40,9 +39,11 @@ export function History({
     };
   }, [selectedDate, externalSelectedDateStart, externalSelectedDateEnd]);
 
+  const { isAuthenticated, isLoading: isUserLoading } = useUser();
+
   const {
     data: notes = [],
-    isPending,
+    isLoading: isNotesLoading,
     error,
   } = useNotesByDate(
     selectedDateStart.toISOString(),
@@ -53,16 +54,21 @@ export function History({
     setShowAll(prev => !prev);
   }, []);
 
-  if (!isAuthenticated) {
-    return <AuthRequiredMessage messageKey="auth.signInToViewHistory" />;
-  }
+  const isLoading = useMemo(
+    () => isNotesLoading || isUserLoading,
+    [isNotesLoading, isUserLoading]
+  );
 
-  if (isPending) {
+  if (isLoading) {
     return (
       <div className="space-y-4">
         <NotesSkeleton />
       </div>
     );
+  }
+
+  if (!isAuthenticated) {
+    return <AuthRequiredMessage messageKey="auth.signInToViewHistory" />;
   }
 
   return (

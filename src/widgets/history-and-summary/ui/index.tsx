@@ -7,13 +7,11 @@ import { getDateRangeUTC } from '@/shared/lib/date-utils';
 import { History } from '@/features/history';
 import { AISummary } from '@/features/ai-summary-generation';
 import { DatePicker } from './date-picker';
-import { useUser } from '@/entities/user';
 
 export function HistoryAndSummary() {
   const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState('ai-summary');
-  const { isAuthenticated } = useUser();
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
     const range = getDateRangeUTC(selectedDate);
@@ -51,7 +49,6 @@ export function HistoryAndSummary() {
             selectedDate={selectedDate}
             selectedDateStart={selectedDateStart}
             selectedDateEnd={selectedDateEnd}
-            isAuthenticated={isAuthenticated}
           />
         </TabsContent>
 
@@ -60,7 +57,6 @@ export function HistoryAndSummary() {
             selectedDate={selectedDate}
             selectedDateStart={selectedDateStart}
             selectedDateEnd={selectedDateEnd}
-            isAuthenticated={isAuthenticated}
           />
         </TabsContent>
       </Tabs>

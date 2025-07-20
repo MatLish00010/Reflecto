@@ -12,19 +12,18 @@ import { AISummaryLoadingSkeleton } from './loading-skeleton';
 import { GeneratePrompt } from './generate-prompt';
 import { SummaryHeader } from './summary-header';
 import { SummaryContent } from './summary-content';
+import { useUser } from '@/entities';
 
 interface AISummaryProps {
   selectedDate?: Date;
   selectedDateStart?: Date;
   selectedDateEnd?: Date;
-  isAuthenticated?: boolean;
 }
 
 export function AISummary({
   selectedDate: externalSelectedDate,
   selectedDateStart: externalSelectedDateStart,
   selectedDateEnd: externalSelectedDateEnd,
-  isAuthenticated,
 }: AISummaryProps = {}) {
   const [internalSelectedDate] = useState(new Date());
   const { showError } = useAlertContext();
@@ -46,14 +45,16 @@ export function AISummary({
     externalSelectedDateStart || internalSelectedDateStart;
   const selectedDateEnd = externalSelectedDateEnd || internalSelectedDateEnd;
 
-  const { data: notes, isPending: notesLoading } = useNotesByDate(
+  const { isAuthenticated, isLoading: isUserLoading } = useUser();
+
+  const { data: notes, isLoading: notesLoading } = useNotesByDate(
     selectedDateStart.toISOString(),
     selectedDateEnd.toISOString()
   );
 
   const {
     data: summary,
-    isPending: summaryLoading,
+    isLoading: summaryLoading,
     error: summaryError,
   } = useAISummaryByDateRange(
     selectedDateStart.toISOString(),
@@ -106,16 +107,20 @@ export function AISummary({
   ]);
 
   const isLoading = useMemo(
-    () => summaryLoading || notesLoading || createSummaryMutation.isPending,
-    [summaryLoading, notesLoading, createSummaryMutation.isPending]
+    () =>
+      summaryLoading ||
+      notesLoading ||
+      createSummaryMutation.isPending ||
+      isUserLoading,
+    [
+      summaryLoading,
+      notesLoading,
+      createSummaryMutation.isPending,
+      isUserLoading,
+    ]
   );
 
   const hasData = useMemo(() => !!summary, [summary]);
-
-  const shouldShowLoading = useMemo(
-    () => isLoading || (createSummaryMutation.isSuccess && !summary),
-    [isLoading, createSummaryMutation.isSuccess, summary]
-  );
 
   const error = useMemo(
     () => summaryError || createSummaryMutation.error,
@@ -128,12 +133,12 @@ export function AISummary({
     }
   }, [error, showError]);
 
-  if (!isAuthenticated) {
-    return <AuthRequiredMessage messageKey="auth.signInToViewAnalysis" />;
+  if (isLoading) {
+    return <AISummaryLoadingSkeleton />;
   }
 
-  if (shouldShowLoading) {
-    return <AISummaryLoadingSkeleton />;
+  if (!isAuthenticated) {
+    return <AuthRequiredMessage messageKey="auth.signInToViewAnalysis" />;
   }
 
   if (!hasData && !createSummaryMutation.isSuccess) {
