@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import * as Sentry from '@sentry/nextjs';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export const aiSummaryKeys = {
   all: (userId: string) => ['ai-summary', userId] as const,
@@ -26,7 +26,15 @@ export function useAISummary() {
       });
       if (!res.ok) {
         const error = new Error('Failed to get summary');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_ai_summary' },
+          extra: {
+            notesCount: notes.length,
+            locale: lang,
+            date,
+            status: res.status,
+          },
+        });
         throw error;
       }
       const data = await res.json();
@@ -42,13 +50,18 @@ export function useTodayAISummary() {
     queryFn: async () => {
       if (!user) {
         const error = new Error('User not found');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_today_ai_summary' },
+        });
         throw error;
       }
       const res = await fetch('/api/ai-summary', { method: 'GET' });
       if (!res.ok) {
         const error = new Error('Failed to fetch summary');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_today_ai_summary' },
+          extra: { userId: user.id, status: res.status },
+        });
         throw error;
       }
       const data = await res.json();
@@ -67,7 +80,9 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
     queryFn: async () => {
       if (!user) {
         const error = new Error('User not found');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_ai_summary_by_date_range' },
+        });
         throw error;
       }
 
@@ -80,7 +95,10 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
       });
       if (!res.ok) {
         const error = new Error('Failed to fetch summary');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_ai_summary_by_date_range' },
+          extra: { userId: user.id, from, to, status: res.status },
+        });
         throw error;
       }
       const data = await res.json();
@@ -108,7 +126,9 @@ export function useCreateSummary() {
     }) => {
       if (!user) {
         const error = new Error('User not found');
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'create_ai_summary' },
+        });
         throw error;
       }
       const res = await fetch('/api/ai-summary', {
@@ -119,7 +139,17 @@ export function useCreateSummary() {
       if (!res.ok) {
         const data = await res.json();
         const error = new Error(data.error);
-        Sentry.captureException(error);
+        safeSentry.captureException(error, {
+          tags: { operation: 'create_ai_summary' },
+          extra: {
+            userId: user.id,
+            notesCount: notes.length,
+            locale: lang,
+            from,
+            to,
+            status: res.status,
+          },
+        });
         throw error;
       }
       const data = await res.json();
