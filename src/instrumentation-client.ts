@@ -4,25 +4,40 @@
 
 import * as Sentry from '@sentry/nextjs';
 
-Sentry.init({
-  dsn: 'https://0d83c017a9e682f199afda2546c8e402@o4509699604480000.ingest.de.sentry.io/4509699605528656',
+// Only initialize Sentry in production
+if (process.env.NODE_ENV === 'production') {
+  Sentry.init({
+    dsn: 'https://0d83c017a9e682f199afda2546c8e402@o4509699604480000.ingest.de.sentry.io/4509699605528656',
 
-  // Add optional integrations for additional features
-  integrations: [Sentry.replayIntegration()],
+    // Add optional integrations for additional features
+    integrations: [
+      Sentry.replayIntegration(),
+      // Add console logging integration to capture console.error, console.warn, and console.log
+      Sentry.consoleLoggingIntegration({ levels: ['error', 'warn', 'log'] }),
+    ],
 
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
+    // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
+    tracesSampleRate: 1,
 
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
+    // Define how likely Replay events are sampled.
+    // This sets the sample rate to be 10%. You may want this to be 100% while
+    // in development and sample at a lower rate in production
+    replaysSessionSampleRate: 0.1,
 
-  // Define how likely Replay events are sampled when an error occurs.
-  replaysOnErrorSampleRate: 1.0,
+    // Define how likely Replay events are sampled when an error occurs.
+    replaysOnErrorSampleRate: 1.0,
 
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
-});
+    // Setting this option to true will print useful information to the console while you're setting up Sentry.
+    debug: false,
+
+    // Enable logs in production
+    _experiments: {
+      enableLogs: true,
+    },
+  });
+} else {
+  // In development, create a mock Sentry object to prevent errors
+  console.log('Sentry disabled in development mode');
+}
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
