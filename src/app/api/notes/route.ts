@@ -3,6 +3,7 @@ import { createServerClient } from '@/shared/lib/server';
 import { getCurrentDateUTC } from '@/shared/lib/date-utils';
 import { requireAuth } from '@/shared/lib/auth';
 import { safeSentry } from '@/shared/lib/sentry';
+import { encryptField, decryptField } from '@/shared/lib/crypto-field';
 
 export async function GET(request: NextRequest) {
   return safeSentry.startSpanAsync(
@@ -57,8 +58,20 @@ export async function GET(request: NextRequest) {
           );
         }
 
-        span.setAttribute('notes.count', notes?.length || 0);
-        return NextResponse.json({ notes });
+        // Decrypt note content before returning
+        const decryptedNotes = (notes || []).map(noteObj => {
+          if (!noteObj.note) return noteObj;
+          const { value, error } = decryptField<string>({
+            encrypted: noteObj.note,
+            span,
+            operation: 'decrypt_note',
+          });
+          if (error) throw error; // Will be caught by outer catch
+          return { ...noteObj, note: value };
+        });
+
+        span.setAttribute('notes.count', decryptedNotes.length);
+        return NextResponse.json({ notes: decryptedNotes });
       } catch (error) {
         console.error('Error in notes GET API:', error);
         safeSentry.captureException(error as Error, {
@@ -66,7 +79,10 @@ export async function GET(request: NextRequest) {
         });
         span.setAttribute('error', true);
         return NextResponse.json(
-          { error: 'Internal server error' },
+          {
+            error:
+              error instanceof Error ? error.message : 'Internal server error',
+          },
           { status: 500 }
         );
       }
@@ -109,11 +125,18 @@ export async function POST(request: NextRequest) {
 
         const supabase = await createServerClient();
 
+        // Encrypt note content before saving
+        const { value: encryptedNote, error: encryptError } = encryptField({
+          data: note,
+          span,
+          operation: 'encrypt_note',
+        });
+        if (encryptError) return encryptError;
         const { data: newNote, error: insertError } = await supabase
           .from('notes')
           .insert([
             {
-              note,
+              note: encryptedNote,
               user_id: userId,
               created_at: getCurrentDateUTC(),
             },
@@ -133,8 +156,19 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        // Decrypt before returning to client
+        let returnedNote = newNote ? { ...newNote, note } : newNote;
+        if (newNote && newNote.note) {
+          const { value, error } = decryptField<string>({
+            encrypted: newNote.note,
+            span,
+            operation: 'decrypt_note',
+          });
+          if (error) return error;
+          returnedNote = { ...newNote, note: value };
+        }
         span.setAttribute('note.id', newNote.id);
-        return NextResponse.json({ note: newNote });
+        return NextResponse.json({ note: returnedNote });
       } catch (error) {
         console.error('Error in notes API:', error);
         safeSentry.captureException(error as Error, {
@@ -142,7 +176,10 @@ export async function POST(request: NextRequest) {
         });
         span.setAttribute('error', true);
         return NextResponse.json(
-          { error: 'Internal server error' },
+          {
+            error:
+              error instanceof Error ? error.message : 'Internal server error',
+          },
           { status: 500 }
         );
       }

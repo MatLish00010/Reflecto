@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/shared/lib/server';
 import { requireAuth } from '@/shared/lib/auth';
 import { safeSentry } from '@/shared/lib/sentry';
+import { encryptField } from '@/shared/lib/crypto-field';
 
 export async function PUT(
   request: NextRequest,
@@ -67,9 +68,17 @@ export async function PUT(
           );
         }
 
+        // Encrypt note content before saving
+        const { value: encryptedNote, error: encryptError } = encryptField({
+          data: note,
+          span,
+          operation: 'encrypt_note',
+        });
+        if (encryptError) return encryptError;
+
         const { data: updatedNote, error } = await supabase
           .from('notes')
-          .update({ note })
+          .update({ note: encryptedNote })
           .eq('id', noteId)
           .eq('user_id', authResult.user!.id)
           .select()
@@ -87,6 +96,7 @@ export async function PUT(
           );
         }
 
+        // Do not decrypt on update response (client already has the plaintext)
         span.setAttribute('success', true);
         return NextResponse.json({ note: updatedNote });
       } catch (error) {
@@ -96,7 +106,10 @@ export async function PUT(
         });
         span.setAttribute('error', true);
         return NextResponse.json(
-          { error: 'Internal server error' },
+          {
+            error:
+              error instanceof Error ? error.message : 'Internal server error',
+          },
           { status: 500 }
         );
       }

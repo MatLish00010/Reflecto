@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@sentry/types": "^9.40.0",
     "@tailwindcss/postcss": "^4",
     "@tanstack/react-query-devtools": "^5.83.0",
     "@types/negotiator": "^0.6.4",

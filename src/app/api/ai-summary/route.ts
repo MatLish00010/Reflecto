@@ -6,8 +6,11 @@ import {
   type Locale,
 } from '../../../../prompts';
 import { safeSentry } from '@/shared/lib/sentry';
+import { encryptField, decryptField } from '@/shared/lib/crypto-field';
 
-export const runtime = 'edge';
+interface AISummary {
+  [key: string]: unknown;
+}
 
 export async function GET(request: NextRequest) {
   return safeSentry.startSpanAsync(
@@ -80,9 +83,24 @@ export async function GET(request: NextRequest) {
           return NextResponse.json({ summary: null });
         }
 
+        // Decrypt summary before returning
+        let decryptedSummary = null;
+        const decryptResult =
+          typeof data.summary === 'string'
+            ? decryptField<AISummary>({
+                encrypted: data.summary,
+                span,
+                operation: 'decrypt_ai_summary',
+                parse: true,
+              })
+            : { value: data.summary };
+        if ('error' in decryptResult && decryptResult.error)
+          return decryptResult.error;
+        decryptedSummary = decryptResult.value;
+
         span.setAttribute('summary.found', true);
         span.setAttribute('success', true);
-        return NextResponse.json({ summary: data.summary });
+        return NextResponse.json({ summary: decryptedSummary });
       } catch (error) {
         safeSentry.captureException(error as Error, {
           tags: { operation: 'get_ai_summary' },
@@ -215,6 +233,14 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        // Encrypt summary before saving
+        const { value: encryptedSummary, error: encryptError } = encryptField({
+          data: summary,
+          span,
+          operation: 'encrypt_ai_summary',
+        });
+        if (encryptError) return encryptError;
+
         const { data: existing, error: selectError } = await supabase
           .from('ai_summaries')
           .select('*')
@@ -238,7 +264,7 @@ export async function POST(req: NextRequest) {
         if (existing) {
           const { error: updateError } = await supabase
             .from('ai_summaries')
-            .update({ summary })
+            .update({ summary: encryptedSummary })
             .eq('id', existing.id);
           if (updateError) {
             safeSentry.captureException(updateError, {
@@ -258,7 +284,7 @@ export async function POST(req: NextRequest) {
             .from('ai_summaries')
             .insert({
               user_id: user.id,
-              summary,
+              summary: encryptedSummary as string,
               created_at: summaryDate.toISOString(),
             });
           if (insertError) {
@@ -276,6 +302,7 @@ export async function POST(req: NextRequest) {
         }
 
         span.setAttribute('success', true);
+        // Return decrypted summary to client
         return NextResponse.json({ summary });
       } catch (error) {
         safeSentry.captureException(error as Error, {
