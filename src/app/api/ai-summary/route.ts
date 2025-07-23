@@ -7,9 +7,11 @@ import {
 } from '../../../../prompts';
 import { safeSentry } from '@/shared/lib/sentry';
 import { AISummaryData } from '@/shared/types';
-import type { Json } from '@/shared/types/supabase';
+import { encryptField, decryptField } from '@/shared/lib/crypto-field';
 
-export const runtime = 'edge';
+interface AISummary {
+  [key: string]: unknown;
+}
 
 export async function GET(request: NextRequest) {
   return safeSentry.startSpanAsync(
@@ -64,7 +66,7 @@ export async function GET(request: NextRequest) {
 
         if (returnAll) {
           const { data: summaries, error } = await supabase
-            .from('ai_summaries')
+            .from('daily_summaries')
             .select('*')
             .eq('user_id', user.id)
             .gte('created_at', from)
@@ -80,12 +82,28 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: error.message }, { status: 500 });
           }
 
-          span.setAttribute('summaries.count', summaries?.length || 0);
+          const decryptedSummaries = (summaries || []).map(item => {
+            if (typeof item.summary === 'string') {
+              const { value, error } = decryptField<AISummary>({
+                encrypted: item.summary,
+                span,
+                operation: 'decrypt_ai_summary',
+                parse: true,
+              });
+
+              if (error) throw error; // Will be caught by outer catch
+
+              return { ...item, summary: value };
+            }
+            return item;
+          });
+
+          span.setAttribute('summaries.count', decryptedSummaries.length);
           span.setAttribute('success', true);
-          return NextResponse.json({ summaries: summaries || [] });
+          return NextResponse.json({ summaries: decryptedSummaries });
         } else {
           const { data, error } = await supabase
-            .from('ai_summaries')
+            .from('daily_summaries')
             .select('*')
             .eq('user_id', user.id)
             .gte('created_at', from)
@@ -93,6 +111,7 @@ export async function GET(request: NextRequest) {
             .order('created_at', { ascending: false })
             .limit(1)
             .single();
+
           if (error && error.code !== 'PGRST116') {
             safeSentry.captureException(error, {
               tags: { operation: 'get_ai_summary' },
@@ -106,9 +125,25 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ summary: null });
           }
 
+          let decryptedSummary = null;
+          const decryptResult =
+            typeof data.summary === 'string'
+              ? decryptField<AISummary>({
+                  encrypted: data.summary,
+                  span,
+                  operation: 'decrypt_ai_summary',
+                  parse: true,
+                })
+              : { value: data.summary };
+
+          if ('error' in decryptResult && decryptResult.error)
+            return decryptResult.error;
+
+          decryptedSummary = decryptResult.value;
+
           span.setAttribute('summary.found', true);
           span.setAttribute('success', true);
-          return NextResponse.json({ summary: data.summary });
+          return NextResponse.json({ summary: decryptedSummary });
         }
       } catch (error) {
         safeSentry.captureException(error as Error, {
@@ -136,10 +171,6 @@ export async function POST(req: NextRequest) {
         span.setAttribute('filters.to', to || '');
         span.setAttribute('notes.count', notes?.length || 0);
 
-        console.log({
-          from,
-          to,
-        });
         if (!Array.isArray(notes) || notes.length === 0) {
           const error = new Error('No notes provided');
           safeSentry.captureException(error, {
@@ -302,8 +333,15 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        const { value: encryptedSummary, error: encryptError } = encryptField({
+          data: validatedSummary,
+          span,
+          operation: 'encrypt_ai_summary',
+        });
+        if (encryptError) return encryptError;
+
         const { data: existing, error: selectError } = await supabase
-          .from('ai_summaries')
+          .from('daily_summaries')
           .select('*')
           .eq('user_id', user.id)
           .gte('created_at', from)
@@ -324,8 +362,8 @@ export async function POST(req: NextRequest) {
         }
         if (existing) {
           const { error: updateError } = await supabase
-            .from('ai_summaries')
-            .update({ summary: validatedSummary as unknown as Json })
+            .from('daily_summaries')
+            .update({ summary: encryptedSummary as string })
             .eq('id', existing.id);
           if (updateError) {
             safeSentry.captureException(updateError, {
@@ -342,12 +380,13 @@ export async function POST(req: NextRequest) {
         } else {
           const summaryDate = new Date(from);
           const { error: insertError } = await supabase
-            .from('ai_summaries')
+            .from('daily_summaries')
             .insert({
               user_id: user.id,
-              summary: validatedSummary as unknown as Json,
+              summary: encryptedSummary as string,
               created_at: summaryDate.toISOString(),
             });
+
           if (insertError) {
             safeSentry.captureException(insertError, {
               tags: { operation: 'create_ai_summary' },

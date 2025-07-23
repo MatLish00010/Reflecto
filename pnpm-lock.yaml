@@ -87,6 +87,9 @@ importers:
       '@eslint/eslintrc':
         specifier: 3.3.1
         version: 3.3.1
+      '@sentry/types':
+        specifier: 9.42.0
+        version: 9.42.0
       '@tailwindcss/postcss':
         specifier: 4.1.11
         version: 4.1.11
@@ -1229,6 +1232,10 @@ packages:
     resolution: {integrity: sha512-cZkuz6BDna6VXSqvlWnrRsaDx4QBKq1PcfQrqhVz8ljs0M7Gcl+Mtj8dCzUxx12fkYM62hQXG72DEGNlAQpH/Q==}
     engines: {node: '>=18'}
 
+  '@sentry/core@9.42.0':
+    resolution: {integrity: sha512-AsfB2eklY09GGsCLC2r0pvh/h3tgr9Co3CB7XisEfzhoQH9RaEb0XeIVLyfo+503ktdlPTjH24j4Zpts4y0Jmg==}
+    engines: {node: '>=18'}
+
   '@sentry/nextjs@9.40.0':
     resolution: {integrity: sha512-e/0uoqjzWM1U3NXysNNUa9DuO23Nr9CxQmU07R3XYeVh0QyhTYGovahFVcXFHR254cFuD5xsdQuUCQen+eEa0g==}
     engines: {node: '>=18'}
@@ -1266,6 +1273,10 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       react: ^16.14.0 || 17.x || 18.x || 19.x
+
+  '@sentry/types@9.42.0':
+    resolution: {integrity: sha512-4GXmzcdrf3KlDS4doO3PdWESSwBKanGxzTq6WsRGNYlqaii/AsnX3bu7qPcEvGSwSHDMs3zfbgrgy66086zzoA==}
+    engines: {node: '>=18'}
 
   '@sentry/vercel-edge@9.40.0':
     resolution: {integrity: sha512-oPoJdv9SsTV98c7ix6Kz4Ma+xZZLZiDTGK2Q1cs/K+YT5vOt7ynopw+e42Kctbjc6OFny8IlNNUb0vGNGL0cFg==}
@@ -4658,6 +4669,8 @@ snapshots:
 
   '@sentry/core@9.40.0': {}
 
+  '@sentry/core@9.42.0': {}
+
   '@sentry/nextjs@9.40.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(next@15.3.5(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.100.2)':
     dependencies:
       '@opentelemetry/api': 1.9.0
@@ -4752,6 +4765,10 @@ snapshots:
       '@sentry/core': 9.40.0
       hoist-non-react-statics: 3.3.2
       react: 19.1.0
+
+  '@sentry/types@9.42.0':
+    dependencies:
+      '@sentry/core': 9.42.0
 
   '@sentry/vercel-edge@9.40.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))':
     dependencies:
