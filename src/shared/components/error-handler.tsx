@@ -1,16 +1,11 @@
+'use client';
+
 import { useEffect } from 'react';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
 
 interface QueryErrorHandlerProps {
-  /**
-   * Optional custom map of error codes to translation keys or messages.
-   * If not provided, uses default auth callback error mapping.
-   */
   errorMap?: Record<string, string>;
-  /**
-   * Query parameter to check for errors (default: 'error')
-   */
   paramName?: string;
 }
 
@@ -35,7 +30,7 @@ export function QueryErrorHandler({
         ? t(errorMap[error])
         : errorMap[error];
       showError(message);
-      // Remove error from URL so it doesn't show again
+
       params.delete(paramName);
       const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
       window.history.replaceState({}, '', newUrl);
