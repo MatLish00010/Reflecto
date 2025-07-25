@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
-import { getDateRangeUTC } from '@/shared/lib/date-utils';
+import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { History } from '@/features/history';
 import { AISummary } from '@/features/ai-summary-generation';
 import { DatePicker } from './date-picker';
@@ -14,7 +14,7 @@ export function HistoryAndSummary() {
   const [activeTab, setActiveTab] = useState('ai-summary');
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
-    const range = getDateRangeUTC(selectedDate);
+    const range = getDateRangeForDay(selectedDate);
     return {
       selectedDateStart: new Date(range.from),
       selectedDateEnd: new Date(range.to),

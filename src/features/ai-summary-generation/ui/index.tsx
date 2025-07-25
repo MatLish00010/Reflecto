@@ -7,7 +7,7 @@ import { useNotesByDate } from '@/entities/note';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
-import { getDateRangeUTC } from '@/shared/lib/date-utils';
+import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton } from './loading-skeleton';
 import { GeneratePrompt } from './generate-prompt';
 import { SummaryHeader } from './summary-header';
@@ -32,12 +32,12 @@ export function AISummary({
   const selectedDate = externalSelectedDate || internalSelectedDate;
 
   const internalSelectedDateStart = useMemo(() => {
-    const range = getDateRangeUTC(selectedDate);
+    const range = getDateRangeForDay(selectedDate);
     return new Date(range.from);
   }, [selectedDate]);
 
   const internalSelectedDateEnd = useMemo(() => {
-    const range = getDateRangeUTC(selectedDate);
+    const range = getDateRangeForDay(selectedDate);
     return new Date(range.to);
   }, [selectedDate]);
 

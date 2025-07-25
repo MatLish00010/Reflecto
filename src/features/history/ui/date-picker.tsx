@@ -7,7 +7,7 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/shared/lib/utils';
-import { getDateFnsLocale } from '@/shared/lib/locale-utils';
+import { getLocaleByLang } from '@/shared/lib/date-utils';
 
 interface DatePickerProps {
   selectedDate: Date;
@@ -29,7 +29,7 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {selectedDate ? (
-            format(selectedDate, 'PPP', { locale: getDateFnsLocale(lang) })
+            format(selectedDate, 'PPP', { locale: getLocaleByLang(lang) })
           ) : (
             <span>{t('history.selectDate')}</span>
           )}
@@ -41,7 +41,7 @@ export function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
           selected={selectedDate}
           onSelect={date => date && onDateSelect(date)}
           initialFocus
-          locale={getDateFnsLocale(lang)}
+          locale={getLocaleByLang(lang)}
           disabled={date => date > new Date()}
         />
       </PopoverContent>

@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/shared/lib/utils';
-import { getDateFnsLocale } from '@/shared/lib/locale-utils';
+import { getLocaleByLang } from '@/shared/lib/date-utils';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
@@ -45,7 +45,7 @@ export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {selectedDate ? (
-            format(selectedDate, 'PPP', { locale: getDateFnsLocale(lang) })
+            format(selectedDate, 'PPP', { locale: getLocaleByLang(lang) })
           ) : (
             <span>{t('history.selectDate')}</span>
           )}
@@ -57,7 +57,7 @@ export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
           selected={selectedDate}
           onSelect={date => date && handleDateChange(date)}
           initialFocus
-          locale={getDateFnsLocale(lang)}
+          locale={getLocaleByLang(lang)}
           disabled={date => date > new Date()}
         />
       </PopoverContent>

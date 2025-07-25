@@ -4,7 +4,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useNotesByDate } from '@/entities/note';
 import { AuthRequiredMessage } from '@/shared/components';
-import { getDateRangeUTC } from '@/shared/lib/date-utils';
+import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
 import { useUser } from '@/entities';
@@ -32,7 +32,7 @@ export function History({
         selectedDateEnd: externalSelectedDateEnd,
       };
     }
-    const range = getDateRangeUTC(selectedDate);
+    const range = getDateRangeForDay(selectedDate);
     return {
       selectedDateStart: new Date(range.from),
       selectedDateEnd: new Date(range.to),
