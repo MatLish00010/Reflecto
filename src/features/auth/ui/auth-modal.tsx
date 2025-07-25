@@ -12,7 +12,8 @@ import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { useSignIn, useSignUp } from '@/features/auth';
+import { useSignIn, useSignUp, useSignInWithGoogle } from '@/features/auth';
+import { GoogleIcon } from '@/shared/icons/google-icon';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   const signInMutation = useSignIn();
   const signUpMutation = useSignUp();
+  const googleSignInMutation = useSignInWithGoogle();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +67,17 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     onClose();
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignInMutation.mutateAsync();
+      // The OAuth flow will redirect to Google, so we don't need to close the modal here
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : t('auth.error');
+      showError(errorMessage);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
@@ -78,6 +91,33 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               : t('auth.signInDescription')}
           </DialogDescription>
         </DialogHeader>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={handleGoogleSignIn}
+          disabled={
+            signInMutation.isPending ||
+            signUpMutation.isPending ||
+            googleSignInMutation.isPending
+          }
+        >
+          <GoogleIcon className="size-5 mr-2" />
+          {isSignUp ? t('auth.signUpWithGoogle') : t('auth.signInWithGoogle')}
+        </Button>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              {t('auth.or')}
+            </span>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
             <div className="space-y-2">

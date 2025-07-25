@@ -205,3 +205,37 @@ export function useUpdatePassword() {
     },
   });
 }
+
+export function useSignInWithGoogle() {
+  const { showError } = useAlertContext();
+
+  return useMutation({
+    mutationFn: async () => {
+      const supabase = createBrowserClient();
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        safeSentry.captureException(error, {
+          tags: { operation: 'sign_in_google' },
+        });
+        throw new Error(error.message);
+      }
+
+      // OAuth flow redirects to Google, so we don't get user data immediately
+      // The user will be redirected back to our callback URL
+      return { success: true, url: data.url };
+    },
+    onError: error => {
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'sign_in_google' },
+      });
+      showError(error.message);
+    },
+  });
+}

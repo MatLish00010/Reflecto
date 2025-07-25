@@ -5,5 +5,6 @@ export {
   useSignOut,
   useResetPassword,
   useUpdatePassword,
+  useSignInWithGoogle,
 } from './model/use-auth';
 export { useAuthModal } from './model/use-auth-modal';

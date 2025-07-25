@@ -142,7 +142,15 @@
     "authRequired": "Authentication required to continue",
     "signInToViewHistory": "Sign in to view your diary history",
     "signInToViewAnalysis": "Sign in to view AI analysis of your entries",
-    "signInToContinue": "Sign in to continue"
+    "signInToContinue": "Sign in to continue",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "or": "or",
+    "authCallbackErrors": {
+      "no_auth_code": "Authentication failed: No code was returned. Please try again.",
+      "auth_callback_error": "Authentication failed due to a server error. Please try again or contact support.",
+      "auth_callback_failed": "Authentication failed: Could not complete sign in. Please try again."
+    }
   },
   "feedback": {
     "title": "Feedback",
