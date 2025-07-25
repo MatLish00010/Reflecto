@@ -77,12 +77,14 @@ export function useCreateSummary() {
         throw error;
       }
       const data = await res.json();
+
       return data.summary;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: aiSummaryKeys.all(user?.id || ''),
-      });
+    onSuccess: (data, { from, to }) => {
+      queryClient.setQueryData(
+        aiSummaryKeys.list(user?.id || '', `${from}-${to}`),
+        data
+      );
     },
   });
 }
