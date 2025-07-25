@@ -6,6 +6,8 @@ import {
   type Locale,
 } from '../../../../prompts';
 import { safeSentry } from '@/shared/lib/sentry';
+import { AISummaryData } from '@/shared/types';
+import type { Json } from '@/shared/types/supabase';
 
 export const runtime = 'edge';
 
@@ -180,7 +182,7 @@ export async function POST(req: NextRequest) {
                 { role: 'user', content: prompt },
               ],
               temperature: 0.7,
-              max_tokens: 800,
+              max_tokens: 2000,
             }),
           }
         );
@@ -197,12 +199,72 @@ export async function POST(req: NextRequest) {
 
         const data = await openaiRes.json();
         const content = data.choices?.[0]?.message?.content;
-        let summary;
+        let summary: Record<string, unknown>;
+        let validatedSummary: AISummaryData;
         try {
           const cleanedContent = content
             .replace(/```json\s*|\s*```/g, '')
             .trim();
           summary = JSON.parse(cleanedContent);
+
+          const requiredFields = [
+            'mainStory',
+            'keyEvents',
+            'emotionalMoments',
+            'ideas',
+            'cognitivePatterns',
+            'behavioralPatterns',
+            'triggers',
+            'resources',
+            'progress',
+            'observations',
+            'recommendations',
+            'copingStrategies',
+          ];
+
+          const missingFields = requiredFields.filter(
+            field => !(field in summary)
+          );
+          if (missingFields.length > 0) {
+            const error = new Error(
+              `Missing required fields: ${missingFields.join(', ')}`
+            );
+            safeSentry.captureException(error, {
+              tags: { operation: 'create_ai_summary' },
+              extra: { userId: user.id, missingFields, summary },
+            });
+            span.setAttribute('error', true);
+            return NextResponse.json(
+              { error: 'Invalid summary structure' },
+              { status: 500 }
+            );
+          }
+
+          const arrayFields = [
+            'keyEvents',
+            'emotionalMoments',
+            'ideas',
+            'cognitivePatterns',
+            'behavioralPatterns',
+            'triggers',
+            'resources',
+            'progress',
+            'observations',
+            'recommendations',
+            'copingStrategies',
+          ];
+
+          for (const field of arrayFields) {
+            if (!Array.isArray(summary[field])) {
+              summary[field] = [];
+            }
+          }
+
+          if (typeof summary.mainStory !== 'string') {
+            summary.mainStory = String(summary.mainStory || '');
+          }
+
+          validatedSummary = summary as unknown as AISummaryData;
         } catch (error) {
           safeSentry.captureException(error as Error, {
             tags: { operation: 'create_ai_summary' },
@@ -238,7 +300,7 @@ export async function POST(req: NextRequest) {
         if (existing) {
           const { error: updateError } = await supabase
             .from('ai_summaries')
-            .update({ summary })
+            .update({ summary: validatedSummary as unknown as Json })
             .eq('id', existing.id);
           if (updateError) {
             safeSentry.captureException(updateError, {
@@ -258,7 +320,7 @@ export async function POST(req: NextRequest) {
             .from('ai_summaries')
             .insert({
               user_id: user.id,
-              summary,
+              summary: validatedSummary as unknown as Json,
               created_at: summaryDate.toISOString(),
             });
           if (insertError) {
@@ -276,7 +338,7 @@ export async function POST(req: NextRequest) {
         }
 
         span.setAttribute('success', true);
-        return NextResponse.json({ summary });
+        return NextResponse.json({ summary: validatedSummary });
       } catch (error) {
         safeSentry.captureException(error as Error, {
           tags: { operation: 'create_ai_summary' },

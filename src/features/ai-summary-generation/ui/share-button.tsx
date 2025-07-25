@@ -4,15 +4,10 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { safeSentry } from '@/shared/lib/sentry';
 
+import { AISummaryData } from '@/shared/types';
+
 interface ShareButtonProps {
-  summary: {
-    mainStory: string;
-    keyEvents?: string[];
-    emotionalMoments?: string[];
-    observations?: string[];
-    recommendations?: string[];
-    keyThemes?: string[];
-  };
+  summary: AISummaryData;
 }
 
 export function ShareButton({ summary }: ShareButtonProps) {
@@ -56,9 +51,45 @@ export function ShareButton({ summary }: ShareButtonProps) {
       );
     }
 
-    if (summary.keyThemes && summary.keyThemes.length > 0) {
+    if (summary.cognitivePatterns && summary.cognitivePatterns.length > 0) {
       parts.push(
-        `\n🏷️ ${t('aiAnalysis.keyThemes')}:\n${summary.keyThemes.join(', ')}`
+        `\n🧠 ${t('aiAnalysis.cognitivePatterns')}:\n${summary.cognitivePatterns.map(pattern => `• ${pattern}`).join('\n')}`
+      );
+    }
+
+    if (summary.behavioralPatterns && summary.behavioralPatterns.length > 0) {
+      parts.push(
+        `\n🎭 ${t('aiAnalysis.behavioralPatterns')}:\n${summary.behavioralPatterns.map(pattern => `• ${pattern}`).join('\n')}`
+      );
+    }
+
+    if (summary.triggers && summary.triggers.length > 0) {
+      parts.push(
+        `\n⚡ ${t('aiAnalysis.triggers')}:\n${summary.triggers.map(trigger => `• ${trigger}`).join('\n')}`
+      );
+    }
+
+    if (summary.resources && summary.resources.length > 0) {
+      parts.push(
+        `\n🛡️ ${t('aiAnalysis.resources')}:\n${summary.resources.map(resource => `• ${resource}`).join('\n')}`
+      );
+    }
+
+    if (summary.progress && summary.progress.length > 0) {
+      parts.push(
+        `\n📈 ${t('aiAnalysis.progress')}:\n${summary.progress.map(prog => `• ${prog}`).join('\n')}`
+      );
+    }
+
+    if (summary.copingStrategies && summary.copingStrategies.length > 0) {
+      parts.push(
+        `\n⭐ ${t('aiAnalysis.copingStrategies')}:\n${summary.copingStrategies.map(strategy => `• ${strategy}`).join('\n')}`
+      );
+    }
+
+    if (summary.ideas && summary.ideas.length > 0) {
+      parts.push(
+        `\n💡 ${t('aiAnalysis.ideas')}:\n${summary.ideas.map(idea => `• ${idea}`).join('\n')}`
       );
     }
 
@@ -86,10 +117,6 @@ export function ShareButton({ summary }: ShareButtonProps) {
           span.setAttribute(
             'summary.keyEventsCount',
             summary.keyEvents?.length || 0
-          );
-          span.setAttribute(
-            'summary.themesCount',
-            summary.keyThemes?.length || 0
           );
 
           const text = formatSummaryForSharing();

@@ -1,17 +1,23 @@
-import { Clock, Heart, Lightbulb, Sparkles, Target } from 'lucide-react';
+import {
+  Clock,
+  Heart,
+  Lightbulb,
+  Sparkles,
+  Target,
+  Brain,
+  Activity,
+  Zap,
+  TrendingUp,
+  Shield,
+  Star,
+  LightbulbIcon,
+} from 'lucide-react';
 import { SummaryCard } from './summary-card';
-import { ThemesTags } from './themes-tags';
 import { ShareButton } from './share-button';
+import { AISummaryData } from '@/shared/types';
 
 interface SummaryContentProps {
-  summary: {
-    mainStory: string;
-    keyEvents?: string[];
-    emotionalMoments?: string[];
-    observations?: string[];
-    recommendations?: string[];
-    keyThemes?: string[];
-  };
+  summary: AISummaryData;
 }
 
 export function SummaryContent({ summary }: SummaryContentProps) {
@@ -41,6 +47,56 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             />
           </div>
 
+          {summary.ideas && summary.ideas.length > 0 && (
+            <SummaryCard
+              icon={LightbulbIcon}
+              title="aiAnalysis.ideas"
+              content={summary.ideas}
+              bulletColor="bg-cyan-500"
+            />
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <SummaryCard
+              icon={Brain}
+              title="aiAnalysis.cognitivePatterns"
+              content={summary.cognitivePatterns || []}
+              bulletColor="bg-purple-500"
+            />
+
+            <SummaryCard
+              icon={Activity}
+              title="aiAnalysis.behavioralPatterns"
+              content={summary.behavioralPatterns || []}
+              bulletColor="bg-indigo-500"
+            />
+          </div>
+
+          {summary.triggers && summary.triggers.length > 0 && (
+            <SummaryCard
+              icon={Zap}
+              title="aiAnalysis.triggers"
+              content={summary.triggers}
+              bulletColor="bg-red-500"
+            />
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <SummaryCard
+              icon={Shield}
+              title="aiAnalysis.resources"
+              content={summary.resources || []}
+              bulletColor="bg-emerald-500"
+            />
+
+            <SummaryCard
+              icon={TrendingUp}
+              title="aiAnalysis.progress"
+              content={summary.progress || []}
+              bulletColor="bg-teal-500"
+            />
+          </div>
+
           <SummaryCard
             icon={Lightbulb}
             title="aiAnalysis.observations"
@@ -48,15 +104,22 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             bulletColor="bg-yellow-500"
           />
 
-          <SummaryCard
-            icon={Target}
-            title="aiAnalysis.recommendations"
-            content={summary.recommendations || []}
-            bulletColor="bg-green-500"
-          />
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <SummaryCard
+              icon={Target}
+              title="aiAnalysis.recommendations"
+              content={summary.recommendations || []}
+              bulletColor="bg-green-500"
+            />
 
-        <ThemesTags themes={summary.keyThemes || []} />
+            <SummaryCard
+              icon={Star}
+              title="aiAnalysis.copingStrategies"
+              content={summary.copingStrategies || []}
+              bulletColor="bg-amber-500"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="flex justify-center pt-4">
