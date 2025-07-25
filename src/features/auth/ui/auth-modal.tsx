@@ -92,7 +92,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Google Sign In Button */}
         <Button
           type="button"
           variant="outline"
@@ -105,11 +104,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           }
         >
           <GoogleIcon className="size-5 mr-2" />
-          {googleSignInMutation.isPending
-            ? t('auth.loading')
-            : isSignUp
-              ? t('auth.signUpWithGoogle')
-              : t('auth.signInWithGoogle')}
+          {isSignUp ? t('auth.signUpWithGoogle') : t('auth.signInWithGoogle')}
         </Button>
 
         <div className="relative">
