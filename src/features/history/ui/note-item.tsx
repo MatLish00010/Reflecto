@@ -3,10 +3,10 @@
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
-import { getTimeLocale } from '@/shared/lib/locale-utils';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useState } from 'react';
 import type { Note } from '@/shared/types/notes';
+import { formatDateForDisplay } from '@/shared/lib/date-utils';
 
 interface NoteItemProps {
   note: Note;
@@ -17,10 +17,7 @@ export function NoteItem({ note }: NoteItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString(getTimeLocale(lang), {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    return formatDateForDisplay(new Date(dateString), lang, 'p'); // 'p' = localized time
   };
 
   const noteText = note.note || '';
