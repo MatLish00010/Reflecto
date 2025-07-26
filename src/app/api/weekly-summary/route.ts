@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
 
         const { data: dailySummariesData, error: dailySummariesError } =
           await supabase
-            .from('ai_summaries')
+            .from('daily_summaries')
             .select('summary')
             .eq('user_id', user.id)
             .gte('created_at', from)
@@ -233,7 +233,6 @@ export async function POST(req: NextRequest) {
           locale as Locale,
           dailySummariesTexts
         );
-        console.log(prompt);
         const systemPrompt = getWeeklySummarySystemPrompt(locale as Locale);
 
         const openaiRes = await fetch(

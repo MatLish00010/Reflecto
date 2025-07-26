@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/shared/lib/server';
 import { requireAuth } from '@/shared/lib/auth';
 import { safeSentry } from '@/shared/lib/sentry';
+import { encryptField } from '@/shared/lib/crypto-field';
 
 export async function PUT(
   request: NextRequest,
@@ -67,9 +68,16 @@ export async function PUT(
           );
         }
 
+        const { value: encryptedNote, error: encryptError } = encryptField({
+          data: note,
+          span,
+          operation: 'encrypt_note',
+        });
+        if (encryptError) return encryptError;
+
         const { data: updatedNote, error } = await supabase
           .from('notes')
-          .update({ note })
+          .update({ note: encryptedNote })
           .eq('id', noteId)
           .eq('user_id', authResult.user!.id)
           .select()

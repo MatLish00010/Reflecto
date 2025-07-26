@@ -39,7 +39,7 @@ export type Database = {
   };
   public: {
     Tables: {
-      ai_summaries: {
+      daily_summaries: {
         Row: {
           created_at: string | null;
           id: string;
