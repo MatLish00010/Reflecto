@@ -2,14 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { safeSentry } from '@/shared/lib/sentry';
-import { aiSummaryKeys } from '@/entities/ai-summary';
+import { dailySummaryKeys } from '@/entities/daily-summary';
 
 export function useAISummary() {
   const { lang } = useTranslation();
 
   return useMutation({
     mutationFn: async ({ notes, date }: { notes: string[]; date?: string }) => {
-      const res = await fetch('/api/ai-summary', {
+      const res = await fetch('/api/daily-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes, locale: lang, date }),
@@ -55,7 +55,7 @@ export function useCreateSummary() {
         });
         throw error;
       }
-      const res = await fetch('/api/ai-summary', {
+      const res = await fetch('/api/daily-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes, locale: lang, from, to }),
@@ -82,7 +82,7 @@ export function useCreateSummary() {
     },
     onSuccess: (data, { from, to }) => {
       queryClient.setQueryData(
-        aiSummaryKeys.list(user?.id || '', `${from}-${to}`),
+        dailySummaryKeys.list(user?.id || '', `${from}-${to}`),
         data
       );
     },

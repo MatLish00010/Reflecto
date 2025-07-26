@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   return safeSentry.startSpanAsync(
     {
       op: 'http.server',
-      name: 'GET /api/ai-summary',
+      name: 'GET /api/daily-summary',
     },
     async span => {
       try {
@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
   return safeSentry.startSpanAsync(
     {
       op: 'http.server',
-      name: 'POST /api/ai-summary',
+      name: 'POST /api/daily-summary',
     },
     async span => {
       try {

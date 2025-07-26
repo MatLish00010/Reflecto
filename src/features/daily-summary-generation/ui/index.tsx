@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useMemo, useState, useEffect } from 'react';
-import { useCreateSummary } from '@/features/ai-summary-generation';
-import { useAISummaryByDateRange } from '@/entities/ai-summary';
+import { useCreateSummary } from '@/features/daily-summary-generation';
+import { useDailySummaryByDateRange } from '@/entities/daily-summary';
 import { useNotesByDate } from '@/entities/note';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
@@ -56,7 +56,7 @@ export function AISummary({
     data: summary,
     isLoading: summaryLoading,
     error: summaryError,
-  } = useAISummaryByDateRange(
+  } = useDailySummaryByDateRange(
     selectedDateStart.toISOString(),
     selectedDateEnd.toISOString()
   );

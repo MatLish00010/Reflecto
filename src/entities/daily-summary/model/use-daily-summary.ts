@@ -2,22 +2,22 @@ import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { safeSentry } from '@/shared/lib/sentry';
 
-export const aiSummaryKeys = {
-  all: (userId: string) => ['ai-summary', userId] as const,
-  lists: (userId: string) => [...aiSummaryKeys.all(userId), 'list'] as const,
+export const dailySummaryKeys = {
+  all: (userId: string) => ['daily-summary', userId] as const,
+  lists: (userId: string) => [...dailySummaryKeys.all(userId), 'list'] as const,
   list: (userId: string, date?: string) =>
-    [...aiSummaryKeys.lists(userId), date] as const,
+    [...dailySummaryKeys.lists(userId), date] as const,
   details: (userId: string) =>
-    [...aiSummaryKeys.all(userId), 'detail'] as const,
+    [...dailySummaryKeys.all(userId), 'detail'] as const,
   detail: (userId: string, date: string) =>
-    [...aiSummaryKeys.details(userId), date] as const,
+    [...dailySummaryKeys.details(userId), date] as const,
 };
 
-export function useAISummaryByDateRange(from?: string, to?: string) {
+export function useDailySummaryByDateRange(from?: string, to?: string) {
   const { user } = useUser();
 
   return useQuery({
-    queryKey: aiSummaryKeys.list(user?.id || '', `${from}-${to}`),
+    queryKey: dailySummaryKeys.list(user?.id || '', `${from}-${to}`),
     queryFn: async () => {
       if (!user) {
         const error = new Error('User not found');
@@ -31,7 +31,7 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
       if (from) params.append('from', from);
       if (to) params.append('to', to);
 
-      const res = await fetch(`/api/ai-summary?${params.toString()}`, {
+      const res = await fetch(`/api/daily-summary?${params.toString()}`, {
         method: 'GET',
       });
       if (!res.ok) {
@@ -53,7 +53,7 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
 export function useTodayAISummary() {
   const { user } = useUser();
   return useQuery({
-    queryKey: aiSummaryKeys.detail(user?.id || '', 'today'),
+    queryKey: dailySummaryKeys.detail(user?.id || '', 'today'),
     queryFn: async () => {
       if (!user) {
         const error = new Error('User not found');
@@ -62,7 +62,7 @@ export function useTodayAISummary() {
         });
         throw error;
       }
-      const res = await fetch('/api/ai-summary', { method: 'GET' });
+      const res = await fetch('/api/daily-summary', { method: 'GET' });
       if (!res.ok) {
         const error = new Error('Failed to fetch summary');
         safeSentry.captureException(error, {
@@ -83,7 +83,7 @@ export function useDailySummariesByDateRange(from?: string, to?: string) {
   const { user } = useUser();
 
   return useQuery({
-    queryKey: aiSummaryKeys.list(
+    queryKey: dailySummaryKeys.list(
       user?.id || '',
       `daily-summaries-${from}-${to}`
     ),
@@ -101,7 +101,7 @@ export function useDailySummariesByDateRange(from?: string, to?: string) {
       if (to) params.append('to', to);
       params.append('returnAll', 'true');
 
-      const res = await fetch(`/api/ai-summary?${params.toString()}`, {
+      const res = await fetch(`/api/daily-summary?${params.toString()}`, {
         method: 'GET',
       });
       if (!res.ok) {
