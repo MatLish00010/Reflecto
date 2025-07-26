@@ -8,6 +8,7 @@ import {
 } from '@/shared/ui/card';
 import { NewEntryForm } from '@/widgets/new-entry-form';
 import { HistoryAndSummary } from '@/widgets/history-and-summary';
+import { WeeklySummary } from '@/features/weekly-summary-generation';
 
 export default async function Home({
   params,
@@ -45,6 +46,18 @@ export default async function Home({
         </CardHeader>
         <CardContent>
           <HistoryAndSummary />
+        </CardContent>
+      </Card>
+
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>{t('aiAnalysis.weeklySummaryTitle')}</CardTitle>
+          <CardDescription>
+            {t('aiAnalysis.weeklySummaryDescription')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <WeeklySummary />
         </CardContent>
       </Card>
     </>

@@ -1,103 +1,145 @@
 export const aiSummaryPrompts = {
-  ru: `Вот записи вашего дневника за день:
+  ru: `Записи вашего дневника за день:
 {notes}
 
-Пожалуйста, выполните глубокий психологический анализ этих записей в три этапа:
+АНАЛИЗИРУЙТЕ КОНКРЕТНО:
+- Используйте конкретные цитаты и детали из записей
+- Приводите точные примеры событий и реакций
+- Указывайте временные рамки, если они упоминаются
+- Используйте конкретные детали вместо общих фраз
 
-ЭТАП 1 - Основной анализ:
-- Опишите общий сюжет дня, выделите ключевые события с привязкой к временным рамкам
-- Отметьте самые яркие эмоциональные реакции и чувства, которые проявились
-- Идентифицируйте повторяющиеся темы или мысли, которые проходят красной нитью
-- Выделите идеи, которые были упомянуты в заметках (творческие идеи, планы, решения, инсайты, проекты)
-- Проанализируйте когнитивные искажения (например, катастрофизация, черно-белое мышление, долженствование)
-- Выявите паттерны поведения и реакции на стрессовые ситуации
-- Определите триггеры, которые вызвали сильные эмоциональные реакции
+ПРИМЕР ПРАВИЛЬНОГО АНАЛИЗА:
+❌ 'Вы испытывали стресс на работе'
+✅ 'Вы упомянули, что "рабочие встречи были долгими и неэффективными", что вызвало разочарование'
 
-ЭТАП 2 - Глубинный анализ:
-- Оцените уровень стресса и тревожности в течение дня
-- Проанализируйте качество сна, питания и физической активности (если упоминается)
-- Выявите социальные взаимодействия и их влияние на эмоциональное состояние
-- Определите ресурсы и сильные стороны, которые помогли справиться с трудностями
-- Отметьте прогресс и позитивные изменения по сравнению с предыдущими периодами
-- Проанализируйте контекст и окружение, влияющие на состояние
+ИЗБЕГАЙТЕ общих фраз типа:
+- 'вы часто...'
+- 'обычно вы...'
+- 'в целом...'
 
-ЭТАП 3 - Профессиональные выводы:
-- Дайте профессиональные наблюдения с точки зрения психолога, объясняя возможные причины и влияние событий
-- Предложите конкретные, практичные рекомендации для работы с выявленными паттернами
-- Включите техники саморегуляции и копинг-стратегии
-- Предложите упражнения для работы с когнитивными искажениями
-- Дайте рекомендации по улучшению качества жизни и эмоционального благополучия
+Вместо этого используйте:
+- 'в записи указано...'
+- 'вы написали, что...'
+- 'согласно вашим заметкам...'
 
-Лингвистическая проверка:
-- Обращайтесь исключительно на "вы"
-- Исключите обращения типа "пользователь", "клиент" или "человек"
-- Используйте эмпатичный и поддерживающий тон
+Выполните глубокий психологический анализ записей:
 
-Ответ оформите в формате JSON с полями:
-- mainStory (строка) — обобщённый сюжет дня
-- keyEvents (массив строк) — список ключевых событий
-- emotionalMoments (массив строк) — описание эмоциональных моментов
-- ideas (массив строк) — идеи, которые были упомянуты в заметках
-- cognitivePatterns (массив строк) — выявленные когнитивные искажения и паттерны мышления
-- behavioralPatterns (массив строк) — паттерны поведения и реакции
-- triggers (массив строк) — триггеры эмоциональных реакций
-- resources (массив строк) — ресурсы и сильные стороны
-- progress (массив строк) — прогресс и позитивные изменения
-- observations (массив строк) — профессиональные наблюдения
-- recommendations (массив строк) — рекомендации и советы
-- copingStrategies (массив строк) — техники саморегуляции и копинг-стратегии
+1. ОСНОВНОЙ АНАЛИЗ:
+- Опишите общий сюжет дня с конкретными событиями из записей
+- Отметьте эмоциональные реакции с цитатами из текста
+- Идентифицируйте повторяющиеся темы с примерами
+- Выделите идеи и проекты с конкретными деталями
+- Проанализируйте когнитивные искажения с примерами из записей
+- Выявите паттерны поведения с конкретными ситуациями
+- Определите триггеры с указанием событий
 
-Используйте ясный, деликатный и поддерживающий язык для максимально полезного анализа.`,
+2. ГЛУБИННЫЙ АНАЛИЗ:
+- Оцените уровень стресса с примерами из записей
+- Проанализируйте физическое состояние, если упоминается
+- Выявите социальные взаимодействия с конкретными деталями
+- Определите ресурсы и сильные стороны с примерами
+- Отметьте прогресс с конкретными изменениями
+- Проанализируйте контекст с деталями окружения
 
-  en: `Here are your diary entries for the day:
+3. ПРОФЕССИОНАЛЬНЫЕ ВЫВОДЫ:
+- Дайте наблюдения с опорой на конкретные факты из записей
+- Предложите рекомендации, основанные на выявленных паттернах
+- Включите техники саморегуляции
+- Предложите упражнения для работы с искажениями
+- Дайте рекомендации по улучшению качества жизни
+
+Обращайтесь на "вы", используйте эмпатичный тон.
+
+Ответ в JSON формате:
+- mainStory (строка) — обобщённый сюжет дня с конкретными деталями
+- keyEvents (массив строк) — ключевые события с деталями из записей
+- emotionalMoments (массив строк) — эмоциональные моменты с контекстом
+- ideas (массив строк) — идеи с конкретными деталями
+- cognitivePatterns (массив строк) — когнитивные искажения с примерами
+- behavioralPatterns (массив строк) — паттерны поведения с ситуациями
+- triggers (массив строк) — триггеры с конкретными событиями
+- resources (массив строк) — ресурсы и сильные стороны с примерами
+- progress (массив строк) — прогресс с конкретными изменениями
+- observations (массив строк) — профессиональные наблюдения с фактами
+- recommendations (массив строк) — рекомендации
+- copingStrategies (массив строк) — техники совладания
+
+ВАЖНО: Все массивы должны содержать только строки, а не объекты. Например:
+"keyEvents": ["Событие 1 с деталями", "Событие 2 с деталями"]
+НЕ: "keyEvents": [{"event": "...", "details": "..."}]
+
+ОБЯЗАТЕЛЬНО: Каждое наблюдение должно содержать конкретные детали из записей дневника.`,
+
+  en: `Your diary entries for the day:
 {notes}
 
-Please perform a deep psychological analysis of these entries in three stages:
+ANALYZE CONCRETELY:
+- Use specific quotes and details from the entries
+- Provide exact examples of events and reactions
+- Indicate time frames if mentioned
+- Use specific details instead of general phrases
 
-STAGE 1 - Main Analysis:
-- Describe the overall storyline of the day, highlighting key events with time references
-- Note the most vivid emotional reactions and feelings that emerged
-- Identify recurring themes or thoughts that run as a common thread
-- Extract ideas mentioned in the notes (creative ideas, plans, solutions, insights, projects)
-- Analyze cognitive distortions (e.g., catastrophizing, black-and-white thinking, should statements)
-- Identify behavioral patterns and stress response mechanisms
-- Determine triggers that caused strong emotional reactions
+EXAMPLE OF CORRECT ANALYSIS:
+❌ 'You experienced stress at work'
+✅ 'You mentioned that "work meetings were long and inefficient", which caused disappointment'
 
-STAGE 2 - Deep Analysis:
-- Assess stress and anxiety levels throughout the day
-- Analyze sleep quality, nutrition, and physical activity (if mentioned)
-- Examine social interactions and their impact on emotional state
-- Identify resources and strengths that helped cope with difficulties
-- Note progress and positive changes compared to previous periods
-- Analyze context and environment affecting the state
+AVOID general phrases like:
+- 'you often...'
+- 'usually you...'
+- 'in general...'
 
-STAGE 3 - Professional Insights:
-- Provide professional observations from a psychologist's perspective, explaining possible causes and effects
-- Suggest specific, practical recommendations for working with identified patterns
-- Include self-regulation techniques and coping strategies
-- Propose exercises for working with cognitive distortions
-- Give recommendations for improving life quality and emotional well-being
+Instead use:
+- 'the entry states...'
+- 'you wrote that...'
+- 'according to your notes...'
 
-Linguistic Verification:
-- Address exclusively as "you"
-- Exclude references like "user", "client", or "person"
-- Use empathetic and supportive tone
+Perform a deep psychological analysis of the entries:
 
-Format your answer as JSON with fields:
-- mainStory (string) - summarized storyline of the day
-- keyEvents (array of strings) - list of key events
-- emotionalMoments (array of strings) - description of emotional moments
-- ideas (array of strings) - ideas mentioned in the notes
-- cognitivePatterns (array of strings) - identified cognitive distortions and thinking patterns
-- behavioralPatterns (array of strings) - behavioral patterns and responses
-- triggers (array of strings) - emotional reaction triggers
-- resources (array of strings) - resources and strengths
-- progress (array of strings) - progress and positive changes
-- observations (array of strings) - professional observations
-- recommendations (array of strings) - recommendations and advice
-- copingStrategies (array of strings) - self-regulation techniques and coping strategies
+1. MAIN ANALYSIS:
+- Describe the overall storyline of the day with specific events from entries
+- Note emotional reactions with quotes from text
+- Identify recurring themes with examples
+- Extract ideas and projects with specific details
+- Analyze cognitive distortions with examples from entries
+- Identify behavioral patterns with specific situations
+- Determine triggers with event specifications
 
-Use clear, sensitive, and supportive language for the most useful analysis.`,
+2. DEEP ANALYSIS:
+- Assess stress levels with examples from entries
+- Analyze physical condition if mentioned
+- Examine social interactions with specific details
+- Identify resources and strengths with examples
+- Note progress with specific changes
+- Analyze context with environmental details
+
+3. PROFESSIONAL INSIGHTS:
+- Provide observations based on specific facts from entries
+- Suggest recommendations based on identified patterns
+- Include self-regulation techniques
+- Propose exercises for working with distortions
+- Give recommendations for improving life quality
+
+Address as "you", use empathetic tone.
+
+Answer in JSON format:
+- mainStory (string) - summarized storyline of the day with specific details
+- keyEvents (array of strings) - key events with details from entries
+- emotionalMoments (array of strings) - emotional moments with context
+- ideas (array of strings) - ideas with specific details
+- cognitivePatterns (array of strings) - cognitive distortions with examples
+- behavioralPatterns (array of strings) - behavioral patterns with situations
+- triggers (array of strings) - triggers with specific events
+- resources (array of strings) - resources and strengths with examples
+- progress (array of strings) - progress with specific changes
+- observations (array of strings) - professional observations with facts
+- recommendations (array of strings) - recommendations
+- copingStrategies (array of strings) - coping techniques
+
+IMPORTANT: All arrays must contain only strings, not objects. For example:
+"keyEvents": ["Event 1 with details", "Event 2 with details"]
+NOT: "keyEvents": [{"event": "...", "details": "..."}]
+
+MANDATORY: Each observation must contain specific details from diary entries.`,
 };
 
 export const aiSummarySystemPrompts = {
@@ -117,4 +159,171 @@ export function getAISummaryPrompt(locale: Locale, notes: string[]): string {
 
 export function getAISummarySystemPrompt(locale: Locale): string {
   return aiSummarySystemPrompts[locale] || aiSummarySystemPrompts.ru;
+}
+
+export const weeklySummaryPrompts = {
+  ru: `ВНИМАНИЕ: Проанализируйте ВСЕ дни недели без исключения. Каждый день содержит важную информацию.
+
+Дневные саммари за неделю:
+{dailySummaries}
+
+ВАЖНО: Убедитесь, что вы учли информацию из ВСЕХ дней при анализе. Не пропускайте ни одного дня.
+
+АНАЛИЗИРУЙТЕ КОНКРЕТНО:
+- Указывайте день недели для каждого факта
+- Приводите минимум 2-3 конкретных примера для каждого паттерна
+- Показывайте, как события развивались во времени
+- Используйте конкретные детали вместо общих фраз
+
+ПРИМЕР ПРАВИЛЬНОГО АНАЛИЗА:
+❌ 'Вы часто беспокоитесь о работе'
+✅ 'В понедельник вы беспокоились о рабочих встречах, в среду - о показателях продуктивности, в пятницу - о подготовке к важному событию'
+
+ИЗБЕГАЙТЕ общих фраз типа:
+- 'вы часто...'
+- 'обычно вы...'
+- 'в целом...'
+
+Вместо этого используйте:
+- 'в понедельник вы...'
+- 'во вторник вы...'
+- 'к среде ситуация...'
+
+Выполните глубокий психологический анализ всех дневных саммари:
+
+1. ОБЩИЙ АНАЛИЗ НЕДЕЛИ:
+- Объедините сюжеты всех дней в единую историю недели
+- Выделите ключевые события из каждого дня с указанием даты
+- Отследите эмоциональную динамику по дням
+- Найдите повторяющиеся темы и паттерны с конкретными примерами
+
+2. ПАТТЕРНЫ И ТРЕНДЫ:
+- Когнитивные паттерны мышления (с примерами из разных дней)
+- Поведенческие реакции на стресс (конкретные ситуации)
+- Эмоциональные триггеры (с указанием дней и событий)
+- Социальные взаимодействия (когда и с кем)
+- Физическая активность и самочувствие (дни тренировок, показатели)
+
+3. РЕСУРСЫ И ПРОГРЕСС:
+- Сильные стороны и ресурсы (конкретные примеры)
+- Позитивные изменения (как развивались по дням)
+- Успешные стратегии совладания (когда применялись)
+
+4. РЕКОМЕНДАЦИИ:
+- Конкретные техники саморегуляции
+- Работа с когнитивными искажениями
+- Улучшение качества жизни
+
+Обращайтесь на "вы", используйте эмпатичный тон.
+
+Ответ в JSON формате:
+- mainStory (строка) — обобщённый сюжет недели с указанием ключевых дней
+- keyEvents (массив строк) — ключевые события из всех дней с датами
+- emotionalMoments (массив строк) — эмоциональные моменты недели с контекстом
+- ideas (массив строк) — идеи и проекты с указанием дней развития
+- cognitivePatterns (массив строк) — когнитивные паттерны с примерами
+- behavioralPatterns (массив строк) — поведенческие паттерны с ситуациями
+- triggers (массив строк) — эмоциональные триггеры с конкретными событиями
+- resources (массив строк) — ресурсы и сильные стороны с примерами
+- progress (массив строк) — прогресс и изменения по дням
+- observations (массив строк) — профессиональные наблюдения с фактами
+- recommendations (массив строк) — рекомендации
+- copingStrategies (массив строк) — техники совладания
+
+ВАЖНО: Все массивы должны содержать только строки, а не объекты. Например:
+"keyEvents": ["Понедельник: Событие 1 с деталями", "Среда: Событие 2 с деталями"]
+НЕ: "keyEvents": [{"day": "...", "event": "...", "details": "..."}]
+
+ОБЯЗАТЕЛЬНО: Каждое наблюдение должно содержать конкретные даты и детали из дневных записей.`,
+
+  en: `ATTENTION: Analyze ALL days of the week without exception. Each day contains important information.
+
+Daily summaries for the week:
+{dailySummaries}
+
+IMPORTANT: Make sure you include information from ALL days in your analysis. Do not skip any days.
+
+ANALYZE CONCRETELY:
+- Specify the day of the week for each fact
+- Provide at least 2-3 specific examples for each pattern
+- Show how events developed over time
+- Use specific details instead of general phrases
+
+EXAMPLE OF CORRECT ANALYSIS:
+❌ 'You often worry about work'
+✅ 'On Monday you worried about work meetings, on Wednesday - about productivity indicators, on Friday - about preparing for an important event'
+
+AVOID general phrases like:
+- 'you often...'
+- 'usually you...'
+- 'in general...'
+
+Instead use:
+- 'on Monday you...'
+- 'on Tuesday you...'
+- 'by Wednesday the situation...'
+
+Perform a deep psychological analysis of all daily summaries:
+
+1. OVERALL WEEK ANALYSIS:
+- Combine stories from all days into a unified weekly narrative
+- Extract key events from each day with date specification
+- Track emotional dynamics across days
+- Find recurring themes and patterns with specific examples
+
+2. PATTERNS AND TRENDS:
+- Cognitive thinking patterns (with examples from different days)
+- Behavioral stress responses (specific situations)
+- Emotional triggers (with day and event specifications)
+- Social interactions (when and with whom)
+- Physical activity and well-being (training days, indicators)
+
+3. RESOURCES AND PROGRESS:
+- Strengths and resources (specific examples)
+- Positive changes (how they developed over days)
+- Successful coping strategies (when they were applied)
+
+4. RECOMMENDATIONS:
+- Specific self-regulation techniques
+- Working with cognitive distortions
+- Improving life quality
+
+Address as "you", use empathetic tone.
+
+Answer in JSON format:
+- mainStory (string) - summarized weekly storyline with key days mentioned
+- keyEvents (array of strings) - key events from all days with dates
+- emotionalMoments (array of strings) - emotional moments of the week with context
+- ideas (array of strings) - ideas and projects with development days specified
+- cognitivePatterns (array of strings) - cognitive patterns with examples
+- behavioralPatterns (array of strings) - behavioral patterns with situations
+- triggers (array of strings) - emotional triggers with specific events
+- resources (array of strings) - resources and strengths with examples
+- progress (array of strings) - progress and changes by days
+- observations (array of strings) - professional observations with facts
+- recommendations (array of strings) - recommendations
+- copingStrategies (array of strings) - coping techniques
+
+IMPORTANT: All arrays must contain only strings, not objects. For example:
+"keyEvents": ["Monday: Event 1 with details", "Wednesday: Event 2 with details"]
+NOT: "keyEvents": [{"day": "...", "event": "...", "details": "..."}]
+
+MANDATORY: Each observation must contain specific dates and details from daily entries.`,
+};
+
+export const weeklySummarySystemPrompts = {
+  ru: 'Вы опытный психотерапевт с многолетней практикой в когнитивно-поведенческой терапии, диалектической поведенческой терапии и других современных подходах. Анализируйте недельные саммари с глубокой эмпатией, профессионализмом и клиническим опытом. Выявляйте долгосрочные паттерны мышления, поведения и эмоциональные триггеры. Давайте персонализированные, практичные выводы и рекомендации, основанные на доказательных методах психотерапии. Всегда обращайтесь к пользователю на "вы", используйте поддерживающий и эмпатичный тон.',
+  en: 'You are an experienced psychotherapist with years of practice in cognitive behavioral therapy, dialectical behavior therapy, and other modern approaches. Analyze weekly summaries with deep empathy, professionalism, and clinical experience. Identify long-term thinking patterns, behaviors, and emotional triggers. Provide personalized, practical insights and recommendations based on evidence-based psychotherapy methods. Always address the user as "you", use supportive and empathetic tone.',
+};
+
+export function getWeeklySummaryPrompt(
+  locale: Locale,
+  dailySummaries: string[]
+): string {
+  const prompt = weeklySummaryPrompts[locale] || weeklySummaryPrompts.ru;
+  return prompt.replace('{dailySummaries}', dailySummaries.join('\n\n'));
+}
+
+export function getWeeklySummarySystemPrompt(locale: Locale): string {
+  return weeklySummarySystemPrompts[locale] || weeklySummarySystemPrompts.ru;
 }

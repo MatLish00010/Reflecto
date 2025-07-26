@@ -141,24 +141,24 @@ export function AISummary({
     return <AuthRequiredMessage messageKey="auth.signInToViewAnalysis" />;
   }
 
-  if (!hasData && !createSummaryMutation.isSuccess) {
+  if (hasData) {
     return (
-      <GeneratePrompt
-        selectedDate={selectedDate}
-        onGenerate={handleGenerateSummary}
-        isGenerating={createSummaryMutation.isPending}
-        hasNotes={notes.length > 0}
-      />
+      <div className="space-y-4">
+        <SummaryHeader
+          onRefresh={handleRefresh}
+          isRefreshing={createSummaryMutation.isPending}
+        />
+        <SummaryContent summary={summary} />
+      </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <SummaryHeader
-        onRefresh={handleRefresh}
-        isRefreshing={createSummaryMutation.isPending}
-      />
-      <SummaryContent summary={summary} />
-    </div>
+    <GeneratePrompt
+      selectedDate={selectedDate}
+      onGenerate={handleGenerateSummary}
+      isGenerating={createSummaryMutation.isPending}
+      hasNotes={notes.length > 0}
+    />
   );
 }

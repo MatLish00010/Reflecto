@@ -50,6 +50,7 @@
     "copingStrategies": "Coping Strategies",
     "fetchError": "Error generating summary",
     "selectDate": "Select date",
+    "selectWeek": "Select week",
     "noNotesTodayTitle": "No entries for today",
     "noNotesTodayDescription": "Add your first entry to get AI analysis",
     "noNotesTitle": "No entries for this date",
@@ -61,7 +62,13 @@
     "copiedToClipboard": "Analysis copied to clipboard!",
     "shareError": "Failed to share analysis",
     "poweredBy": "Powered by",
-    "tryItYourself": "Try it yourself"
+    "tryItYourself": "Try it yourself",
+    "weeklySummaryTitle": "Weekly AI Analysis",
+    "weeklySummaryDescription": "Analysis of your daily summaries for the week",
+    "insufficientDailySummariesTitle": "Insufficient Daily Summaries",
+    "insufficientDailySummariesDescription": "To create a weekly summary, you need to create more than 3 daily summaries for the selected week",
+    "dailySummariesCount": "daily summaries created",
+    "noData": "No data"
   },
   "history": {
     "title": "Entry History",

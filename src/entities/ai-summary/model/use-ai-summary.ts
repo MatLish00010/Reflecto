@@ -43,7 +43,7 @@ export function useAISummaryByDateRange(from?: string, to?: string) {
         throw error;
       }
       const data = await res.json();
-      return data.summary;
+      return data.summary || null;
     },
     enabled: !!user,
     retry: false,
@@ -72,9 +72,50 @@ export function useTodayAISummary() {
         throw error;
       }
       const data = await res.json();
-      return data.summary;
+      return data.summary || null;
     },
     enabled: !!user,
+    retry: false,
+  });
+}
+
+export function useDailySummariesByDateRange(from?: string, to?: string) {
+  const { user } = useUser();
+
+  return useQuery({
+    queryKey: aiSummaryKeys.list(
+      user?.id || '',
+      `daily-summaries-${from}-${to}`
+    ),
+    queryFn: async () => {
+      if (!user) {
+        const error = new Error('User not found');
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_daily_summaries_by_date_range' },
+        });
+        throw error;
+      }
+
+      const params = new URLSearchParams();
+      if (from) params.append('from', from);
+      if (to) params.append('to', to);
+      params.append('returnAll', 'true');
+
+      const res = await fetch(`/api/ai-summary?${params.toString()}`, {
+        method: 'GET',
+      });
+      if (!res.ok) {
+        const error = new Error('Failed to fetch daily summaries');
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_daily_summaries_by_date_range' },
+          extra: { userId: user.id, from, to, status: res.status },
+        });
+        throw error;
+      }
+      const data = await res.json();
+      return data.summaries || [];
+    },
+    enabled: !!user && !!from && !!to,
     retry: false,
   });
 }

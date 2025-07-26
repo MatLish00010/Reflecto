@@ -117,6 +117,33 @@ export type Database = {
         };
         Relationships: [];
       };
+      weekly_summaries: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          summary: Json;
+          user_id: string | null;
+          week_end_date: string;
+          week_start_date: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: string;
+          summary: Json;
+          user_id?: string | null;
+          week_end_date: string;
+          week_start_date: string;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          summary?: Json;
+          user_id?: string | null;
+          week_end_date?: string;
+          week_start_date?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;

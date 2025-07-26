@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, startOfWeek, endOfWeek } from 'date-fns';
 import {
   ru,
   enUS,
@@ -87,4 +87,22 @@ export function getDateRangeForDay(date: Date): { from: string; to: string } {
 // Returns the current date/time in UTC ISO format
 export function getCurrentDateUTC(): string {
   return new Date().toISOString();
+}
+
+export function getStartOfWeek(date: Date): Date {
+  return startOfWeek(date, { weekStartsOn: 1 }); // 1 = Monday
+}
+
+export function getEndOfWeek(date: Date): Date {
+  return endOfWeek(date, { weekStartsOn: 1 }); // 1 = Monday
+}
+
+export function getWeekRange(date: Date): { from: string; to: string } {
+  const startOfWeek = getStartOfWeek(date);
+  const endOfWeek = getEndOfWeek(date);
+
+  return {
+    from: getStartOfDayUTC(startOfWeek),
+    to: getEndOfDayUTC(endOfWeek),
+  };
 }

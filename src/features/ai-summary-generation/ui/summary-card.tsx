@@ -17,6 +17,26 @@ export function SummaryCard({
 }: SummaryCardProps) {
   const { t } = useTranslation();
 
+  const renderContent = () => {
+    if (Array.isArray(content)) {
+      return content.map((item, index) => (
+        <div key={index} className="flex items-start space-x-2">
+          <div
+            className={`w-1.5 h-1.5 ${bulletColor} rounded-full mt-2 flex-shrink-0`}
+          />
+          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+            {item}
+          </p>
+        </div>
+      ));
+    }
+    return (
+      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+        {content}
+      </p>
+    );
+  };
+
   return (
     <Card className="gap-1">
       <CardHeader className="pb-2">
@@ -27,26 +47,7 @@ export function SummaryCard({
           </span>
         </div>
       </CardHeader>
-      <CardContent>
-        {Array.isArray(content) ? (
-          <div className="space-y-1">
-            {content.map((item, index) => (
-              <div key={index} className="flex items-start space-x-2">
-                <div
-                  className={`w-1.5 h-1.5 ${bulletColor} rounded-full mt-2 flex-shrink-0`}
-                />
-                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {item}
-                </p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-            {content}
-          </p>
-        )}
-      </CardContent>
+      <CardContent>{renderContent()}</CardContent>
     </Card>
   );
 }

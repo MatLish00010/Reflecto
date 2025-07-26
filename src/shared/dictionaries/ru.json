@@ -50,6 +50,7 @@
     "copingStrategies": "Техники саморегуляции",
     "fetchError": "Ошибка генерации summary",
     "selectDate": "Выберите дату",
+    "selectWeek": "Выберите неделю",
     "noNotesTodayTitle": "Нет записей за сегодня",
     "noNotesTodayDescription": "Добавьте первую запись для получения AI-анализа",
     "noNotesTitle": "Нет записей за эту дату",
@@ -61,7 +62,13 @@
     "copiedToClipboard": "Анализ скопирован в буфер обмена!",
     "shareError": "Не удалось поделиться анализом",
     "poweredBy": "Создано с помощью",
-    "tryItYourself": "Попробуйте сами"
+    "tryItYourself": "Попробуйте сами",
+    "weeklySummaryTitle": "Недельный AI Анализ",
+    "weeklySummaryDescription": "Анализ ваших дневных саммари за неделю",
+    "insufficientDailySummariesTitle": "Недостаточно дневных саммари",
+    "insufficientDailySummariesDescription": "Для создания недельного саммари необходимо создать более 3 дневных саммари за выбранную неделю",
+    "dailySummariesCount": "дневных саммари создано",
+    "noData": "Нет данных"
   },
   "history": {
     "title": "История записей",
