@@ -70,7 +70,7 @@ importers:
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       openai:
         specifier: 5.9.0
-        version: 5.9.0(ws@8.18.3)
+        version: 5.9.0(ws@8.18.3)(zod@4.0.10)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -83,6 +83,9 @@ importers:
       tailwind-merge:
         specifier: 3.3.1
         version: 3.3.1
+      zod:
+        specifier: 4.0.10
+        version: 4.0.10
     devDependencies:
       '@eslint/eslintrc':
         specifier: 3.3.1
@@ -3568,6 +3571,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod@4.0.10:
+    resolution: {integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==}
+
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -6567,9 +6573,10 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  openai@5.9.0(ws@8.18.3):
+  openai@5.9.0(ws@8.18.3)(zod@4.0.10):
     optionalDependencies:
       ws: 8.18.3
+      zod: 4.0.10
 
   optionator@0.9.4:
     dependencies:
@@ -7338,3 +7345,5 @@ snapshots:
   yaml@2.8.0: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@4.0.10: {}
