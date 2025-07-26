@@ -10,8 +10,6 @@ import { safeSentry } from '@/shared/lib/sentry';
 import type { AISummaryData } from '@/shared/types';
 import { encryptField, decryptField } from '@/shared/lib/crypto-field';
 
-export const runtime = 'edge';
-
 export async function GET(request: NextRequest) {
   return safeSentry.startSpanAsync(
     {
@@ -194,8 +192,36 @@ export async function POST(req: NextRequest) {
         span.setAttribute('summaries.count', dailySummariesData.length);
 
         const labels = getSummaryLabels(locale);
-        const dailySummariesTexts = dailySummariesData.map((item, index) => {
-          const summary = item.summary as unknown as AISummaryData;
+        const dailySummariesTexts = [];
+
+        for (let i = 0; i < dailySummariesData.length; i++) {
+          const item = dailySummariesData[i];
+
+          // Decrypt the daily summary
+          const { value: decryptedSummary, error: decryptError } =
+            decryptField<AISummaryData>({
+              encrypted: item.summary as string,
+              span,
+              operation: 'decrypt_daily_summary',
+              parse: true,
+            });
+
+          if (decryptError) {
+            safeSentry.captureException(
+              new Error('Failed to decrypt daily summary'),
+              {
+                tags: { operation: 'create_weekly_summary' },
+                extra: { userId: user.id, summaryIndex: i },
+              }
+            );
+            span.setAttribute('error', true);
+            return NextResponse.json(
+              { error: 'Failed to decrypt daily summary' },
+              { status: 500 }
+            );
+          }
+
+          const summary = decryptedSummary!;
           const parts = [];
 
           if (summary.mainStory)
@@ -235,8 +261,10 @@ export async function POST(req: NextRequest) {
               `${labels.copingStrategies}: ${summary.copingStrategies.join(', ')}`
             );
 
-          return `${labels.day} ${index + 1}:\n${parts.join('\n')}`;
-        });
+          dailySummariesTexts.push(
+            `${labels.day} ${i + 1}:\n${parts.join('\n')}`
+          );
+        }
 
         const prompt = getWeeklySummaryPrompt(
           locale as Locale,
