@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/shared/lib/server';
 import {
+  getSummaryLabels,
   getWeeklySummaryPrompt,
   getWeeklySummarySystemPrompt,
   type Locale,
@@ -8,7 +9,6 @@ import {
 import { safeSentry } from '@/shared/lib/sentry';
 import type { AISummaryData } from '@/shared/types';
 import type { Json } from '@/shared/types/supabase';
-import { getSummaryLabels } from '@/shared/config';
 
 export const runtime = 'edge';
 
@@ -183,7 +183,6 @@ export async function POST(req: NextRequest) {
 
         span.setAttribute('summaries.count', dailySummariesData.length);
 
-        // Преобразуем дневные саммари в текстовый формат для промпта
         const labels = getSummaryLabels(locale);
         const dailySummariesTexts = dailySummariesData.map((item, index) => {
           const summary = item.summary as unknown as AISummaryData;
