@@ -41,8 +41,10 @@ export default async function Home({
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>{t('history.title')}</CardTitle>
-          <CardDescription>{t('history.description')}</CardDescription>
+          <CardTitle>{t('aiAnalysis.dailySummaryTitle')}</CardTitle>
+          <CardDescription>
+            {t('aiAnalysis.dailySummaryDescription')}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <HistoryAndSummary />
