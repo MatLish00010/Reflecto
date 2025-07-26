@@ -43,19 +43,19 @@ export type Database = {
         Row: {
           created_at: string | null;
           id: string;
-          summary: Json;
+          summary: string;
           user_id: string;
         };
         Insert: {
           created_at?: string | null;
           id?: string;
-          summary: Json;
+          summary: string;
           user_id: string;
         };
         Update: {
           created_at?: string | null;
           id?: string;
-          summary?: Json;
+          summary?: string;
           user_id?: string;
         };
         Relationships: [];
@@ -121,7 +121,7 @@ export type Database = {
         Row: {
           created_at: string | null;
           id: string;
-          summary: Json;
+          summary: string;
           user_id: string | null;
           week_end_date: string;
           week_start_date: string;
@@ -129,7 +129,7 @@ export type Database = {
         Insert: {
           created_at?: string | null;
           id?: string;
-          summary: Json;
+          summary: string;
           user_id?: string | null;
           week_end_date: string;
           week_start_date: string;
@@ -137,7 +137,7 @@ export type Database = {
         Update: {
           created_at?: string | null;
           id?: string;
-          summary?: Json;
+          summary?: string;
           user_id?: string | null;
           week_end_date?: string;
           week_start_date?: string;

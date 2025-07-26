@@ -8,9 +8,7 @@ import {
 } from '../../../../prompts';
 import { safeSentry } from '@/shared/lib/sentry';
 import type { AISummaryData } from '@/shared/types';
-import type { Json } from '@/shared/types/supabase';
-
-export const runtime = 'edge';
+import { encryptField, decryptField } from '@/shared/lib/crypto-field';
 
 export async function GET(request: NextRequest) {
   return safeSentry.startSpanAsync(
@@ -83,9 +81,19 @@ export async function GET(request: NextRequest) {
           return NextResponse.json({ summary: null });
         }
 
+        const { value: decryptedSummary, error: decryptError } =
+          decryptField<AISummaryData>({
+            encrypted: data.summary as string,
+            span,
+            operation: 'decrypt_weekly_summary',
+            parse: true,
+          });
+
+        if (decryptError) return decryptError;
+
         span.setAttribute('summary.found', true);
         span.setAttribute('success', true);
-        return NextResponse.json({ summary: data.summary });
+        return NextResponse.json({ summary: decryptedSummary });
       } catch (error) {
         safeSentry.captureException(error as Error, {
           tags: { operation: 'get_weekly_summary' },
@@ -184,8 +192,36 @@ export async function POST(req: NextRequest) {
         span.setAttribute('summaries.count', dailySummariesData.length);
 
         const labels = getSummaryLabels(locale);
-        const dailySummariesTexts = dailySummariesData.map((item, index) => {
-          const summary = item.summary as unknown as AISummaryData;
+        const dailySummariesTexts = [];
+
+        for (let i = 0; i < dailySummariesData.length; i++) {
+          const item = dailySummariesData[i];
+
+          // Decrypt the daily summary
+          const { value: decryptedSummary, error: decryptError } =
+            decryptField<AISummaryData>({
+              encrypted: item.summary as string,
+              span,
+              operation: 'decrypt_daily_summary',
+              parse: true,
+            });
+
+          if (decryptError) {
+            safeSentry.captureException(
+              new Error('Failed to decrypt daily summary'),
+              {
+                tags: { operation: 'create_weekly_summary' },
+                extra: { userId: user.id, summaryIndex: i },
+              }
+            );
+            span.setAttribute('error', true);
+            return NextResponse.json(
+              { error: 'Failed to decrypt daily summary' },
+              { status: 500 }
+            );
+          }
+
+          const summary = decryptedSummary!;
           const parts = [];
 
           if (summary.mainStory)
@@ -225,8 +261,10 @@ export async function POST(req: NextRequest) {
               `${labels.copingStrategies}: ${summary.copingStrategies.join(', ')}`
             );
 
-          return `${labels.day} ${index + 1}:\n${parts.join('\n')}`;
-        });
+          dailySummariesTexts.push(
+            `${labels.day} ${i + 1}:\n${parts.join('\n')}`
+          );
+        }
 
         const prompt = getWeeklySummaryPrompt(
           locale as Locale,
@@ -350,6 +388,13 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        const { value: encryptedSummary, error: encryptError } = encryptField({
+          data: validatedSummary,
+          span,
+          operation: 'encrypt_weekly_summary',
+        });
+        if (encryptError) return encryptError;
+
         const { data: existing, error: selectError } = await supabase
           .from('weekly_summaries')
           .select('*')
@@ -373,7 +418,7 @@ export async function POST(req: NextRequest) {
         if (existing) {
           const { error: updateError } = await supabase
             .from('weekly_summaries')
-            .update({ summary: validatedSummary as unknown as Json })
+            .update({ summary: encryptedSummary })
             .eq('id', existing.id);
           if (updateError) {
             safeSentry.captureException(updateError, {
@@ -393,7 +438,7 @@ export async function POST(req: NextRequest) {
             .from('weekly_summaries')
             .insert({
               user_id: user.id,
-              summary: validatedSummary as unknown as Json,
+              summary: encryptedSummary as string,
               week_start_date: weekStartDate.toISOString().split('T')[0],
               week_end_date: new Date(to).toISOString().split('T')[0],
             });
