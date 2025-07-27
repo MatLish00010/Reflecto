@@ -10,8 +10,7 @@ import { AuthRequiredMessage } from '@/shared/components';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton } from './loading-skeleton';
 import { GeneratePrompt } from './generate-prompt';
-import { SummaryHeader } from './summary-header';
-import { SummaryContent } from './summary-content';
+import { SummaryHeader, SummaryContent } from '@/shared/ui';
 import { useUser } from '@/entities';
 
 interface AISummaryProps {

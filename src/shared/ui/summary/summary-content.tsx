@@ -14,11 +14,7 @@ import {
 } from 'lucide-react';
 import { ShareButton } from './share-button';
 import { AISummaryData } from '@/shared/types';
-import {
-  ModernSummaryCard,
-  HeroSummaryCard,
-  CARD_COLOR_SCHEMES,
-} from '@/shared/ui';
+import { SummaryCard, HeroSummaryCard, CARD_COLOR_SCHEMES } from './index';
 
 interface SummaryContentProps {
   summary: AISummaryData;
@@ -32,101 +28,81 @@ export function SummaryContent({ summary }: SummaryContentProps) {
         titleKey="aiAnalysis.mainStory"
         content={summary.mainStory}
       />
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ModernSummaryCard
+        <SummaryCard
           icon={Clock}
           titleKey="aiAnalysis.keyEvents"
           content={summary.keyEvents || []}
           {...CARD_COLOR_SCHEMES.keyEvents}
         />
-
-        <ModernSummaryCard
+        <SummaryCard
           icon={Heart}
           titleKey="aiAnalysis.emotionalMoments"
           content={summary.emotionalMoments || []}
           {...CARD_COLOR_SCHEMES.emotionalMoments}
         />
+        <SummaryCard
+          icon={Target}
+          titleKey="aiAnalysis.cognitivePatterns"
+          content={summary.cognitivePatterns || []}
+          {...CARD_COLOR_SCHEMES.cognitivePatterns}
+        />
+        <SummaryCard
+          icon={Activity}
+          titleKey="aiAnalysis.behavioralPatterns"
+          content={summary.behavioralPatterns || []}
+          {...CARD_COLOR_SCHEMES.behavioralPatterns}
+        />
+        <SummaryCard
+          icon={Zap}
+          titleKey="aiAnalysis.triggers"
+          content={summary.triggers || []}
+          {...CARD_COLOR_SCHEMES.triggers}
+        />
+        <SummaryCard
+          icon={Shield}
+          titleKey="aiAnalysis.resources"
+          content={summary.resources || []}
+          {...CARD_COLOR_SCHEMES.resources}
+        />
+        <SummaryCard
+          icon={TrendingUp}
+          titleKey="aiAnalysis.progress"
+          content={summary.progress || []}
+          {...CARD_COLOR_SCHEMES.progress}
+        />
+        <SummaryCard
+          icon={Star}
+          titleKey="aiAnalysis.observations"
+          content={summary.observations || []}
+          {...CARD_COLOR_SCHEMES.observations}
+        />
       </div>
-
       {summary.ideas && summary.ideas.length > 0 && (
-        <ModernSummaryCard
+        <SummaryCard
           icon={LightbulbIcon}
           titleKey="aiAnalysis.ideas"
           content={summary.ideas}
           {...CARD_COLOR_SCHEMES.ideas}
         />
       )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ModernSummaryCard
+      {summary.recommendations && summary.recommendations.length > 0 && (
+        <SummaryCard
           icon={Brain}
-          titleKey="aiAnalysis.cognitivePatterns"
-          content={summary.cognitivePatterns || []}
-          {...CARD_COLOR_SCHEMES.cognitivePatterns}
-        />
-
-        <ModernSummaryCard
-          icon={Activity}
-          titleKey="aiAnalysis.behavioralPatterns"
-          content={summary.behavioralPatterns || []}
-          {...CARD_COLOR_SCHEMES.behavioralPatterns}
-        />
-      </div>
-
-      {summary.triggers && summary.triggers.length > 0 && (
-        <ModernSummaryCard
-          icon={Zap}
-          titleKey="aiAnalysis.triggers"
-          content={summary.triggers}
-          {...CARD_COLOR_SCHEMES.triggers}
-        />
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ModernSummaryCard
-          icon={Shield}
-          titleKey="aiAnalysis.resources"
-          content={summary.resources || []}
-          {...CARD_COLOR_SCHEMES.resources}
-        />
-
-        <ModernSummaryCard
-          icon={TrendingUp}
-          titleKey="aiAnalysis.progress"
-          content={summary.progress || []}
-          {...CARD_COLOR_SCHEMES.progress}
-        />
-      </div>
-
-      <ModernSummaryCard
-        icon={Lightbulb}
-        titleKey="aiAnalysis.observations"
-        content={summary.observations || []}
-        {...CARD_COLOR_SCHEMES.observations}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ModernSummaryCard
-          icon={Target}
           titleKey="aiAnalysis.recommendations"
-          content={summary.recommendations || []}
+          content={summary.recommendations}
           {...CARD_COLOR_SCHEMES.recommendations}
         />
-
-        <ModernSummaryCard
-          icon={Star}
+      )}
+      {summary.copingStrategies && summary.copingStrategies.length > 0 && (
+        <SummaryCard
+          icon={Lightbulb}
           titleKey="aiAnalysis.copingStrategies"
-          content={summary.copingStrategies || []}
+          content={summary.copingStrategies}
           {...CARD_COLOR_SCHEMES.copingStrategies}
         />
-      </div>
-
-      <div className="flex justify-center pt-6">
-        <div className="transform hover:scale-105 transition-transform duration-200">
-          <ShareButton summary={summary} />
-        </div>
-      </div>
+      )}
+      <ShareButton summary={summary} />
     </div>
   );
 }

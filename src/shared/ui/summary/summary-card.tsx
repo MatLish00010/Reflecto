@@ -1,7 +1,7 @@
 import { LucideIcon } from 'lucide-react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 
-interface ModernSummaryCardProps {
+interface SummaryCardProps {
   icon: LucideIcon;
   titleKey: string;
   content: string | string[];
@@ -16,7 +16,7 @@ interface ModernSummaryCardProps {
   className?: string;
 }
 
-export function ModernSummaryCard({
+export function SummaryCard({
   icon: Icon,
   titleKey,
   content,
@@ -29,7 +29,7 @@ export function ModernSummaryCard({
   iconGradientFrom,
   iconGradientTo,
   className = '',
-}: ModernSummaryCardProps) {
+}: SummaryCardProps) {
   const { t } = useTranslation();
 
   const renderContent = () => {
