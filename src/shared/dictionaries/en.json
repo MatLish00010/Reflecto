@@ -70,7 +70,7 @@
     "dailySummaryDescription": "AI analysis of your daily entries and thoughts",
     "insufficientDailySummariesTitle": "Insufficient Daily Summaries",
     "insufficientDailySummariesDescription": "To create a weekly summary, you need to create more than 3 daily summaries for the selected week",
-    "dailySummariesCount": "daily summaries created",
+    "dailySummariesCount": "Daily summaries created",
     "noData": "No data",
     "tabs": {
       "daily": "Daily Summary",

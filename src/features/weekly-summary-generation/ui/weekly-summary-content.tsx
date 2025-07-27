@@ -16,8 +16,8 @@ import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '@/shared/ui';
 import { WeekPicker } from '@/shared/ui';
 import { useUser } from '@/entities';
-import { useTranslation } from '@/shared/contexts/translation-context';
 import { AISummaryData } from '@/shared';
+import { InsufficientSummariesMessage } from './insufficient-summaries-message';
 
 interface WeeklySummaryContentProps {
   className?: string;
@@ -27,7 +27,6 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
   const { selectedDate, updateWeek } = useWeekFromUrl();
   const { showError } = useAlertContext();
   const { openModal } = useAuthModalContext();
-  const { t } = useTranslation();
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
     if (!selectedDate) {
@@ -165,17 +164,9 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
             isRefreshing={createWeeklySummaryMutation.isPending}
           />
         ) : !hasEnoughDailySummaries ? (
-          <div className="text-center space-y-4 p-6">
-            <div className="text-2xl font-semibold text-foreground">
-              {t('aiAnalysis.insufficientDailySummariesTitle')}
-            </div>
-            <div className="text-muted-foreground max-w-md mx-auto">
-              {t('aiAnalysis.insufficientDailySummariesDescription')}
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {`${dailySummaries?.length || 0}/4 ${t('aiAnalysis.dailySummariesCount')}`}
-            </div>
-          </div>
+          <InsufficientSummariesMessage
+            dailySummariesCount={dailySummaries?.length || 0}
+          />
         ) : (
           <GeneratePrompt
             selectedDate={selectedDate}
