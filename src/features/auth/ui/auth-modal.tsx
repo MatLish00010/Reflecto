@@ -70,7 +70,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignInMutation.mutateAsync();
-      // The OAuth flow will redirect to Google, so we don't need to close the modal here
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : t('auth.error');
