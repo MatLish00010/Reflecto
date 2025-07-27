@@ -7,8 +7,6 @@ interface SummaryCardProps {
   content: string | string[];
   gradientFrom: string;
   gradientTo: string;
-  borderColor: string;
-  darkBorderColor: string;
   darkGradientFrom: string;
   darkGradientTo: string;
   iconGradientFrom: string;
@@ -22,8 +20,6 @@ export function SummaryCard({
   content,
   gradientFrom,
   gradientTo,
-  borderColor,
-  darkBorderColor,
   darkGradientFrom,
   darkGradientTo,
   iconGradientFrom,
@@ -54,7 +50,7 @@ export function SummaryCard({
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} ${darkGradientFrom} ${darkGradientTo} border ${borderColor} ${darkBorderColor} p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${className}`}
+      className={`group relative overflow-hidden rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} ${darkGradientFrom} ${darkGradientTo} p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${className}`}
     >
       <div className="relative">
         <div className="flex items-center space-x-3 mb-3">

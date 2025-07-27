@@ -2,8 +2,6 @@ export const CARD_COLOR_SCHEMES = {
   mainStory: {
     gradientFrom: 'from-blue-50',
     gradientTo: 'to-purple-50',
-    borderColor: 'border-blue-200/50',
-    darkBorderColor: 'border-blue-800/30',
     darkGradientFrom: 'dark:from-blue-950/20',
     darkGradientTo: 'dark:to-purple-950/20',
     iconGradientFrom: 'from-blue-500',
@@ -12,8 +10,6 @@ export const CARD_COLOR_SCHEMES = {
   keyEvents: {
     gradientFrom: 'from-amber-50',
     gradientTo: 'to-orange-50',
-    borderColor: 'border-amber-200/50',
-    darkBorderColor: 'border-amber-800/30',
     darkGradientFrom: 'dark:from-amber-950/20',
     darkGradientTo: 'dark:to-orange-950/20',
     iconGradientFrom: 'from-amber-500',
@@ -22,8 +18,6 @@ export const CARD_COLOR_SCHEMES = {
   emotionalMoments: {
     gradientFrom: 'from-pink-50',
     gradientTo: 'to-rose-50',
-    borderColor: 'border-pink-200/50',
-    darkBorderColor: 'border-pink-800/30',
     darkGradientFrom: 'dark:from-pink-950/20',
     darkGradientTo: 'dark:to-rose-950/20',
     iconGradientFrom: 'from-pink-500',
@@ -32,8 +26,6 @@ export const CARD_COLOR_SCHEMES = {
   ideas: {
     gradientFrom: 'from-cyan-50',
     gradientTo: 'to-blue-50',
-    borderColor: 'border-cyan-200/50',
-    darkBorderColor: 'border-cyan-800/30',
     darkGradientFrom: 'dark:from-cyan-950/20',
     darkGradientTo: 'dark:to-blue-950/20',
     iconGradientFrom: 'from-cyan-500',
@@ -42,8 +34,6 @@ export const CARD_COLOR_SCHEMES = {
   cognitivePatterns: {
     gradientFrom: 'from-purple-50',
     gradientTo: 'to-violet-50',
-    borderColor: 'border-purple-200/50',
-    darkBorderColor: 'border-purple-800/30',
     darkGradientFrom: 'dark:from-purple-950/20',
     darkGradientTo: 'dark:to-violet-950/20',
     iconGradientFrom: 'from-purple-500',
@@ -52,8 +42,6 @@ export const CARD_COLOR_SCHEMES = {
   behavioralPatterns: {
     gradientFrom: 'from-indigo-50',
     gradientTo: 'to-blue-50',
-    borderColor: 'border-indigo-200/50',
-    darkBorderColor: 'border-indigo-800/30',
     darkGradientFrom: 'dark:from-indigo-950/20',
     darkGradientTo: 'dark:to-blue-950/20',
     iconGradientFrom: 'from-indigo-500',
@@ -62,8 +50,6 @@ export const CARD_COLOR_SCHEMES = {
   triggers: {
     gradientFrom: 'from-red-50',
     gradientTo: 'to-pink-50',
-    borderColor: 'border-red-200/50',
-    darkBorderColor: 'border-red-800/30',
     darkGradientFrom: 'dark:from-red-950/20',
     darkGradientTo: 'dark:to-pink-950/20',
     iconGradientFrom: 'from-red-500',
@@ -72,8 +58,6 @@ export const CARD_COLOR_SCHEMES = {
   resources: {
     gradientFrom: 'from-emerald-50',
     gradientTo: 'to-green-50',
-    borderColor: 'border-emerald-200/50',
-    darkBorderColor: 'border-emerald-800/30',
     darkGradientFrom: 'dark:from-emerald-950/20',
     darkGradientTo: 'dark:to-green-950/20',
     iconGradientFrom: 'from-emerald-500',
@@ -82,8 +66,6 @@ export const CARD_COLOR_SCHEMES = {
   progress: {
     gradientFrom: 'from-teal-50',
     gradientTo: 'to-cyan-50',
-    borderColor: 'border-teal-200/50',
-    darkBorderColor: 'border-teal-800/30',
     darkGradientFrom: 'dark:from-teal-950/20',
     darkGradientTo: 'dark:to-cyan-950/20',
     iconGradientFrom: 'from-teal-500',
@@ -92,8 +74,6 @@ export const CARD_COLOR_SCHEMES = {
   observations: {
     gradientFrom: 'from-yellow-50',
     gradientTo: 'to-amber-50',
-    borderColor: 'border-yellow-200/50',
-    darkBorderColor: 'border-yellow-800/30',
     darkGradientFrom: 'dark:from-yellow-950/20',
     darkGradientTo: 'dark:to-amber-950/20',
     iconGradientFrom: 'from-yellow-500',
@@ -102,8 +82,6 @@ export const CARD_COLOR_SCHEMES = {
   recommendations: {
     gradientFrom: 'from-green-50',
     gradientTo: 'to-emerald-50',
-    borderColor: 'border-green-200/50',
-    darkBorderColor: 'border-green-800/30',
     darkGradientFrom: 'dark:from-green-950/20',
     darkGradientTo: 'dark:to-emerald-950/20',
     iconGradientFrom: 'from-green-500',
@@ -112,8 +90,6 @@ export const CARD_COLOR_SCHEMES = {
   copingStrategies: {
     gradientFrom: 'from-amber-50',
     gradientTo: 'to-orange-50',
-    borderColor: 'border-amber-200/50',
-    darkBorderColor: 'border-amber-800/30',
     darkGradientFrom: 'dark:from-amber-950/20',
     darkGradientTo: 'dark:to-orange-950/20',
     iconGradientFrom: 'from-amber-500',

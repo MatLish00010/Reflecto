@@ -104,7 +104,9 @@ export function SummaryContent({ summary }: SummaryContentProps) {
           {...CARD_COLOR_SCHEMES.copingStrategies}
         />
       )}
-      <ShareButton summary={summary} />
+      <div className="flex justify-center">
+        <ShareButton summary={summary} />
+      </div>
     </div>
   );
 }
