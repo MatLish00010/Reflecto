@@ -4,35 +4,6 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { safeSentry } from '@/shared/lib/sentry';
 import { dailySummaryKeys } from '@/entities/daily-summary';
 
-export function useAISummary() {
-  const { lang } = useTranslation();
-
-  return useMutation({
-    mutationFn: async ({ notes, date }: { notes: string[]; date?: string }) => {
-      const res = await fetch('/api/daily-summary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes, locale: lang, date }),
-      });
-      if (!res.ok) {
-        const error = new Error('Failed to get summary');
-        safeSentry.captureException(error, {
-          tags: { operation: 'get_daily_summary' },
-          extra: {
-            notesCount: notes.length,
-            locale: lang,
-            date,
-            status: res.status,
-          },
-        });
-        throw error;
-      }
-      const data = await res.json();
-      return data.summary;
-    },
-  });
-}
-
 export function useCreateSummary() {
   const queryClient = useQueryClient();
   const { user } = useUser();
