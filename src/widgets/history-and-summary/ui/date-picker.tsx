@@ -13,7 +13,7 @@ import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 
 interface DatePickerProps {
-  selectedDate: Date;
+  selectedDate: Date | null;
   onDateChange: (date: Date) => void;
 }
 
@@ -54,7 +54,7 @@ export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={selectedDate}
+          selected={selectedDate || undefined}
           onSelect={date => date && handleDateChange(date)}
           initialFocus
           locale={getLocaleByLang(lang)}

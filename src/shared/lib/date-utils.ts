@@ -12,6 +12,7 @@ import {
   zhCN,
   Locale,
 } from 'date-fns/locale';
+import React from 'react'; // Added for useDateFromUrl hook
 
 // Маппинг языковых кодов на локали date-fns
 const localeMap: Record<string, Locale> = {
@@ -105,4 +106,73 @@ export function getWeekRange(date: Date): { from: string; to: string } {
     from: getStartOfDayUTC(startOfWeek),
     to: getEndOfDayUTC(endOfWeek),
   };
+}
+
+export function dateToUrlParam(date: Date): string {
+  return format(date, 'yyyy-MM-dd');
+}
+
+export function urlParamToDate(dateString: string): Date | null {
+  try {
+    const parsed = parseISO(dateString);
+    if (isNaN(parsed.getTime())) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function getDefaultDateFromUrl(): Date {
+  if (typeof window === 'undefined') {
+    return new Date();
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const dateParam = urlParams.get('date');
+
+  if (dateParam) {
+    const parsedDate = urlParamToDate(dateParam);
+    if (parsedDate && parsedDate <= new Date()) {
+      return parsedDate;
+    }
+  }
+
+  return new Date();
+}
+
+export function updateUrlWithDate(date: Date): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  const dateParam = dateToUrlParam(date);
+
+  url.searchParams.set('date', dateParam);
+
+  window.history.replaceState({}, '', url.toString());
+}
+
+export function useDateFromUrl() {
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
+
+  React.useEffect(() => {
+    setSelectedDate(getDefaultDateFromUrl());
+
+    const handlePopState = () => {
+      setSelectedDate(getDefaultDateFromUrl());
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const updateDate = React.useCallback((date: Date) => {
+    setSelectedDate(date);
+    updateUrlWithDate(date);
+  }, []);
+
+  return { selectedDate, updateDate };
 }

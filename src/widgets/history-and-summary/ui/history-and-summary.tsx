@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import {
   TabsWithURL,
@@ -8,16 +8,20 @@ import {
   TabsTrigger,
   TabsContent,
 } from '@/shared/ui/tabs';
-import { getDateRangeForDay } from '@/shared/lib/date-utils';
+import { getDateRangeForDay, useDateFromUrl } from '@/shared/lib/date-utils';
 import { History } from '@/features/history';
 import { AISummary } from '@/features/daily-summary-generation';
 import { DatePicker } from './date-picker';
 
 export function HistoryAndSummary() {
   const { t } = useTranslation();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { selectedDate, updateDate } = useDateFromUrl();
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
+    if (!selectedDate) {
+      return { selectedDateStart: new Date(), selectedDateEnd: new Date() };
+    }
+
     const range = getDateRangeForDay(selectedDate);
     return {
       selectedDateStart: new Date(range.from),
@@ -25,17 +29,14 @@ export function HistoryAndSummary() {
     };
   }, [selectedDate]);
 
-  const handleDateChange = useCallback((date: Date) => {
-    setSelectedDate(date);
-  }, []);
+  if (!selectedDate) {
+    return null;
+  }
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <DatePicker
-          selectedDate={selectedDate}
-          onDateChange={handleDateChange}
-        />
+        <DatePicker selectedDate={selectedDate} onDateChange={updateDate} />
       </div>
 
       <TabsWithURL
