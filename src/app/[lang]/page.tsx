@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { RefreshCw } from 'lucide-react';
 import { getDictionary } from '@/shared/dictionaries';
 import {
   Card,
@@ -45,40 +47,54 @@ export default async function Home({
         </CardContent>
       </Card>
 
-      <TabsWithURL defaultValue="daily" urlParam="tab" className="w-full mt-8">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="daily">{t('aiAnalysis.tabs.daily')}</TabsTrigger>
-          <TabsTrigger value="weekly">
-            {t('aiAnalysis.tabs.weekly')}
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="daily" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('aiAnalysis.dailySummaryTitle')}</CardTitle>
-              <CardDescription>
-                {t('aiAnalysis.dailySummaryDescription')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <HistoryAndSummary />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="weekly" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('aiAnalysis.weeklySummaryTitle')}</CardTitle>
-              <CardDescription>
-                {t('aiAnalysis.weeklySummaryDescription')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <WeeklySummaryWidget />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </TabsWithURL>
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center p-8">
+            <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        }
+      >
+        <TabsWithURL
+          defaultValue="daily"
+          urlParam="tab"
+          className="w-full mt-8"
+        >
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="daily">
+              {t('aiAnalysis.tabs.daily')}
+            </TabsTrigger>
+            <TabsTrigger value="weekly">
+              {t('aiAnalysis.tabs.weekly')}
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="daily" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('aiAnalysis.dailySummaryTitle')}</CardTitle>
+                <CardDescription>
+                  {t('aiAnalysis.dailySummaryDescription')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <HistoryAndSummary />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="weekly" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('aiAnalysis.weeklySummaryTitle')}</CardTitle>
+                <CardDescription>
+                  {t('aiAnalysis.weeklySummaryDescription')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <WeeklySummaryWidget />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </TabsWithURL>
+      </Suspense>
     </>
   );
 }
