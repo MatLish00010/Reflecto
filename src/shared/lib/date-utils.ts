@@ -32,9 +32,9 @@ export function getLocaleByLang(lang: string): Locale {
   return localeMap[lang] || enUS;
 }
 
-// Returns a UTC ISO string for API
-export function toApiDate(date: Date): string {
-  return date.toISOString();
+// Converts a date string to API format (UTC ISO string)
+export function toIsoDate(date: string | Date): string {
+  return new Date(date).toISOString();
 }
 
 // Parses an ISO string to a Date object
@@ -57,7 +57,7 @@ export function getStartOfDayUTC(date: Date): string {
   const utc = new Date(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
   );
-  return utc.toISOString();
+  return toIsoDate(utc);
 }
 
 // Returns the UTC ISO string for the end of the day
@@ -73,7 +73,7 @@ export function getEndOfDayUTC(date: Date): string {
       999
     )
   );
-  return utc.toISOString();
+  return toIsoDate(utc);
 }
 
 // Returns a UTC ISO range for a given day
@@ -86,7 +86,7 @@ export function getDateRangeForDay(date: Date): { from: string; to: string } {
 
 // Returns the current date/time in UTC ISO format
 export function getCurrentDateUTC(): string {
-  return new Date().toISOString();
+  return toIsoDate(new Date());
 }
 
 export function getStartOfWeek(date: Date): Date {

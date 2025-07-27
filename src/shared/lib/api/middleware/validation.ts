@@ -117,9 +117,14 @@ export const VALIDATION_SCHEMAS = {
     }),
 
   // Daily summary schemas
-  dailySummary: z.object({
-    date: z.string().datetime('Date is required'),
-    notes: z.array(z.string()).min(1, 'At least one note is required'),
-    locale: z.string().optional().default('ru'),
-  }),
+  dailySummary: z
+    .object({
+      from: z.string().datetime('From date is required'),
+      to: z.string().datetime('To date is required'),
+      notes: z.array(z.string()).min(1, 'At least one note is required'),
+      locale: z.string().optional().default('ru'),
+    })
+    .refine(data => new Date(data.from) <= new Date(data.to), {
+      message: 'From date must be before or equal to to date',
+    }),
 };

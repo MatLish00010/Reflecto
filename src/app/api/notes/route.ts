@@ -5,6 +5,7 @@ import {
   VALIDATION_SCHEMAS,
 } from '@/shared/lib/api';
 import { NotesService } from '@/shared/lib/api/services';
+import { toIsoDate } from '@/shared/lib/date-utils';
 
 export async function GET(request: NextRequest) {
   return handleApiRequest(
@@ -15,8 +16,8 @@ export async function GET(request: NextRequest) {
       const from = searchParams.get('from') || undefined;
       const to = searchParams.get('to') || undefined;
 
-      context.span.setAttribute('filters.from', from || '');
-      context.span.setAttribute('filters.to', to || '');
+      context.span.setAttribute('filters.from', from ? toIsoDate(from) : '');
+      context.span.setAttribute('filters.to', to ? toIsoDate(to) : '');
 
       const notesService = new NotesService(context.supabase);
       const notes = await notesService.fetchNotes({

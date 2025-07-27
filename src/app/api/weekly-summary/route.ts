@@ -18,6 +18,7 @@ import {
   AI_SUMMARY_ARRAY_FIELDS,
   ServiceFactory,
 } from '@/shared/lib/api';
+import { toIsoDate } from '@/shared/lib/date-utils';
 
 export async function GET(request: NextRequest) {
   return handleApiRequest(
@@ -25,8 +26,14 @@ export async function GET(request: NextRequest) {
     { operation: 'get_weekly_summary' },
     withValidation(VALIDATION_SCHEMAS.dateRange, { validateQuery: true })(
       async (context: ApiContext, request: NextRequest, validatedData) => {
-        context.span.setAttribute('filters.from', validatedData.from || '');
-        context.span.setAttribute('filters.to', validatedData.to || '');
+        context.span.setAttribute(
+          'filters.from',
+          validatedData.from ? toIsoDate(validatedData.from) : ''
+        );
+        context.span.setAttribute(
+          'filters.to',
+          validatedData.to ? toIsoDate(validatedData.to) : ''
+        );
 
         const weeklySummaryService = ServiceFactory.createWeeklySummaryService(
           context.supabase
@@ -51,8 +58,11 @@ export async function POST(request: NextRequest) {
     withValidation(VALIDATION_SCHEMAS.weeklySummary)(
       async (context: ApiContext, request: NextRequest, validatedData) => {
         context.span.setAttribute('locale', validatedData.locale);
-        context.span.setAttribute('filters.from', validatedData.from);
-        context.span.setAttribute('filters.to', validatedData.to);
+        context.span.setAttribute(
+          'filters.from',
+          toIsoDate(validatedData.from)
+        );
+        context.span.setAttribute('filters.to', toIsoDate(validatedData.to));
 
         const dailySummaryService = ServiceFactory.createDailySummaryService(
           context.supabase
@@ -111,7 +121,7 @@ export async function POST(request: NextRequest) {
         await weeklySummaryService.saveSummary(
           validatedSummary,
           context.user.id,
-          validatedData.from,
+          toIsoDate(validatedData.from),
           { span: context.span, operation: 'create_weekly_summary' }
         );
 

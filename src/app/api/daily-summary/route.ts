@@ -16,18 +16,25 @@ import {
   AI_SUMMARY_ARRAY_FIELDS,
   ServiceFactory,
 } from '@/shared/lib/api';
+import { toIsoDate } from '@/shared/lib/date-utils';
 
 export async function GET(request: NextRequest) {
   return handleApiRequest(
     request,
-    { operation: 'get_ai_summary' },
+    { operation: 'get_daily_summary' },
     withValidation(VALIDATION_SCHEMAS.dateRange, { validateQuery: true })(
       async (context: ApiContext, request: NextRequest, validatedData) => {
         const { searchParams } = new URL(request.url);
         const returnAll = searchParams.get('returnAll') === 'true';
 
-        context.span.setAttribute('filters.from', validatedData.from || '');
-        context.span.setAttribute('filters.to', validatedData.to || '');
+        context.span.setAttribute(
+          'filters.from',
+          validatedData.from ? toIsoDate(validatedData.from) : ''
+        );
+        context.span.setAttribute(
+          'filters.to',
+          validatedData.to ? toIsoDate(validatedData.to) : ''
+        );
         context.span.setAttribute('filters.returnAll', returnAll);
 
         const dailySummaryService = ServiceFactory.createDailySummaryService(
@@ -39,7 +46,7 @@ export async function GET(request: NextRequest) {
             context.user.id,
             validatedData.from!,
             validatedData.to!,
-            { span: context.span, operation: 'get_ai_summary' }
+            { span: context.span, operation: 'get_daily_summary' }
           );
 
           context.span.setAttribute('summaries.count', summaries.length);
@@ -49,7 +56,7 @@ export async function GET(request: NextRequest) {
             context.user.id,
             validatedData.from!,
             validatedData.to!,
-            { span: context.span, operation: 'get_ai_summary' }
+            { span: context.span, operation: 'get_daily_summary' }
           );
 
           return { summary };
@@ -62,11 +69,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   return handleApiRequest(
     request,
-    { operation: 'create_ai_summary' },
+    { operation: 'create_daily_summary' },
     withValidation(VALIDATION_SCHEMAS.dailySummary)(
       async (context: ApiContext, request: NextRequest, validatedData) => {
         context.span.setAttribute('locale', validatedData.locale);
-        context.span.setAttribute('filters.date', validatedData.date);
+        context.span.setAttribute(
+          'filters.from',
+          toIsoDate(validatedData.from)
+        );
+        context.span.setAttribute('filters.to', toIsoDate(validatedData.to));
         context.span.setAttribute('notes.count', validatedData.notes.length);
 
         const dailySummaryService = ServiceFactory.createDailySummaryService(
@@ -88,7 +99,7 @@ export async function POST(request: NextRequest) {
           ],
           {
             span: context.span,
-            operation: 'create_ai_summary',
+            operation: 'create_daily_summary',
             maxTokens: 4000,
           }
         );
@@ -102,8 +113,8 @@ export async function POST(request: NextRequest) {
         await dailySummaryService.saveSummary(
           validatedSummary,
           context.user.id,
-          validatedData.date,
-          { span: context.span, operation: 'create_ai_summary' }
+          toIsoDate(validatedData.from),
+          { span: context.span, operation: 'create_daily_summary' }
         );
 
         return { summary: validatedSummary };

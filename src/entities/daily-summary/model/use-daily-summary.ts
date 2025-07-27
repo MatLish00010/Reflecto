@@ -22,7 +22,7 @@ export function useDailySummaryByDateRange(from?: string, to?: string) {
       if (!user) {
         const error = new Error('User not found');
         safeSentry.captureException(error, {
-          tags: { operation: 'get_ai_summary_by_date_range' },
+          tags: { operation: 'get_daily_summary_by_date_range' },
         });
         throw error;
       }
@@ -37,7 +37,7 @@ export function useDailySummaryByDateRange(from?: string, to?: string) {
       if (!res.ok) {
         const error = new Error('Failed to fetch summary');
         safeSentry.captureException(error, {
-          tags: { operation: 'get_ai_summary_by_date_range' },
+          tags: { operation: 'get_daily_summary_by_date_range' },
           extra: { userId: user.id, from, to, status: res.status },
         });
         throw error;
@@ -58,7 +58,7 @@ export function useTodayAISummary() {
       if (!user) {
         const error = new Error('User not found');
         safeSentry.captureException(error, {
-          tags: { operation: 'get_today_ai_summary' },
+          tags: { operation: 'get_daily_summary' },
         });
         throw error;
       }
@@ -66,7 +66,7 @@ export function useTodayAISummary() {
       if (!res.ok) {
         const error = new Error('Failed to fetch summary');
         safeSentry.captureException(error, {
-          tags: { operation: 'get_today_ai_summary' },
+          tags: { operation: 'get_today_daily_summary' },
           extra: { userId: user.id, status: res.status },
         });
         throw error;
