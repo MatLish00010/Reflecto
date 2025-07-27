@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { safeSentry } from '@/shared/lib/sentry';
 import { NextResponse } from 'next/server';
 import type { Span } from '@sentry/types';
+import { createErrorResponse } from '@/shared/lib/api/utils/response-helpers';
 
 const ALGORITHM = 'aes-256-gcm';
 const IV_LENGTH = 12; // Recommended for GCM
@@ -65,10 +66,7 @@ export function safeEncrypt({
     if (span) span.setAttribute('error', true);
     safeSentry.captureException(e as Error, { tags: { operation } });
     return {
-      error: NextResponse.json(
-        { error: 'Failed to encrypt data' },
-        { status: 500 }
-      ),
+      error: createErrorResponse('Failed to encrypt data', 500, operation),
     };
   }
 }
@@ -93,10 +91,7 @@ export function safeDecrypt({
     if (span) span.setAttribute('error', true);
     safeSentry.captureException(e as Error, { tags: { operation } });
     return {
-      error: NextResponse.json(
-        { error: 'Failed to decrypt data' },
-        { status: 500 }
-      ),
+      error: createErrorResponse('Failed to decrypt data', 500, operation),
     };
   }
 }

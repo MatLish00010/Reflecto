@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@/shared/lib/server';
 import type { User } from '@supabase/supabase-js';
+import { createErrorResponse } from '@/shared/lib/api/utils/response-helpers';
 
 export async function authenticateUser(): Promise<{
   isAuthenticated: boolean;
@@ -51,7 +52,7 @@ export async function requireAuth(): Promise<{
   if (!authResult.isAuthenticated) {
     return {
       isAuthenticated: false,
-      response: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }),
+      response: createErrorResponse('Unauthorized', 401),
     };
   }
 
