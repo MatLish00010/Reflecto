@@ -8,7 +8,7 @@ import {
 } from '@/shared/ui/card';
 import { NewEntryForm } from '@/widgets/new-entry-form';
 import { HistoryAndSummary } from '@/widgets/history-and-summary';
-import { WeeklySummary } from '@/features/weekly-summary-generation';
+import { WeeklySummaryWidget } from '@/widgets/weekly-summary';
 
 export default async function Home({
   params,
@@ -59,7 +59,7 @@ export default async function Home({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <WeeklySummary />
+          <WeeklySummaryWidget />
         </CardContent>
       </Card>
     </>

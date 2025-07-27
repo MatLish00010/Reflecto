@@ -14,7 +14,11 @@ import { WeekPicker } from '@/shared/ui';
 import { useUser } from '@/entities';
 import { useTranslation } from '@/shared/contexts/translation-context';
 
-export function WeeklySummary() {
+interface WeeklySummaryContentProps {
+  className?: string;
+}
+
+export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { showError } = useAlertContext();
   const { openModal } = useAuthModalContext();
@@ -127,42 +131,44 @@ export function WeeklySummary() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-center sm:justify-start">
-        <WeekPicker
-          selectedDate={selectedDate}
-          onWeekChange={handleWeekChange}
-        />
-      </div>
-
-      {isLoading ? (
-        <AISummaryLoadingSkeleton />
-      ) : hasData && weeklySummary ? (
-        <Summary
-          summary={weeklySummary}
-          onRefresh={handleRefresh}
-          isRefreshing={createWeeklySummaryMutation.isPending}
-        />
-      ) : !hasEnoughDailySummaries ? (
-        <div className="text-center space-y-4 p-6">
-          <div className="text-2xl font-semibold text-foreground">
-            {t('aiAnalysis.insufficientDailySummariesTitle')}
-          </div>
-          <div className="text-muted-foreground max-w-md mx-auto">
-            {t('aiAnalysis.insufficientDailySummariesDescription')}
-          </div>
-          <div className="text-sm text-muted-foreground">
-            {`${dailySummaries?.length || 0}/4 ${t('aiAnalysis.dailySummariesCount')}`}
-          </div>
+    <div className={className}>
+      <div className="space-y-4">
+        <div className="flex items-center justify-center sm:justify-start">
+          <WeekPicker
+            selectedDate={selectedDate}
+            onWeekChange={handleWeekChange}
+          />
         </div>
-      ) : (
-        <GeneratePrompt
-          selectedDate={selectedDate}
-          onGenerate={handleGenerateSummary}
-          isGenerating={createWeeklySummaryMutation.isPending}
-          hasNotes={true}
-        />
-      )}
+
+        {isLoading ? (
+          <AISummaryLoadingSkeleton />
+        ) : hasData && weeklySummary ? (
+          <Summary
+            summary={weeklySummary}
+            onRefresh={handleRefresh}
+            isRefreshing={createWeeklySummaryMutation.isPending}
+          />
+        ) : !hasEnoughDailySummaries ? (
+          <div className="text-center space-y-4 p-6">
+            <div className="text-2xl font-semibold text-foreground">
+              {t('aiAnalysis.insufficientDailySummariesTitle')}
+            </div>
+            <div className="text-muted-foreground max-w-md mx-auto">
+              {t('aiAnalysis.insufficientDailySummariesDescription')}
+            </div>
+            <div className="text-sm text-muted-foreground">
+              {`${dailySummaries?.length || 0}/4 ${t('aiAnalysis.dailySummariesCount')}`}
+            </div>
+          </div>
+        ) : (
+          <GeneratePrompt
+            selectedDate={selectedDate}
+            onGenerate={handleGenerateSummary}
+            isGenerating={createWeeklySummaryMutation.isPending}
+            hasNotes={true}
+          />
+        )}
+      </div>
     </div>
   );
 }

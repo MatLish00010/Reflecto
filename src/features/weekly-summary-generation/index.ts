@@ -1,2 +1,2 @@
 export { useCreateWeeklySummary } from './model/use-weekly-summary';
-export { WeeklySummary } from './ui/index';
+export { WeeklySummaryContent } from './ui/weekly-summary-content';
