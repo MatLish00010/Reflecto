@@ -71,7 +71,11 @@
     "insufficientDailySummariesTitle": "Недостаточно дневных саммари",
     "insufficientDailySummariesDescription": "Для создания недельного саммари необходимо создать более 3 дневных саммари за выбранную неделю",
     "dailySummariesCount": "дневных саммари создано",
-    "noData": "Нет данных"
+    "noData": "Нет данных",
+    "tabs": {
+      "daily": "Ежедневный анализ",
+      "weekly": "Недельный анализ"
+    }
   },
   "history": {
     "title": "История записей",

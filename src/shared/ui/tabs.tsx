@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { cn } from '@/shared/lib/utils';
 
@@ -52,4 +53,53 @@ const TabsContent = React.forwardRef<
 ));
 TabsContent.displayName = TabsPrimitive.Content.displayName;
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+interface TabsWithURLProps extends React.ComponentProps<typeof Tabs> {
+  urlParam?: string;
+  defaultValue?: string;
+}
+
+const TabsWithURL = React.forwardRef<
+  React.ElementRef<typeof Tabs>,
+  TabsWithURLProps
+>(({ urlParam = 'tab', defaultValue, value, onValueChange, ...props }, ref) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const urlValue = searchParams.get(urlParam);
+  const initialValue = urlValue || defaultValue || '';
+
+  const [internalValue, setInternalValue] = React.useState(initialValue);
+
+  const currentValue = value !== undefined ? value : internalValue;
+
+  const handleValueChange = React.useCallback(
+    (newValue: string) => {
+      if (value === undefined) {
+        setInternalValue(newValue);
+      }
+
+      if (onValueChange) {
+        onValueChange(newValue);
+      }
+
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(urlParam, newValue);
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      router.replace(newUrl, { scroll: false });
+    },
+    [value, onValueChange, searchParams, urlParam, router]
+  );
+
+  return (
+    <Tabs
+      ref={ref}
+      value={currentValue}
+      onValueChange={handleValueChange}
+      {...props}
+    />
+  );
+});
+
+TabsWithURL.displayName = 'TabsWithURL';
+
+export { Tabs, TabsList, TabsTrigger, TabsContent, TabsWithURL };

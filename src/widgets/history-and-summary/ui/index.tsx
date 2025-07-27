@@ -2,7 +2,12 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
+import {
+  TabsWithURL,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from '@/shared/ui/tabs';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { History } from '@/features/history';
 import { AISummary } from '@/features/daily-summary-generation';
@@ -11,7 +16,6 @@ import { DatePicker } from './date-picker';
 export function HistoryAndSummary() {
   const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [activeTab, setActiveTab] = useState('daily-summary');
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
     const range = getDateRangeForDay(selectedDate);
@@ -34,7 +38,11 @@ export function HistoryAndSummary() {
         />
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <TabsWithURL
+        defaultValue="daily-summary"
+        urlParam="view"
+        className="w-full"
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="daily-summary">
             {t('aiAnalysis.title')}
@@ -57,7 +65,7 @@ export function HistoryAndSummary() {
             selectedDateEnd={selectedDateEnd}
           />
         </TabsContent>
-      </Tabs>
+      </TabsWithURL>
     </div>
   );
 }

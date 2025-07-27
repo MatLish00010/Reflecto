@@ -6,6 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
+import {
+  TabsWithURL,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/ui/tabs';
 import { NewEntryForm } from '@/widgets/new-entry-form';
 import { HistoryAndSummary } from '@/widgets/history-and-summary';
 import { WeeklySummaryWidget } from '@/widgets/weekly-summary';
@@ -39,29 +45,40 @@ export default async function Home({
         </CardContent>
       </Card>
 
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>{t('aiAnalysis.dailySummaryTitle')}</CardTitle>
-          <CardDescription>
-            {t('aiAnalysis.dailySummaryDescription')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <HistoryAndSummary />
-        </CardContent>
-      </Card>
-
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>{t('aiAnalysis.weeklySummaryTitle')}</CardTitle>
-          <CardDescription>
-            {t('aiAnalysis.weeklySummaryDescription')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <WeeklySummaryWidget />
-        </CardContent>
-      </Card>
+      <TabsWithURL defaultValue="daily" urlParam="tab" className="w-full mt-8">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="daily">{t('aiAnalysis.tabs.daily')}</TabsTrigger>
+          <TabsTrigger value="weekly">
+            {t('aiAnalysis.tabs.weekly')}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="daily" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('aiAnalysis.dailySummaryTitle')}</CardTitle>
+              <CardDescription>
+                {t('aiAnalysis.dailySummaryDescription')}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <HistoryAndSummary />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="weekly" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('aiAnalysis.weeklySummaryTitle')}</CardTitle>
+              <CardDescription>
+                {t('aiAnalysis.weeklySummaryDescription')}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <WeeklySummaryWidget />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </TabsWithURL>
     </>
   );
 }

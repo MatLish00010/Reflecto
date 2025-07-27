@@ -71,7 +71,11 @@
     "insufficientDailySummariesTitle": "Insufficient Daily Summaries",
     "insufficientDailySummariesDescription": "To create a weekly summary, you need to create more than 3 daily summaries for the selected week",
     "dailySummariesCount": "daily summaries created",
-    "noData": "No data"
+    "noData": "No data",
+    "tabs": {
+      "daily": "Daily Summary",
+      "weekly": "Weekly Summary"
+    }
   },
   "history": {
     "title": "Entry History",
