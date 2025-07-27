@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { handleApiRequest } from '@/shared/lib/api';
 import { ServiceFactory } from '@/shared/lib/api';
-import { validateRequiredFields } from '@/shared/lib/api/handlers';
+import { validateRequiredFields } from '@/shared/lib/api';
 
 export async function POST(request: NextRequest) {
   return handleApiRequest(

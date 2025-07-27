@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { safeSentry } from '@/shared/lib/sentry';
+import { createErrorResponse } from './utils/response-helpers';
 
 export interface ApiErrorInterface {
   message: string;
@@ -46,14 +47,10 @@ export function handleApiError(
       extra: { status: error.status, code: error.code, details: error.details },
     });
 
-    return NextResponse.json(
-      {
-        error: error.message,
-        ...(error.code && { code: error.code }),
-        ...(error.details && { details: error.details }),
-      },
-      { status: error.status }
-    );
+    return createErrorResponse(error.message, error.status, operation, {
+      code: error.code,
+      details: error.details,
+    });
   }
 
   // Handle OpenAI specific errors
@@ -61,40 +58,38 @@ export function handleApiError(
     const errorMessage = error.message;
 
     if (errorMessage.includes('quota exceeded')) {
-      return NextResponse.json(
-        {
-          error:
-            'OpenAI quota exceeded. Please try again later or upgrade your plan.',
-        },
-        { status: 429 }
+      return createErrorResponse(
+        'OpenAI quota exceeded. Please try again later or upgrade your plan.',
+        429,
+        operation
       );
     }
 
     if (errorMessage.includes('Unsupported audio file format')) {
-      return NextResponse.json(
-        { error: 'Unsupported audio file format' },
-        { status: 400 }
+      return createErrorResponse(
+        'Unsupported audio file format',
+        400,
+        operation
       );
     }
 
     if (errorMessage.includes('File too large')) {
-      return NextResponse.json(
-        { error: 'File too large (maximum 25MB)' },
-        { status: 413 }
+      return createErrorResponse(
+        'File too large (maximum 25MB)',
+        413,
+        operation
       );
     }
 
     if (errorMessage.includes('Invalid OpenAI API key')) {
-      return NextResponse.json(
-        { error: 'Invalid OpenAI API key' },
-        { status: 401 }
-      );
+      return createErrorResponse('Invalid OpenAI API key', 401, operation);
     }
 
     if (errorMessage.includes('rate limit exceeded')) {
-      return NextResponse.json(
-        { error: 'OpenAI rate limit exceeded. Please try again later.' },
-        { status: 429 }
+      return createErrorResponse(
+        'OpenAI rate limit exceeded. Please try again later.',
+        429,
+        operation
       );
     }
 
@@ -103,10 +98,7 @@ export function handleApiError(
       tags: { operation },
     });
 
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return createErrorResponse('Internal server error', 500, operation);
   }
 
   // Fallback for unknown errors
@@ -115,7 +107,7 @@ export function handleApiError(
     extra: { originalError: error },
   });
 
-  return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  return createErrorResponse('Internal server error', 500, operation);
 }
 
 // Common error creators
