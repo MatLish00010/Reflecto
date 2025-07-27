@@ -33,3 +33,4 @@ export { Skeleton } from './skeleton';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Textarea } from './textarea';
 export { AISummaryLoadingSkeleton, Summary } from './summary';
+export { GeneratePrompt } from './generate-prompt';

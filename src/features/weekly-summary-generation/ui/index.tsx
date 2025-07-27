@@ -9,7 +9,7 @@ import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
 import { getWeekRange, toIsoDate } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
-import { GeneratePrompt } from '../../daily-summary-generation/ui/generate-prompt';
+import { GeneratePrompt } from '@/shared/ui';
 import { WeekPicker } from './week-picker';
 import { useUser } from '@/entities';
 import { useTranslation } from '@/shared/contexts/translation-context';

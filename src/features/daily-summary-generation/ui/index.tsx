@@ -9,7 +9,7 @@ import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
 import { getDateRangeForDay, toIsoDate } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
-import { GeneratePrompt } from './generate-prompt';
+import { GeneratePrompt } from '@/shared/ui';
 import { useUser } from '@/entities';
 
 interface AISummaryProps {
