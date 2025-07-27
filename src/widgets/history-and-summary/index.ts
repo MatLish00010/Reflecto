@@ -1,1 +1,1 @@
-export { HistoryAndSummary } from './ui/index';
+export { HistoryAndSummary } from './ui/history-and-summary';
