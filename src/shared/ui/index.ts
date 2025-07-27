@@ -32,3 +32,8 @@ export { Popover, PopoverContent, PopoverTrigger } from './popover';
 export { Skeleton } from './skeleton';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Textarea } from './textarea';
+export {
+  ModernSummaryCard,
+  HeroSummaryCard,
+  CARD_COLOR_SCHEMES,
+} from './summary-cards';
