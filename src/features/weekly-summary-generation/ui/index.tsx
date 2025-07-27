@@ -8,9 +8,8 @@ import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
 import { getWeekRange } from '@/shared/lib/date-utils';
-import { AISummaryLoadingSkeleton } from '@/shared/ui';
+import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '../../daily-summary-generation/ui/generate-prompt';
-import { SummaryHeader, SummaryContent } from '@/shared/ui';
 import { WeekPicker } from './week-picker';
 import { useUser } from '@/entities';
 import { useTranslation } from '@/shared/contexts/translation-context';
@@ -138,14 +137,12 @@ export function WeeklySummary() {
 
       {isLoading ? (
         <AISummaryLoadingSkeleton />
-      ) : hasData ? (
-        <>
-          <SummaryHeader
-            onRefresh={handleRefresh}
-            isRefreshing={createWeeklySummaryMutation.isPending}
-          />
-          {weeklySummary && <SummaryContent summary={weeklySummary} />}
-        </>
+      ) : hasData && weeklySummary ? (
+        <Summary
+          summary={weeklySummary}
+          onRefresh={handleRefresh}
+          isRefreshing={createWeeklySummaryMutation.isPending}
+        />
       ) : !hasEnoughDailySummaries ? (
         <div className="text-center space-y-4 p-6">
           <div className="text-2xl font-semibold text-foreground">

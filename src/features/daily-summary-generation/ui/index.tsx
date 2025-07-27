@@ -8,9 +8,8 @@ import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
-import { AISummaryLoadingSkeleton } from '@/shared/ui';
+import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from './generate-prompt';
-import { SummaryHeader, SummaryContent } from '@/shared/ui';
 import { useUser } from '@/entities';
 
 interface AISummaryProps {
@@ -142,13 +141,11 @@ export function AISummary({
 
   if (hasData) {
     return (
-      <div className="space-y-4">
-        <SummaryHeader
-          onRefresh={handleRefresh}
-          isRefreshing={createSummaryMutation.isPending}
-        />
-        <SummaryContent summary={summary} />
-      </div>
+      <Summary
+        summary={summary}
+        onRefresh={handleRefresh}
+        isRefreshing={createSummaryMutation.isPending}
+      />
     );
   }
 

@@ -40,4 +40,5 @@ export {
   HeroSummaryCard,
   CARD_COLOR_SCHEMES,
   AISummaryLoadingSkeleton,
+  Summary,
 } from './summary';
