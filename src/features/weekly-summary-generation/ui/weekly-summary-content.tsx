@@ -1,30 +1,39 @@
 'use client';
 
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useCreateWeeklySummary } from '@/features/weekly-summary-generation';
 import { useWeeklySummaryByDateRange } from '@/entities/weekly-summary';
 import { useDailySummariesByDateRange } from '@/entities/daily-summary';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
-import { getWeekRange, toIsoDate } from '@/shared/lib/date-utils';
+import {
+  getWeekRange,
+  toIsoDate,
+  useWeekFromUrl,
+} from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '@/shared/ui';
 import { WeekPicker } from '@/shared/ui';
 import { useUser } from '@/entities';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { AISummaryData } from '@/shared';
 
 interface WeeklySummaryContentProps {
   className?: string;
 }
 
 export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { selectedDate, updateWeek } = useWeekFromUrl();
   const { showError } = useAlertContext();
   const { openModal } = useAuthModalContext();
   const { t } = useTranslation();
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
+    if (!selectedDate) {
+      return { selectedDateStart: new Date(), selectedDateEnd: new Date() };
+    }
+
     const range = getWeekRange(selectedDate);
     return {
       selectedDateStart: new Date(range.from),
@@ -54,9 +63,12 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
 
   const createWeeklySummaryMutation = useCreateWeeklySummary();
 
-  const handleWeekChange = useCallback((date: Date) => {
-    setSelectedDate(date);
-  }, []);
+  const handleWeekChange = useCallback(
+    (date: Date) => {
+      updateWeek(date);
+    },
+    [updateWeek]
+  );
 
   const handleGenerateSummary = useCallback(() => {
     if (!isAuthenticated) {
@@ -130,6 +142,10 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
     return <AuthRequiredMessage messageKey="auth.signInToViewAnalysis" />;
   }
 
+  if (!selectedDate) {
+    return null;
+  }
+
   return (
     <div className={className}>
       <div className="space-y-4">
@@ -142,9 +158,9 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
 
         {isLoading ? (
           <AISummaryLoadingSkeleton />
-        ) : hasData && weeklySummary ? (
+        ) : hasData ? (
           <Summary
-            summary={weeklySummary}
+            summary={weeklySummary || ({} as AISummaryData)}
             onRefresh={handleRefresh}
             isRefreshing={createWeeklySummaryMutation.isPending}
           />

@@ -13,7 +13,7 @@ import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 
 interface WeekPickerProps {
-  selectedDate: Date;
+  selectedDate: Date | null;
   onWeekChange: (date: Date) => void;
 }
 
@@ -22,9 +22,9 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
   const { isAuthenticated } = useUser();
   const { openModal } = useAuthModalContext();
 
-  const weekRange = getWeekRange(selectedDate);
-  const weekStart = new Date(weekRange.from);
-  const weekEnd = new Date(weekRange.to);
+  const weekRange = selectedDate ? getWeekRange(selectedDate) : null;
+  const weekStart = weekRange ? new Date(weekRange.from) : null;
+  const weekEnd = weekRange ? new Date(weekRange.to) : null;
 
   const handleDateSelect = useCallback(
     (date: Date | undefined) => {
@@ -40,7 +40,7 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
   );
 
   const handlePreviousWeek = useCallback(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !selectedDate) {
       openModal();
       return;
     }
@@ -49,7 +49,7 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
   }, [isAuthenticated, openModal, onWeekChange, selectedDate]);
 
   const handleNextWeek = useCallback(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !selectedDate) {
       openModal();
       return;
     }
@@ -59,7 +59,8 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
     }
   }, [isAuthenticated, openModal, onWeekChange, selectedDate]);
 
-  const isNextWeekDisabled = addWeeks(selectedDate, 1) > new Date();
+  const isNextWeekDisabled =
+    !selectedDate || addWeeks(selectedDate, 1) > new Date();
 
   return (
     <div className="flex items-center gap-1 sm:gap-2">
@@ -67,7 +68,7 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
         variant="outline"
         size="icon"
         onClick={handlePreviousWeek}
-        disabled={!isAuthenticated}
+        disabled={!isAuthenticated || !selectedDate}
         className="h-9 w-9 sm:h-10 sm:w-10"
       >
         <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -83,7 +84,7 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
             )}
           >
             <CalendarIcon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-            {selectedDate ? (
+            {selectedDate && weekStart && weekEnd ? (
               <span className="truncate">
                 {format(weekStart, 'MMM d', { locale: getLocaleByLang(lang) })}{' '}
                 -{' '}
@@ -99,13 +100,14 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={selectedDate}
+            selected={selectedDate || undefined}
             onSelect={handleDateSelect}
             initialFocus
             locale={getLocaleByLang(lang)}
             disabled={date => date > new Date()}
             showOutsideDays={false}
             className="rounded-md border"
+            weekStartsOn={1}
           />
         </PopoverContent>
       </Popover>

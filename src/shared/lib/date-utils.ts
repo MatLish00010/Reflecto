@@ -176,3 +176,72 @@ export function useDateFromUrl() {
 
   return { selectedDate, updateDate };
 }
+
+export function weekToUrlParam(date: Date): string {
+  return format(date, 'yyyy-MM-dd');
+}
+
+export function urlParamToWeek(dateString: string): Date | null {
+  try {
+    const parsed = parseISO(dateString);
+    if (isNaN(parsed.getTime())) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function getDefaultWeekFromUrl(): Date {
+  if (typeof window === 'undefined') {
+    return new Date();
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const weekParam = urlParams.get('week');
+
+  if (weekParam) {
+    const parsedWeek = urlParamToWeek(weekParam);
+    if (parsedWeek && parsedWeek <= new Date()) {
+      return parsedWeek;
+    }
+  }
+
+  return new Date();
+}
+
+export function updateUrlWithWeek(date: Date): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  const weekParam = weekToUrlParam(date);
+
+  url.searchParams.set('week', weekParam);
+
+  window.history.replaceState({}, '', url.toString());
+}
+
+export function useWeekFromUrl() {
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
+
+  React.useEffect(() => {
+    setSelectedDate(getDefaultWeekFromUrl());
+
+    const handlePopState = () => {
+      setSelectedDate(getDefaultWeekFromUrl());
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const updateWeek = React.useCallback((date: Date) => {
+    setSelectedDate(date);
+    updateUrlWithWeek(date);
+  }, []);
+
+  return { selectedDate, updateWeek };
+}

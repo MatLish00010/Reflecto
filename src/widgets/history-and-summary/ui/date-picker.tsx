@@ -59,6 +59,7 @@ export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
           initialFocus
           locale={getLocaleByLang(lang)}
           disabled={date => date > new Date()}
+          weekStartsOn={1}
         />
       </PopoverContent>
     </Popover>
