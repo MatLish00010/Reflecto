@@ -10,7 +10,7 @@ import { AuthRequiredMessage } from '@/shared/components';
 import { getWeekRange, toIsoDate } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '@/shared/ui';
-import { WeekPicker } from './week-picker';
+import { WeekPicker } from '@/shared/ui';
 import { useUser } from '@/entities';
 import { useTranslation } from '@/shared/contexts/translation-context';
 

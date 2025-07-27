@@ -54,7 +54,6 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
       return;
     }
     const nextWeek = addWeeks(selectedDate, 1);
-    // Не позволяем выбирать будущие недели
     if (nextWeek <= new Date()) {
       onWeekChange(nextWeek);
     }
