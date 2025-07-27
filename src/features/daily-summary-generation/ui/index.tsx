@@ -8,7 +8,7 @@ import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
-import { AISummaryLoadingSkeleton } from './loading-skeleton';
+import { AISummaryLoadingSkeleton } from '@/shared/ui';
 import { GeneratePrompt } from './generate-prompt';
 import { SummaryHeader, SummaryContent } from '@/shared/ui';
 import { useUser } from '@/entities';

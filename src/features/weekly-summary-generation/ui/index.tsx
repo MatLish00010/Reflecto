@@ -8,7 +8,7 @@ import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
 import { getWeekRange } from '@/shared/lib/date-utils';
-import { AISummaryLoadingSkeleton } from '../../daily-summary-generation/ui/loading-skeleton';
+import { AISummaryLoadingSkeleton } from '@/shared/ui';
 import { GeneratePrompt } from '../../daily-summary-generation/ui/generate-prompt';
 import { SummaryHeader, SummaryContent } from '@/shared/ui';
 import { WeekPicker } from './week-picker';
