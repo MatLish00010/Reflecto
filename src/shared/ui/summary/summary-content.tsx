@@ -14,7 +14,9 @@ import {
 } from 'lucide-react';
 import { ShareButton } from './share-button';
 import { AISummaryData } from '@/shared/types';
-import { SummaryCard, HeroSummaryCard, CARD_COLOR_SCHEMES } from './index';
+import { SummaryCard } from './summary-card';
+import { HeroSummaryCard } from './hero-summary-card';
+import { CARD_COLOR_SCHEMES } from './color-schemes';
 
 interface SummaryContentProps {
   summary: AISummaryData;
