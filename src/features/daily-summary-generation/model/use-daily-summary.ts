@@ -17,7 +17,7 @@ export function useAISummary() {
       if (!res.ok) {
         const error = new Error('Failed to get summary');
         safeSentry.captureException(error, {
-          tags: { operation: 'get_ai_summary' },
+          tags: { operation: 'get_daily_summary' },
           extra: {
             notesCount: notes.length,
             locale: lang,
@@ -51,7 +51,7 @@ export function useCreateSummary() {
       if (!user) {
         const error = new Error('User not found');
         safeSentry.captureException(error, {
-          tags: { operation: 'create_ai_summary' },
+          tags: { operation: 'create_daily_summary' },
         });
         throw error;
       }
@@ -64,7 +64,7 @@ export function useCreateSummary() {
         const data = await res.json();
         const error = new Error(data.error);
         safeSentry.captureException(error, {
-          tags: { operation: 'create_ai_summary' },
+          tags: { operation: 'create_daily_summary' },
           extra: {
             userId: user.id,
             notesCount: notes.length,

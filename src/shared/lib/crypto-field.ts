@@ -1,6 +1,7 @@
 import { safeEncrypt, safeDecrypt } from './crypto';
 import type { Span } from '@sentry/types';
 import { NextResponse } from 'next/server';
+import { createErrorResponse } from '@/shared/lib/api/utils/response-helpers';
 
 interface EncryptFieldParams {
   data: unknown;
@@ -46,9 +47,10 @@ export function decryptField<T = string>({
       return { value: JSON.parse(value!) as T };
     } catch {
       return {
-        error: NextResponse.json(
-          { error: 'Failed to parse decrypted data' },
-          { status: 500 }
+        error: createErrorResponse(
+          'Failed to parse decrypted data',
+          500,
+          operation
         ),
       };
     }

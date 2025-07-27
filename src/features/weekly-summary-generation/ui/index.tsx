@@ -7,7 +7,7 @@ import { useDailySummariesByDateRange } from '@/entities/daily-summary';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
-import { getWeekRange } from '@/shared/lib/date-utils';
+import { getWeekRange, toIsoDate } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '../../daily-summary-generation/ui/generate-prompt';
 import { WeekPicker } from './week-picker';
@@ -35,8 +35,8 @@ export function WeeklySummary() {
     isLoading: weeklySummaryLoading,
     error: weeklySummaryError,
   } = useWeeklySummaryByDateRange(
-    selectedDateStart.toISOString(),
-    selectedDateEnd.toISOString()
+    toIsoDate(selectedDateStart),
+    toIsoDate(selectedDateEnd)
   );
 
   const {
@@ -44,8 +44,8 @@ export function WeeklySummary() {
     isLoading: dailySummariesLoading,
     error: dailySummariesError,
   } = useDailySummariesByDateRange(
-    selectedDateStart.toISOString(),
-    selectedDateEnd.toISOString()
+    toIsoDate(selectedDateStart),
+    toIsoDate(selectedDateEnd)
   );
 
   const createWeeklySummaryMutation = useCreateWeeklySummary();
@@ -60,8 +60,8 @@ export function WeeklySummary() {
       return;
     }
     createWeeklySummaryMutation.mutate({
-      from: selectedDateStart.toISOString(),
-      to: selectedDateEnd.toISOString(),
+      from: toIsoDate(selectedDateStart),
+      to: toIsoDate(selectedDateEnd),
     });
   }, [
     isAuthenticated,
@@ -77,8 +77,8 @@ export function WeeklySummary() {
       return;
     }
     createWeeklySummaryMutation.mutate({
-      from: selectedDateStart.toISOString(),
-      to: selectedDateEnd.toISOString(),
+      from: toIsoDate(selectedDateStart),
+      to: toIsoDate(selectedDateEnd),
     });
   }, [
     isAuthenticated,

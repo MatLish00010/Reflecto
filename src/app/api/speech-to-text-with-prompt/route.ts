@@ -1,88 +1,40 @@
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { NextRequest } from 'next/server';
+import { handleApiRequest } from '@/shared/lib/api';
+import { ServiceFactory } from '@/shared/lib/api';
+import { validateRequiredFields } from '@/shared/lib/api';
 
 export async function POST(request: NextRequest) {
-  try {
-    const formData = await request.formData();
-    const audioFile = formData.get('audio') as File;
-    const prompt = formData.get('prompt') as string;
+  return handleApiRequest(
+    request,
+    { operation: 'speech_to_text_with_prompt' },
+    async (context, request: NextRequest) => {
+      const formData = await request.formData();
+      const audioFile = formData.get('audio') as File;
+      const prompt = formData.get('prompt') as string;
 
-    if (!audioFile) {
-      return NextResponse.json(
-        { error: 'Audio file not found' },
-        { status: 400 }
-      );
-    }
-
-    // Check if OpenAI API key is configured
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY is not configured');
-      return NextResponse.json(
-        { error: 'OpenAI API key is not configured' },
-        { status: 500 }
-      );
-    }
-
-    // Convert File to Buffer for OpenAI API
-    const arrayBuffer = await audioFile.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    // Create a file-like object for OpenAI
-    const file = new File([buffer], audioFile.name, { type: audioFile.type });
-
-    try {
-      // Use OpenAI transcription API with prompt
-      const transcription = await openai.audio.transcriptions.create({
-        model: process.env.OPENAI_TRANSCRIPTION_MODEL || 'gpt-4o-transcribe',
-        file: file,
-        response_format: 'text',
-        prompt: prompt || undefined, // Only include prompt if provided
-      });
-
-      return NextResponse.json({
-        text: transcription,
-        confidence: 1.0,
-        promptUsed: !!prompt,
-      });
-    } catch (openaiError: unknown) {
-      console.error('OpenAI API error:', openaiError);
-
-      const error = openaiError as { status?: number };
-
-      // Handle specific OpenAI errors
-      switch (error.status) {
-        case 401:
-          return NextResponse.json(
-            { error: 'Invalid OpenAI API key' },
-            { status: error.status }
-          );
-        case 413:
-          return NextResponse.json(
-            { error: 'File too large (maximum 25MB)' },
-            { status: error.status }
-          );
-        case 400:
-          return NextResponse.json(
-            { error: 'Unsupported audio file format or invalid prompt' },
-            { status: error.status }
-          );
+      const validation = validateRequiredFields({ audioFile }, ['audioFile']);
+      if (!validation.isValid) {
+        throw new Error('Audio file not found');
       }
 
-      return NextResponse.json(
-        { error: 'Error processing audio through OpenAI' },
-        { status: 500 }
-      );
+      context.span.setAttribute('audio.file.size', audioFile.size);
+      context.span.setAttribute('audio.file.type', audioFile.type);
+      context.span.setAttribute('prompt.provided', !!prompt);
+      if (prompt) {
+        context.span.setAttribute('prompt.length', prompt.length);
+      }
+
+      const speechToTextService = ServiceFactory.createSpeechToTextService();
+      const result = await speechToTextService.transcribeAudio({
+        audioFile,
+        prompt,
+        options: {
+          span: context.span,
+          operation: 'transcribe_audio_with_prompt',
+        },
+      });
+
+      return result;
     }
-  } catch (error) {
-    console.error('Error processing audio:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
+  );
 }
