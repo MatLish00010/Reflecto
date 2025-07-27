@@ -5,6 +5,7 @@ import {
   DailySummaryService,
   WeeklySummaryService,
   SpeechToTextService,
+  OpenAIService,
 } from '@/shared/lib/api/services';
 
 export class ServiceFactory {
@@ -26,5 +27,9 @@ export class ServiceFactory {
 
   static createSpeechToTextService() {
     return new SpeechToTextService();
+  }
+
+  static createOpenAIService(): OpenAIService {
+    return new OpenAIService();
   }
 }

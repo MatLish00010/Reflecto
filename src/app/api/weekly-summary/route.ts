@@ -8,8 +8,6 @@ import {
 import type { AISummaryData } from '@/shared/types';
 import {
   handleApiRequest,
-  callOpenAIAndParseJSON,
-  validateAISummaryStructure,
   type ApiContext,
   withValidation,
   VALIDATION_SCHEMAS,
@@ -70,6 +68,7 @@ export async function POST(request: NextRequest) {
         const weeklySummaryService = ServiceFactory.createWeeklySummaryService(
           context.supabase
         );
+        const openAIService = ServiceFactory.createOpenAIService();
 
         // Fetch daily summaries for the week
         const dailySummaries = await dailySummaryService.fetchSummaries(
@@ -100,23 +99,27 @@ export async function POST(request: NextRequest) {
           validatedData.locale as Locale
         );
 
-        const summary = await callOpenAIAndParseJSON(
-          [
+        const summary = await openAIService.callOpenAIAndParseJSON({
+          messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: prompt },
           ],
-          {
+          maxTokens: 8000,
+          options: {
             span: context.span,
             operation: 'create_weekly_summary',
-            maxTokens: 8000,
-          }
-        );
+          },
+        });
 
-        const validatedSummary = validateAISummaryStructure(
+        const validatedSummary = openAIService.validateAISummaryStructure({
           summary,
-          AI_SUMMARY_REQUIRED_FIELDS,
-          AI_SUMMARY_ARRAY_FIELDS
-        ) as unknown as AISummaryData;
+          requiredFields: AI_SUMMARY_REQUIRED_FIELDS,
+          arrayFields: AI_SUMMARY_ARRAY_FIELDS,
+          options: {
+            span: context.span,
+            operation: 'create_weekly_summary',
+          },
+        }) as unknown as AISummaryData;
 
         await weeklySummaryService.saveSummary(
           validatedSummary,
