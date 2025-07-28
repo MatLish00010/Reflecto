@@ -95,7 +95,14 @@
     "showLess": "Скрыть",
     "selectDate": "Выберите дату",
     "expand": "Развернуть",
-    "collapse": "Свернуть"
+    "collapse": "Свернуть",
+    "actions": {
+      "menu": "Действия",
+      "edit": "Редактировать",
+      "delete": "Удалить",
+      "confirmDelete": "Вы уверены, что хотите удалить эту запись?",
+      "confirmDeleteTitle": "Удалить запись"
+    }
   },
   "languages": {
     "russian": "Русский",
