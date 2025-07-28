@@ -38,12 +38,18 @@ export function UserInfoDropdown() {
     return null;
   }
 
+  const displayName = user.user_metadata?.name || user.email;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
-          <User className="h-4 w-4" />
-          {user.user_metadata?.name || user.email}
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2 min-w-0 max-w-[200px]"
+        >
+          <User className="h-4 w-4 flex-shrink-0" />
+          <span className="truncate text-left">{displayName}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
