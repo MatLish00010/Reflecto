@@ -12,12 +12,15 @@ export function UserInfo({ user }: UserInfoProps) {
 
   return (
     <div className="px-2 py-1.5 text-sm text-muted-foreground">
-      <p>
-        <strong>{t('auth.email')}:</strong> {user.email}
+      <p className="break-all">
+        <strong>{t('auth.email')}:</strong>
+        <span className="truncate block">{user.email}</span>
       </p>
-      <p>
+      <p className="break-all">
         <strong>{t('auth.name')}:</strong>{' '}
-        {user.user_metadata?.name || t('user.notFound')}
+        <span className="truncate block">
+          {user.user_metadata?.name || t('user.notFound')}
+        </span>
       </p>
       <p>
         <strong>{t('user.createdAt')}:</strong>{' '}

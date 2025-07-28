@@ -95,7 +95,14 @@
     "showLess": "Show less",
     "selectDate": "Select date",
     "expand": "Expand",
-    "collapse": "Collapse"
+    "collapse": "Collapse",
+    "actions": {
+      "menu": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this entry?",
+      "confirmDeleteTitle": "Delete Entry"
+    }
   },
   "languages": {
     "russian": "Русский",

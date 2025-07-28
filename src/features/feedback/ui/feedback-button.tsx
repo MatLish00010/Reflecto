@@ -32,7 +32,7 @@ export function FeedbackButton() {
         title={t('feedback.description')}
       >
         <Bug className="h-4 w-4" />
-        {t('feedback.button')}
+        <span className="hidden sm:inline">{t('feedback.button')}</span>
       </Button>
 
       <FeedbackModal
