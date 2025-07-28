@@ -6,6 +6,7 @@ import {
   WeeklySummaryService,
   SpeechToTextService,
   OpenAIService,
+  RedisService,
 } from '@/shared/lib/api/services';
 
 export class ServiceFactory {
@@ -31,5 +32,9 @@ export class ServiceFactory {
 
   static createOpenAIService(): OpenAIService {
     return new OpenAIService();
+  }
+
+  static createRedisService(): RedisService {
+    return new RedisService();
   }
 }

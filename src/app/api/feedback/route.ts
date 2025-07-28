@@ -4,10 +4,12 @@ import {
   withValidation,
   VALIDATION_SCHEMAS,
   ServiceFactory,
+  withRateLimit,
+  RATE_LIMIT_CONFIGS,
 } from '@/shared/lib/api';
 
 export async function GET(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
     { operation: 'fetch_feedback' },
     async context => {
@@ -25,7 +27,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
     { operation: 'create_feedback' },
     withValidation(VALIDATION_SCHEMAS.createFeedback)(

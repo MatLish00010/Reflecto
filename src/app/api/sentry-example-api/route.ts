@@ -1,5 +1,9 @@
 import { NextRequest } from 'next/server';
-import { handleApiRequest } from '@/shared/lib/api';
+import {
+  handleApiRequest,
+  withRateLimit,
+  RATE_LIMIT_CONFIGS,
+} from '@/shared/lib/api';
 
 class SentryExampleAPIError extends Error {
   constructor(message: string | undefined) {
@@ -11,7 +15,7 @@ class SentryExampleAPIError extends Error {
 export const dynamic = 'force-dynamic';
 
 export function GET(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
     { operation: 'sentry_example_error' },
     async context => {
