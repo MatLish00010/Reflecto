@@ -24,14 +24,23 @@ export interface RateLimitStore {
 
 // Redis-based rate limit store using RedisService
 class RedisRateLimitStore implements RateLimitStore {
-  private redisService = ServiceFactory.createRedisService();
+  private redisService: ReturnType<
+    typeof ServiceFactory.createRedisService
+  > | null = null;
+
+  private getRedisService() {
+    if (!this.redisService) {
+      this.redisService = ServiceFactory.createRedisService();
+    }
+    return this.redisService;
+  }
 
   async increment(
     key: string,
     windowMs: number
   ): Promise<{ count: number; resetTime: number }> {
     try {
-      return await this.redisService.incrementRateLimit(key, windowMs);
+      return await this.getRedisService().incrementRateLimit(key, windowMs);
     } catch (error) {
       console.error('Redis rate limit increment error:', error);
       throw error;
@@ -43,7 +52,7 @@ class RedisRateLimitStore implements RateLimitStore {
     windowMs: number
   ): Promise<{ count: number; resetTime: number } | undefined> {
     try {
-      return await this.redisService.getRateLimit(key, windowMs);
+      return await this.getRedisService().getRateLimit(key, windowMs);
     } catch (error) {
       console.error('Redis rate limit get error:', error);
       return undefined;
@@ -86,28 +95,33 @@ class InMemoryRateLimitStore implements RateLimitStore {
   }
 }
 
-function createRateLimitStore(): RateLimitStore {
-  // Use Redis in production, in-memory in development
-  if (process.env.NODE_ENV === 'production') {
-    if (process.env.REDIS_URL) {
-      console.log('Using Redis for rate limiting');
-      return new RedisRateLimitStore();
+// Lazy initialization of rate limit store
+let rateLimitStore: RateLimitStore | null = null;
+
+function getRateLimitStore(): RateLimitStore {
+  if (!rateLimitStore) {
+    // Use Redis in production, in-memory in development
+    if (process.env.NODE_ENV === 'production') {
+      if (process.env.REDIS_URL) {
+        console.log('Using Redis for rate limiting');
+        rateLimitStore = new RedisRateLimitStore();
+      } else {
+        // Fallback to in-memory if Redis is not configured
+        console.warn(
+          '⚠️  WARNING: Redis not configured, falling back to in-memory rate limiting'
+        );
+        console.warn(
+          '⚠️  In-memory rate limiting is NOT suitable for production with multiple servers!'
+        );
+        console.warn('⚠️  Please configure REDIS_URL for production use.');
+        rateLimitStore = new InMemoryRateLimitStore();
+      }
+    } else {
+      rateLimitStore = new InMemoryRateLimitStore();
     }
-
-    // Fallback to in-memory if Redis is not configured
-    console.warn(
-      '⚠️  WARNING: Redis not configured, falling back to in-memory rate limiting'
-    );
-    console.warn(
-      '⚠️  In-memory rate limiting is NOT suitable for production with multiple servers!'
-    );
-    console.warn('⚠️  Please configure REDIS_URL for production use.');
-    return new InMemoryRateLimitStore();
   }
-  return new InMemoryRateLimitStore();
+  return rateLimitStore;
 }
-
-const rateLimitStore = createRateLimitStore();
 
 // Default key generator - uses IP address
 function defaultKeyGenerator(request: NextRequest): string {
@@ -130,7 +144,7 @@ export function withRateLimit(config: RateLimitConfig) {
       )?.span;
 
       try {
-        const { count, resetTime } = await rateLimitStore.increment(
+        const { count, resetTime } = await getRateLimitStore().increment(
           key,
           config.windowMs
         );
