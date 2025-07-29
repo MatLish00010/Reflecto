@@ -85,7 +85,7 @@ export function NoteActions({ note }: NoteActionsProps) {
             onClick={() => setIsDeleteDialogOpen(true)}
             className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
           >
-            <Trash2 className="h-3 w-3 mr-2" />
+            <Trash2 className="h-3 w-3 mr-2 text-red-600 dark:text-red-400" />
             {t('history.actions.delete')}
           </DropdownMenuItem>
         </DropdownMenuContent>
