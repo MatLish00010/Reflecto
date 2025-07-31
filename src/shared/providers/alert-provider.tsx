@@ -52,7 +52,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
     setAlert(prev => ({ ...prev, isVisible: false }));
   }, []);
 
-  // Автоматическое скрытие алертов через 5 секунд
+  // Auto-hide alerts after 5 seconds
   useEffect(() => {
     if (alert.isVisible && alert.message) {
       const timer = setTimeout(() => {

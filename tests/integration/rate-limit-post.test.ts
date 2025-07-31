@@ -5,13 +5,13 @@ const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
 
 describe('Rate Limiting POST Tests', () => {
   beforeEach(async () => {
-    // Очищаем состояние перед каждым тестом
+    // Clean up state before each test
     jest.clearAllMocks();
     await cleanupRateLimitState();
   });
 
   afterEach(async () => {
-    // Очищаем состояние после каждого теста
+    // Clean up state after each test
     await cleanupRateLimitState();
   });
 
@@ -39,7 +39,7 @@ describe('Rate Limiting POST Tests', () => {
     it('should handle multiple POST requests correctly', async () => {
       const results = [];
 
-      // Выполняем 3 POST запроса
+      // Execute 3 POST requests
       for (let i = 1; i <= 3; i++) {
         const response = await fetch(`${BASE_URL}/api/rate-limit-test`, {
           method: 'POST',
@@ -59,7 +59,7 @@ describe('Rate Limiting POST Tests', () => {
         });
       }
 
-      // Все запросы должны пройти успешно (лимит 20 запросов за 5 минут)
+      // All requests should succeed (limit 20 requests per 5 minutes)
       results.forEach((result, index) => {
         expect(result.status).toBe(200);
         expect(result.limit).toBe('20');

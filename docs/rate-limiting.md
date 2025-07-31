@@ -1,22 +1,22 @@
-# Rate Limiting с Redis
+# Rate Limiting with Redis
 
-## Обзор
+## Overview
 
-Rate limiting в приложении реализован с использованием Redis для production и in-memory store для development.
+Rate limiting in the application is implemented using Redis for production and in-memory store for development.
 
-## Настройка Redis для Rate Limiting
+## Redis Setup for Rate Limiting
 
-### Локальная разработка
+### Local Development
 
-Для локальной разработки создайте файл `.env.local`:
+For local development, create a `.env.local` file:
 
 ```env
 REDIS_URL=your-redis-url
 ```
 
-## Использование
+## Usage
 
-### Базовое использование
+### Basic Usage
 
 ```typescript
 import {
@@ -27,26 +27,26 @@ import {
 export const GET = withRateLimit(RATE_LIMIT_CONFIGS.standard)(async (
   request: NextRequest
 ) => {
-  // Ваш код обработки запроса
+  // Your request processing code
   return Response.json({ message: 'Success' });
 });
 ```
 
-### Конфигурации по умолчанию
+### Default Configurations
 
-- **standard**: 300 запросов за 15 минут
-- **ai**: 20 запросов за 5 минут (для AI endpoints)
-- **auth**: 30 запросов за 15 минут (для аутентификации)
-- **upload**: 15 запросов за 5 минут (для загрузки файлов)
+- **standard**: 300 requests per 15 minutes
+- **ai**: 20 requests per 5 minutes (for AI endpoints)
+- **auth**: 30 requests per 15 minutes (for authentication)
+- **upload**: 15 requests per 5 minutes (for file uploads)
 
-### Кастомная конфигурация
+### Custom Configuration
 
 ```typescript
 const customConfig = {
-  windowMs: 60 * 1000, // 1 минута
-  maxRequests: 10, // 10 запросов в минуту
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 10, // 10 requests per minute
   keyGenerator: (request: NextRequest) => {
-    // Кастомная логика генерации ключа
+    // Custom key generation logic
     const userId = request.headers.get('x-user-id');
     return `user:${userId}`;
   },
@@ -55,59 +55,59 @@ const customConfig = {
 export const POST = withRateLimit(customConfig)(async (
   request: NextRequest
 ) => {
-  // Ваш код
+  // Your code
 });
 ```
 
-## Архитектура
+## Architecture
 
 ### RedisService
 
-Централизованный сервис для работы с Redis, который используется для:
+Centralized service for working with Redis, used for:
 
-- **Rate Limiting**: Атомарные операции с счетчиками
-- **Мониторинг**: Получение статистики памяти и ключей
-- **Очистка**: Удаление старых ключей
+- **Rate Limiting**: Atomic operations with counters
+- **Monitoring**: Getting memory and key statistics
+- **Cleanup**: Removing old keys
 
-**Основные методы:**
+**Main methods:**
 
-- `incrementRateLimit()` - атомарное увеличение счетчика
-- `getRateLimit()` - получение текущего значения
-- `getStats()` - полная статистика Redis
-- `cleanupOldKeys()` - очистка старых ключей
+- `incrementRateLimit()` - atomic counter increment
+- `getRateLimit()` - get current value
+- `getStats()` - complete Redis statistics
+- `cleanupOldKeys()` - cleanup old keys
 
-**Оптимизации памяти:**
+**Memory optimizations:**
 
-- Короткие ключи: `rl:ip:timestamp` вместо `rate_limit:ip:timestamp`
-- Автоматическое удаление через TTL
-- ~50 байт на ключ (очень эффективно)
-- Singleton паттерн через ServiceFactory
+- Short keys: `rl:ip:timestamp` instead of `rate_limit:ip:timestamp`
+- Automatic deletion via TTL
+- ~50 bytes per key (very efficient)
+- Singleton pattern via ServiceFactory
 
 ### InMemoryRateLimitStore
 
-Fallback для development окружения, использует Map для хранения данных в памяти.
+Fallback for development environment, uses Map for in-memory data storage.
 
-## Мониторинг использования памяти
+## Memory Usage Monitoring
 
-### Расчет использования:
+### Usage calculation:
 
 ```typescript
-// Пример для 1000 активных пользователей:
-// 1000 ключей × 50 байт = 50KB
-// Это очень мало для 30MB лимита!
+// Example for 1000 active users:
+// 1000 keys × 50 bytes = 50KB
+// This is very small for a 30MB limit!
 
-// Для 10,000 пользователей:
-// 10,000 ключей × 50 байт = 500KB
-// Все еще очень эффективно
+// For 10,000 users:
+// 10,000 keys × 50 bytes = 500KB
+// Still very efficient
 ```
 
-### Автоматическое управление:
+### Automatic management:
 
-- Ключи автоматически удаляются через TTL (15 минут для standard)
-- Нет необходимости в ручной очистке
-- Redis автоматически освобождает память
+- Keys are automatically deleted via TTL (15 minutes for standard)
+- No need for manual cleanup
+- Redis automatically frees memory
 
-### Мониторинг (опционально):
+### Monitoring (optional):
 
 ```typescript
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
@@ -120,28 +120,28 @@ console.log('Memory usage:', stats.memory.usedMemory, 'bytes');
 console.log('Memory usage %:', stats.memory.memoryUsagePercent, '%');
 ```
 
-## Мониторинг
+## Monitoring
 
-Rate limiting интегрирован с Sentry для мониторинга:
+Rate limiting is integrated with Sentry for monitoring:
 
-- `rate_limit.count` - текущий счетчик запросов
-- `rate_limit.limit` - лимит запросов
-- `rate_limit.reset_time` - время сброса
-- `rate_limit.exceeded` - превышен ли лимит
-- `rate_limit.error` - ошибки в работе rate limiting
+- `rate_limit.count` - current request counter
+- `rate_limit.limit` - request limit
+- `rate_limit.reset_time` - reset time
+- `rate_limit.exceeded` - whether limit was exceeded
+- `rate_limit.error` - rate limiting errors
 
 ## Headers
 
-Rate limiting добавляет следующие заголовки к ответу:
+Rate limiting adds the following headers to the response:
 
-- `X-RateLimit-Limit` - максимальное количество запросов
-- `X-RateLimit-Remaining` - оставшееся количество запросов
-- `X-RateLimit-Reset` - время сброса лимита
-- `Retry-After` - время ожидания до следующего запроса
+- `X-RateLimit-Limit` - maximum number of requests
+- `X-RateLimit-Remaining` - remaining number of requests
+- `X-RateLimit-Reset` - limit reset time
+- `Retry-After` - wait time until next request
 
-## Обработка ошибок
+## Error Handling
 
-При превышении лимита возвращается HTTP 429 с JSON ответом:
+When the limit is exceeded, HTTP 429 is returned with JSON response:
 
 ```json
 {
@@ -156,90 +156,90 @@ Rate limiting добавляет следующие заголовки к отв
 }
 ```
 
-## Использование RedisService
+## Using RedisService
 
-### Прямое использование сервиса
+### Direct service usage
 
 ```typescript
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 
-// Получение статистики Redis
+// Get Redis statistics
 const redisService = ServiceFactory.createRedisService();
 const stats = await redisService.getStats();
 
-// Очистка старых ключей
+// Cleanup old keys
 await redisService.cleanupOldKeys();
 
-// Проверка здоровья Redis
+// Check Redis health
 const isHealthy = await redisService.isHealthy();
 
-// Получение информации о памяти
+// Get memory information
 const memoryInfo = await redisService.getMemoryInfo();
 ```
 
-### API Endpoint для мониторинга
+### API Endpoint for Monitoring
 
-Доступен endpoint `/api/redis-stats` для мониторинга в реальном времени:
+Available endpoint `/api/redis-stats` for real-time monitoring:
 
 ```bash
 curl http://localhost:3000/api/redis-stats
 ```
 
-Ответ включает:
+Response includes:
 
-- Использование памяти
-- Количество rate limit ключей
-- Оценку емкости
-- Рекомендации по использованию
+- Memory usage
+- Number of rate limit keys
+- Capacity estimation
+- Usage recommendations
 
-## Тестирование
+## Testing
 
-### Jest Интеграционные Тесты
+### Jest Integration Tests
 
-Проект включает полный набор Jest интеграционных тестов для rate limiting:
+The project includes a complete set of Jest integration tests for rate limiting:
 
 ```bash
-# Запуск всех интеграционных тестов
+# Run all integration tests
 pnpm test:integration
 
-# Запуск всех тестов
+# Run all tests
 pnpm test
 
-# Запуск тестов с покрытием
+# Run tests with coverage
 pnpm test:coverage
 
-# Запуск тестов в watch режиме
+# Run tests in watch mode
 pnpm test:watch
 ```
 
-#### Структура тестов:
+#### Test structure:
 
-- `tests/integration/rate-limit-basic.test.ts` - базовые тесты rate limiting
-- `tests/integration/rate-limit-ip-isolation.test.ts` - тесты изоляции по IP
-- `tests/integration/rate-limit-post.test.ts` - тесты POST endpoints
+- `tests/integration/rate-limit-basic.test.ts` - basic rate limiting tests
+- `tests/integration/rate-limit-ip-isolation.test.ts` - IP isolation tests
+- `tests/integration/rate-limit-post.test.ts` - POST endpoint tests
 
-### Тестовый Endpoint
+### Test Endpoint
 
-Создан специальный endpoint для тестирования rate limiting:
+A special endpoint is created for testing rate limiting:
 
-- `GET /api/rate-limit-test` - строгий лимит (3 запроса в минуту)
-- `POST /api/rate-limit-test` - AI лимит (20 запросов за 5 минут)
+- `GET /api/rate-limit-test` - strict limit (3 requests per minute)
+- `POST /api/rate-limit-test` - AI limit (20 requests per 5 minutes)
 
-### Ручное тестирование
+### Manual Testing
 
 ```bash
-# Тест GET endpoint
+# Test GET endpoint
 curl -i http://localhost:3000/api/rate-limit-test
 
-# Тест POST endpoint
+# Test POST endpoint
 curl -i -X POST http://localhost:3000/api/rate-limit-test \
   -H "Content-Type: application/json" \
   -d '{"test": true}'
 ```
 
-### Проверка Headers
+### Checking Headers
 
-Обратите внимание на заголовки ответа:
+Pay attention to the response headers:
 
 ```
 X-RateLimit-Limit: 3

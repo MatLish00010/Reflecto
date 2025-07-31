@@ -21,7 +21,7 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
-  testTimeout: 30000, // 30 секунд для интеграционных тестов
+  testTimeout: 30000, // 30 seconds for integration tests
   verbose: true,
   collectCoverageFrom: [
     'src/**/*.{js,ts}',

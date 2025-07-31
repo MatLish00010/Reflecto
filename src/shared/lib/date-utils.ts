@@ -14,7 +14,7 @@ import {
 } from 'date-fns/locale';
 import React from 'react'; // Added for useDateFromUrl hook
 
-// Маппинг языковых кодов на локали date-fns
+// Language code mapping to date-fns locales
 const localeMap: Record<string, Locale> = {
   ru,
   en: enUS,
@@ -28,7 +28,7 @@ const localeMap: Record<string, Locale> = {
   zh: zhCN,
 };
 
-// Получает локаль для указанного языка
+// Gets locale for the specified language
 export function getLocaleByLang(lang: string): Locale {
   return localeMap[lang] || enUS;
 }

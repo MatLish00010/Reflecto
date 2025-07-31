@@ -1,19 +1,19 @@
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 
 /**
- * Очищает rate limiting состояние для тестов
- * В development использует in-memory store, поэтому просто ждет
+ * Cleans up rate limiting state for tests
+ * In development uses in-memory store, so just waits
  */
 export async function cleanupRateLimitState(): Promise<void> {
-  // В development используем in-memory store, поэтому просто ждем немного
-  // чтобы окно rate limiting истекло
+  // In development we use in-memory store, so just wait a bit
+  // for the rate limiting window to expire
   if (process.env.NODE_ENV !== 'production') {
-    // Ждем 5 секунд для in-memory store (больше времени для очистки)
+    // Wait 5 seconds for in-memory store (more time for cleanup)
     await new Promise(resolve => setTimeout(resolve, 5000));
     return;
   }
 
-  // В production с Redis можно очистить ключи
+  // In production with Redis we can clear keys
   try {
     const redisService = ServiceFactory.createRedisService();
     await redisService.cleanupOldKeys();
@@ -23,9 +23,9 @@ export async function cleanupRateLimitState(): Promise<void> {
 }
 
 /**
- * Ждет до истечения текущего окна rate limiting
+ * Waits until the current rate limiting window expires
  */
 export async function waitForRateLimitWindow(): Promise<void> {
-  // Ждем 65 секунд (чуть больше минуты для тестового endpoint)
+  // Wait 65 seconds (slightly more than a minute for the test endpoint)
   await new Promise(resolve => setTimeout(resolve, 65000));
 }

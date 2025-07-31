@@ -1,9 +1,9 @@
 // Global test setup
 
-// Увеличиваем timeout для интеграционных тестов
+// Increase timeout for integration tests
 jest.setTimeout(30000);
 
-// Мокаем Sentry для тестов
+// Mock Sentry for tests
 jest.mock('@sentry/nextjs', () => ({
   startSpan: jest.fn(
     (
