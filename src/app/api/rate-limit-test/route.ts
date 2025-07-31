@@ -5,12 +5,12 @@ import {
 } from '@/shared/lib/api/middleware/rate-limit';
 import * as Sentry from '@sentry/nextjs';
 
-// Тестовый endpoint с очень строгим rate limit для демонстрации
+// Test endpoint with very strict rate limit for demonstration
 const strictConfig = {
-  windowMs: 60 * 1000, // 1 минута
-  maxRequests: 3, // только 3 запроса в минуту
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 3, // only 3 requests per minute
   keyGenerator: (request: NextRequest) => {
-    // Используем IP адрес для демонстрации
+    // Use IP address for demonstration
     const forwarded = request.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0] : 'unknown';
     return `test:${ip}`;
@@ -18,7 +18,7 @@ const strictConfig = {
 };
 
 export const GET = withRateLimit(strictConfig)(async () => {
-  // Создаем span для мониторинга
+  // Create span for monitoring
   return Sentry.startSpan(
     {
       op: 'http.server',
@@ -28,7 +28,7 @@ export const GET = withRateLimit(strictConfig)(async () => {
       span.setAttribute('endpoint', '/api/rate-limit-test');
       span.setAttribute('method', 'GET');
 
-      // Имитируем некоторую обработку
+      // Simulate some processing
       await new Promise(resolve => setTimeout(resolve, 100));
 
       return Response.json({
@@ -40,7 +40,7 @@ export const GET = withRateLimit(strictConfig)(async () => {
   );
 });
 
-// Endpoint с AI rate limit для демонстрации разных конфигураций
+// Endpoint with AI rate limit for demonstrating different configurations
 export const POST = withRateLimit(RATE_LIMIT_CONFIGS.ai)(async (
   request: NextRequest
 ) => {
@@ -56,7 +56,7 @@ export const POST = withRateLimit(RATE_LIMIT_CONFIGS.ai)(async (
       const body = await request.json();
       span.setAttribute('request.body_size', JSON.stringify(body).length);
 
-      // Имитируем AI обработку
+      // Simulate AI processing
       await new Promise(resolve => setTimeout(resolve, 500));
 
       return Response.json({

@@ -27,12 +27,12 @@ export async function handleApiRequest<T>(
         const result = await handler(authResult.context!, request);
         span.setAttribute('success', true);
 
-        // Если результат уже является Response, возвращаем его как есть
+        // If result is already a Response, return it as is
         if (result instanceof Response) {
           return result;
         }
 
-        // Если результат - объект, оборачиваем в Response
+        // If result is an object, wrap it in Response
         return createSuccessResponse(result);
       } catch (error) {
         const errorResponse = createErrorResponse(

@@ -61,7 +61,6 @@ export function EnhancedVoiceRecorder({
           };
 
           mediaRecorder.onstop = async () => {
-            // Если запись была сброшена, не обрабатываем аудио
             if (isResetRef.current) {
               isResetRef.current = false;
               stream.getTracks().forEach(track => track.stop());

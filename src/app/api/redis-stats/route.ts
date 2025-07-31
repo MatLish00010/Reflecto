@@ -9,7 +9,7 @@ export async function GET() {
     },
     async () => {
       try {
-        // Проверяем, что Redis доступен
+        // Check if Redis is available
         if (!process.env.REDIS_URL) {
           return Response.json(
             {

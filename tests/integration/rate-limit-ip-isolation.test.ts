@@ -5,13 +5,13 @@ const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
 
 describe('Rate Limiting IP Isolation Tests', () => {
   beforeEach(async () => {
-    // Очищаем состояние перед каждым тестом
+    // Clean up state before each test
     jest.clearAllMocks();
     await cleanupRateLimitState();
   });
 
   afterEach(async () => {
-    // Очищаем состояние после каждого теста
+    // Clean up state after each test
     await cleanupRateLimitState();
   });
 
@@ -20,7 +20,7 @@ describe('Rate Limiting IP Isolation Tests', () => {
       const testIPs = ['192.168.1.1', '192.168.1.2', '10.0.0.1'];
       const results = [];
 
-      // Выполняем запросы с разными IP адресами
+      // Execute requests with different IP addresses
       for (const ip of testIPs) {
         const ipResults = [];
 
@@ -43,15 +43,15 @@ describe('Rate Limiting IP Isolation Tests', () => {
         results.push({ ip, results: ipResults });
       }
 
-      // Проверяем, что каждый IP имеет свой счетчик
+      // Check that each IP has its own counter
       results.forEach(({ results: ipResults }) => {
-        // Первые 3 запроса должны пройти успешно
+        // First 3 requests should succeed
         for (let i = 0; i < 3; i++) {
           expect(ipResults[i].status).toBe(200);
           expect(ipResults[i].remaining).toBe((2 - i).toString());
         }
 
-        // 4-й запрос должен быть заблокирован
+        // 4th request should be blocked
         expect(ipResults[3].status).toBe(429);
         expect(ipResults[3].data.error).toBe('Too many requests');
       });

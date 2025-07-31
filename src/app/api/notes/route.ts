@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
   );
 }
 
-// Handler с валидацией
+// Handler with validation
 const createNoteHandler = withValidation(VALIDATION_SCHEMAS.createNote)(async (
   context,
   request: NextRequest,
