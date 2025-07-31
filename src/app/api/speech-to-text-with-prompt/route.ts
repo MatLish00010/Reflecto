@@ -1,10 +1,14 @@
 import { NextRequest } from 'next/server';
-import { handleApiRequest } from '@/shared/lib/api';
+import {
+  handleApiRequest,
+  withRateLimit,
+  RATE_LIMIT_CONFIGS,
+} from '@/shared/lib/api';
 import { ServiceFactory } from '@/shared/lib/api';
 import { validateRequiredFields } from '@/shared/lib/api';
 
 export async function POST(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.upload)(handleApiRequest)(
     request,
     { operation: 'speech_to_text_with_prompt' },
     async (context, request: NextRequest) => {

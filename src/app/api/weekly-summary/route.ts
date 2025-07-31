@@ -15,11 +15,13 @@ import {
   AI_SUMMARY_REQUIRED_FIELDS,
   AI_SUMMARY_ARRAY_FIELDS,
   ServiceFactory,
+  withRateLimit,
+  RATE_LIMIT_CONFIGS,
 } from '@/shared/lib/api';
 import { toIsoDate } from '@/shared/lib/date-utils';
 
 export async function GET(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
     { operation: 'get_weekly_summary' },
     withValidation(VALIDATION_SCHEMAS.dateRange, { validateQuery: true })(
@@ -50,7 +52,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.ai)(handleApiRequest)(
     request,
     { operation: 'create_weekly_summary' },
     withValidation(VALIDATION_SCHEMAS.weeklySummary)(

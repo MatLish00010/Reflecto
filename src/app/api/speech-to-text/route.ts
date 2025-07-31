@@ -3,10 +3,12 @@ import {
   handleApiRequest,
   validateRequiredFields,
   ServiceFactory,
+  withRateLimit,
+  RATE_LIMIT_CONFIGS,
 } from '@/shared/lib/api';
 
 export async function POST(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.upload)(handleApiRequest)(
     request,
     { operation: 'speech_to_text' },
     async (context, request: NextRequest) => {

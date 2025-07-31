@@ -3,12 +3,14 @@ import {
   handleApiRequest,
   withValidation,
   VALIDATION_SCHEMAS,
+  withRateLimit,
+  RATE_LIMIT_CONFIGS,
 } from '@/shared/lib/api';
 import { NotesService } from '@/shared/lib/api/services';
 import { toIsoDate } from '@/shared/lib/date-utils';
 
 export async function GET(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
     { operation: 'fetch_notes' },
     async (context, request: NextRequest) => {
@@ -51,7 +53,7 @@ const createNoteHandler = withValidation(VALIDATION_SCHEMAS.createNote)(async (
 });
 
 export async function POST(request: NextRequest) {
-  return handleApiRequest(
+  return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
     { operation: 'create_note' },
     createNoteHandler
