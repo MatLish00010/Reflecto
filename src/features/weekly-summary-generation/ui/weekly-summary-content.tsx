@@ -7,11 +7,7 @@ import { useDailySummariesByDateRange } from '@/entities/daily-summary';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
-import {
-  getWeekRange,
-  toIsoDate,
-  useWeekFromUrl,
-} from '@/shared/lib/date-utils';
+import { getWeekRange, useWeekFromUrl } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '@/shared/ui';
 import { WeekPicker } from '@/shared/ui';
@@ -47,8 +43,8 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
     isLoading: weeklySummaryLoading,
     error: weeklySummaryError,
   } = useWeeklySummaryByDateRange(
-    toIsoDate(selectedDateStart),
-    toIsoDate(selectedDateEnd)
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
   );
 
   const {
@@ -56,8 +52,8 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
     isLoading: dailySummariesLoading,
     error: dailySummariesError,
   } = useDailySummariesByDateRange(
-    toIsoDate(selectedDateStart),
-    toIsoDate(selectedDateEnd)
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
   );
 
   const createWeeklySummaryMutation = useCreateWeeklySummary();
@@ -75,8 +71,8 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
       return;
     }
     createWeeklySummaryMutation.mutate({
-      from: toIsoDate(selectedDateStart),
-      to: toIsoDate(selectedDateEnd),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
   }, [
     isAuthenticated,
@@ -92,8 +88,8 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
       return;
     }
     createWeeklySummaryMutation.mutate({
-      from: toIsoDate(selectedDateStart),
-      to: toIsoDate(selectedDateEnd),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
   }, [
     isAuthenticated,

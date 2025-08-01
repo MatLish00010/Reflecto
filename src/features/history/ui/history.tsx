@@ -4,7 +4,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useNotesByDate } from '@/entities/note';
 import { AuthRequiredMessage } from '@/shared/components';
-import { getDateRangeForDay, toIsoDate } from '@/shared/lib/date-utils';
+import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
 import { useUser } from '@/entities';
@@ -45,7 +45,10 @@ export function History({
     data: notes = [],
     isLoading: isNotesLoading,
     error,
-  } = useNotesByDate(toIsoDate(selectedDateStart), toIsoDate(selectedDateEnd));
+  } = useNotesByDate(
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
+  );
 
   const handleToggleShowAll = useCallback(() => {
     setShowAll(prev => !prev);

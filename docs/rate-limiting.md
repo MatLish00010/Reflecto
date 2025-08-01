@@ -1,209 +1,113 @@
-# Rate Limiting with Redis
+# Rate Limiting
+
+This document describes the rate limiting implementation and how to troubleshoot issues.
 
 ## Overview
 
-Rate limiting in the application is implemented using Redis for production and in-memory store for development.
+The application uses a flexible rate limiting system that supports both Redis (production) and in-memory storage (development).
 
-## Redis Setup for Rate Limiting
+## Configuration
 
-### Local Development
+Rate limiting is configured in `src/shared/lib/api/middleware/rate-limit.ts` with predefined configurations:
 
-For local development, create a `.env.local` file:
+- **Standard**: 300 requests per 15 minutes
+- **AI**: 20 requests per 5 minutes (for expensive operations)
+- **Auth**: 30 requests per 15 minutes (for authentication)
+- **Upload**: 15 requests per 5 minutes (for file uploads)
 
-```env
-REDIS_URL=your-redis-url
-```
+## Troubleshooting
 
-## Usage
+### Issue: Rate Limit Exceeded Without Making Requests
 
-### Basic Usage
+If you're getting rate limit errors without making requests, this could be due to:
 
-```typescript
-import {
-  withRateLimit,
-  RATE_LIMIT_CONFIGS,
-} from '@/shared/lib/api/middleware/rate-limit';
+1. **In-memory store persistence**: The in-memory store persists between server restarts in development
+2. **IP address detection issues**: The system might not be detecting your IP correctly
+3. **Shared keys**: Multiple requests might be using the same rate limit key
 
-export const GET = withRateLimit(RATE_LIMIT_CONFIGS.standard)(async (
-  request: NextRequest
-) => {
-  // Your request processing code
-  return Response.json({ message: 'Success' });
-});
-```
+### Solutions
 
-### Default Configurations
-
-- **standard**: 300 requests per 15 minutes
-- **ai**: 20 requests per 5 minutes (for AI endpoints)
-- **auth**: 30 requests per 15 minutes (for authentication)
-- **upload**: 15 requests per 5 minutes (for file uploads)
-
-### Custom Configuration
-
-```typescript
-const customConfig = {
-  windowMs: 60 * 1000, // 1 minute
-  maxRequests: 10, // 10 requests per minute
-  keyGenerator: (request: NextRequest) => {
-    // Custom key generation logic
-    const userId = request.headers.get('x-user-id');
-    return `user:${userId}`;
-  },
-};
-
-export const POST = withRateLimit(customConfig)(async (
-  request: NextRequest
-) => {
-  // Your code
-});
-```
-
-## Architecture
-
-### RedisService
-
-Centralized service for working with Redis, used for:
-
-- **Rate Limiting**: Atomic operations with counters
-- **Monitoring**: Getting memory and key statistics
-- **Cleanup**: Removing old keys
-
-**Main methods:**
-
-- `incrementRateLimit()` - atomic counter increment
-- `getRateLimit()` - get current value
-- `getStats()` - complete Redis statistics
-- `cleanupOldKeys()` - cleanup old keys
-
-**Memory optimizations:**
-
-- Short keys: `rl:ip:timestamp` instead of `rate_limit:ip:timestamp`
-- Automatic deletion via TTL
-- ~50 bytes per key (very efficient)
-- Singleton pattern via ServiceFactory
-
-### InMemoryRateLimitStore
-
-Fallback for development environment, uses Map for in-memory data storage.
-
-## Memory Usage Monitoring
-
-### Usage calculation:
-
-```typescript
-// Example for 1000 active users:
-// 1000 keys × 50 bytes = 50KB
-// This is very small for a 30MB limit!
-
-// For 10,000 users:
-// 10,000 keys × 50 bytes = 500KB
-// Still very efficient
-```
-
-### Automatic management:
-
-- Keys are automatically deleted via TTL (15 minutes for standard)
-- No need for manual cleanup
-- Redis automatically frees memory
-
-### Monitoring (optional):
-
-```typescript
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
-
-const redisService = ServiceFactory.createRedisService();
-const stats = await redisService.getStats();
-
-console.log('Rate limit keys:', stats.rateLimitKeys);
-console.log('Memory usage:', stats.memory.usedMemory, 'bytes');
-console.log('Memory usage %:', stats.memory.memoryUsagePercent, '%');
-```
-
-## Monitoring
-
-Rate limiting is integrated with Sentry for monitoring:
-
-- `rate_limit.count` - current request counter
-- `rate_limit.limit` - request limit
-- `rate_limit.reset_time` - reset time
-- `rate_limit.exceeded` - whether limit was exceeded
-- `rate_limit.error` - rate limiting errors
-
-## Headers
-
-Rate limiting adds the following headers to the response:
-
-- `X-RateLimit-Limit` - maximum number of requests
-- `X-RateLimit-Remaining` - remaining number of requests
-- `X-RateLimit-Reset` - limit reset time
-- `Retry-After` - wait time until next request
-
-## Error Handling
-
-When the limit is exceeded, HTTP 429 is returned with JSON response:
-
-```json
-{
-  "error": "Too many requests",
-  "code": "rate_limit_exceeded",
-  "details": {
-    "retryAfter": 60,
-    "limit": 300,
-    "remaining": 0,
-    "reset": 1640995200000
-  }
-}
-```
-
-## Using RedisService
-
-### Direct service usage
-
-```typescript
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
-
-// Get Redis statistics
-const redisService = ServiceFactory.createRedisService();
-const stats = await redisService.getStats();
-
-// Cleanup old keys
-await redisService.cleanupOldKeys();
-
-// Check Redis health
-const isHealthy = await redisService.isHealthy();
-
-// Get memory information
-const memoryInfo = await redisService.getMemoryInfo();
-```
-
-### API Endpoint for Monitoring
-
-Available endpoint `/api/redis-stats` for real-time monitoring:
+#### 1. Clear Rate Limit Store (Development)
 
 ```bash
-curl http://localhost:3000/api/redis-stats
+# Clear the in-memory rate limit store
+curl -X DELETE http://localhost:3000/api/redis-stats
 ```
 
-Response includes:
+#### 2. Check Rate Limit Status
 
-- Memory usage
-- Number of rate limit keys
-- Capacity estimation
-- Usage recommendations
+```bash
+# Check current rate limit status
+curl http://localhost:3000/api/rate-limit-test
+```
 
-## Testing
-
-### Jest Integration Tests
-
-The project includes a complete set of Jest integration tests for rate limiting:
+#### 3. Run Integration Tests
 
 ```bash
 # Run all integration tests
 pnpm test:integration
 
-# Run all tests
-pnpm test
+# Run specific rate limit tests
+pnpm test tests/integration/rate-limit-basic.test.ts
+pnpm test tests/integration/rate-limit-ip-isolation.test.ts
+pnpm test tests/integration/rate-limit-post.test.ts
+```
+
+#### 4. Debug Logging
+
+In development mode, the rate limiting middleware logs:
+
+- Rate limit keys being used
+- Current count vs limit
+- When rate limits are exceeded
+
+Check the console output for these debug messages.
+
+### IP Address Detection
+
+The system tries to detect your IP address from these headers in order:
+
+1. `x-forwarded-for`
+2. `x-real-ip`
+3. `cf-connecting-ip`
+
+In development, if no IP is detected, it falls back to using a hash of the user agent.
+
+### Development vs Production
+
+- **Development**: Uses in-memory storage (persists between requests but not server restarts)
+- **Production**: Uses Redis (requires `REDIS_URL` environment variable)
+
+## API Endpoints
+
+### Rate Limit Test
+
+- `GET /api/rate-limit-test` - Check rate limit status
+- `POST /api/rate-limit-test` - Test rate limiting (uses AI config)
+
+### Redis Stats
+
+- `GET /api/redis-stats` - Get Redis statistics
+- `DELETE /api/redis-stats` - Clear rate limit store (development only)
+
+## Testing
+
+The project includes comprehensive integration tests for rate limiting:
+
+### Test Files
+
+- `tests/integration/rate-limit-basic.test.ts` - Basic rate limiting functionality
+- `tests/integration/rate-limit-ip-isolation.test.ts` - IP isolation tests
+- `tests/integration/rate-limit-post.test.ts` - POST endpoint rate limiting
+
+### Running Tests
+
+```bash
+# Run all integration tests
+pnpm test:integration
+
+# Run specific rate limit tests
+pnpm test tests/integration/rate-limit-basic.test.ts
 
 # Run tests with coverage
 pnpm test:coverage
@@ -212,38 +116,26 @@ pnpm test:coverage
 pnpm test:watch
 ```
 
-#### Test structure:
+### Test Features
 
-- `tests/integration/rate-limit-basic.test.ts` - basic rate limiting tests
-- `tests/integration/rate-limit-ip-isolation.test.ts` - IP isolation tests
-- `tests/integration/rate-limit-post.test.ts` - POST endpoint tests
+- Automatic cleanup between tests
+- IP isolation testing
+- Header validation
+- Error response validation
+- Rate limit state management
 
-### Test Endpoint
+## Monitoring
 
-A special endpoint is created for testing rate limiting:
+Rate limiting is integrated with Sentry for monitoring:
 
-- `GET /api/rate-limit-test` - strict limit (3 requests per minute)
-- `POST /api/rate-limit-test` - AI limit (20 requests per 5 minutes)
+- Rate limit counts are tracked as span attributes
+- Rate limit exceeded events are captured
+- Errors in rate limiting are logged
 
-### Manual Testing
+## Best Practices
 
-```bash
-# Test GET endpoint
-curl -i http://localhost:3000/api/rate-limit-test
-
-# Test POST endpoint
-curl -i -X POST http://localhost:3000/api/rate-limit-test \
-  -H "Content-Type: application/json" \
-  -d '{"test": true}'
-```
-
-### Checking Headers
-
-Pay attention to the response headers:
-
-```
-X-RateLimit-Limit: 3
-X-RateLimit-Remaining: 2
-X-RateLimit-Reset: 1640995200000
-Retry-After: 60
-```
+1. **Use appropriate rate limit configs**: Use `ai` config for expensive operations
+2. **Monitor rate limits**: Check Sentry for rate limit patterns
+3. **Clear store in development**: Use the DELETE endpoint to reset rate limits during development
+4. **Run integration tests**: Use the existing test suite to verify rate limiting works correctly
+5. **Check debug logs**: Monitor console output in development for rate limit debugging

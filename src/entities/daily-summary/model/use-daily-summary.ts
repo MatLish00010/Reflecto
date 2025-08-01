@@ -80,7 +80,7 @@ export function useTodayAISummary() {
 }
 
 export function useDailySummariesByDateRange(from?: string, to?: string) {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
 
   return useQuery({
     queryKey: dailySummaryKeys.list(
@@ -88,12 +88,8 @@ export function useDailySummariesByDateRange(from?: string, to?: string) {
       `daily-summaries-${from}-${to}`
     ),
     queryFn: async () => {
-      if (!user) {
-        const error = new Error('User not found');
-        safeSentry.captureException(error, {
-          tags: { operation: 'get_daily_summaries_by_date_range' },
-        });
-        throw error;
+      if (!isAuthenticated || !user) {
+        return [];
       }
 
       const params = new URLSearchParams();
@@ -115,7 +111,8 @@ export function useDailySummariesByDateRange(from?: string, to?: string) {
       const data = await res.json();
       return data.summaries || [];
     },
-    enabled: !!user && !!from && !!to,
+    enabled: isAuthenticated && !!user && !!from && !!to,
+    staleTime: 5 * 60 * 1000, // 5 minutes
     retry: false,
   });
 }

@@ -4,9 +4,9 @@ import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useFormatters } from '@/shared/hooks';
 import { useState } from 'react';
 import type { Note } from '@/shared/types/notes';
-import { formatDateForDisplay } from '@/shared/lib/date-utils';
 import { NoteActions } from './note-actions';
 
 interface NoteItemProps {
@@ -14,12 +14,9 @@ interface NoteItemProps {
 }
 
 export function NoteItem({ note }: NoteItemProps) {
-  const { t, lang } = useTranslation();
+  const { t } = useTranslation();
+  const { formatDate } = useFormatters();
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const formatTime = (dateString: string) => {
-    return formatDateForDisplay(new Date(dateString), lang, 'p'); // 'p' = localized time
-  };
 
   const noteText = note.note || '';
   const shouldShowExpandButton = noteText.length > 100;
@@ -33,10 +30,9 @@ export function NoteItem({ note }: NoteItemProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
             <Clock className="h-3 w-3" />
-            <span>{formatTime(note.created_at)}</span>
+            <span>{formatDate(note.created_at, 'TIME')}</span>
           </div>
 
-          {/* Actions Menu */}
           <NoteActions note={note} />
         </div>
       </CardHeader>

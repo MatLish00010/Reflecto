@@ -64,7 +64,6 @@ export function NoteActions({ note }: NoteActionsProps) {
 
   return (
     <>
-      {/* Actions Menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -91,7 +90,6 @@ export function NoteActions({ note }: NoteActionsProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Edit Dialog */}
       <Dialog open={isEditing} onOpenChange={setIsEditing}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
@@ -128,7 +126,6 @@ export function NoteActions({ note }: NoteActionsProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>

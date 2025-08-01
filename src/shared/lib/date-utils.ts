@@ -43,16 +43,6 @@ export function fromApiDate(dateString: string): Date {
   return parseISO(dateString);
 }
 
-// Formats a date for display in the user's local time zone, using date-fns and locale
-export function formatDateForDisplay(
-  date: Date,
-  lang: string,
-  formatStr = 'Pp'
-): string {
-  // 'Pp' = localized date and time
-  return format(date, formatStr, { locale: getLocaleByLang(lang) });
-}
-
 // Returns the UTC ISO string for the start of the day
 export function getStartOfDayUTC(date: Date): string {
   const utc = new Date(
