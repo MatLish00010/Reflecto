@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
         const weeklySummaryService = ServiceFactory.createWeeklySummaryService(
           context.supabase
         );
+
         const summary = await weeklySummaryService.fetchSingleSummary(
           context.user.id,
           validatedData.from!,

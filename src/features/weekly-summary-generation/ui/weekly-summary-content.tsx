@@ -2,8 +2,8 @@
 
 import { useCallback, useMemo, useEffect } from 'react';
 import { useCreateWeeklySummary } from '@/features/weekly-summary-generation';
-import { useWeeklySummaryByDateRange } from '@/entities/weekly-summary';
-import { useDailySummariesByDateRange } from '@/entities/daily-summary';
+import { useWeeklySummary } from '@/entities/weekly-summary';
+import { useDailySummaries } from '@/entities/daily-summary';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
@@ -42,7 +42,7 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
     data: weeklySummary,
     isLoading: weeklySummaryLoading,
     error: weeklySummaryError,
-  } = useWeeklySummaryByDateRange(
+  } = useWeeklySummary(
     selectedDateStart.toISOString(),
     selectedDateEnd.toISOString()
   );
@@ -51,7 +51,7 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
     data: dailySummaries,
     isLoading: dailySummariesLoading,
     error: dailySummariesError,
-  } = useDailySummariesByDateRange(
+  } = useDailySummaries(
     selectedDateStart.toISOString(),
     selectedDateEnd.toISOString()
   );

@@ -11,12 +11,7 @@ import {
   Type,
 } from 'lucide-react';
 
-import {
-  Note,
-  DailySummary,
-  WeeklySummary,
-  SummaryStats,
-} from '../types/analytics';
+import { Note, DailySummary, SummaryStats } from '../types/analytics';
 import { AnalyticsStatCard } from './analytics-stat-card';
 import {
   calculateAverageNoteLength,
@@ -24,11 +19,12 @@ import {
   formatNumber,
 } from '../utils/analytics-calculations';
 import { CARD_COLOR_SCHEMES } from '@/shared/ui/summary/color-schemes';
+import type { AISummaryData } from '@/shared/types';
 
 interface AnalyticsStatsCardsProps {
   notes: Note[];
   dailySummaries: DailySummary[];
-  weeklySummaries: WeeklySummary[];
+  weeklySummaries: AISummaryData[];
   summaryStats: SummaryStats;
 }
 

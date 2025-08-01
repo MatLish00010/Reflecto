@@ -1,3 +1,5 @@
+import type { AISummaryData } from '@/shared/types';
+
 export interface Note {
   id: number;
   note: string | null;
@@ -12,9 +14,8 @@ export interface DailySummary {
   user_id: string;
 }
 
-export interface WeeklySummary {
+export interface WeeklySummary extends AISummaryData {
   id: string;
-  summary: string;
   created_at: string | null;
   user_id: string | null;
   week_start_date: string;
@@ -79,7 +80,7 @@ export interface ComparativeStats {
 export interface AnalyticsData {
   notes: Note[];
   dailySummaries: DailySummary[];
-  weeklySummaries: WeeklySummary[];
+  weeklySummaries: AISummaryData[];
   activityData: ActivityDataPoint[];
   weeklyActivityData: WeeklyActivityDataPoint[];
   contentAnalysisData: ContentAnalysisData;

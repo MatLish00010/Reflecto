@@ -1,4 +1,5 @@
 import { Note, DailySummary, WeeklySummary } from '../types/analytics';
+import type { AISummaryData } from '@/shared/types';
 
 export function calculateAverageNoteLength(notes: Note[]): number {
   if (!notes || notes.length === 0) return 0;
@@ -16,7 +17,7 @@ export function calculateTotalCharacters(notes: Note[]): number {
 }
 
 export function getSummariesCount(
-  summaries: DailySummary[] | WeeklySummary[]
+  summaries: DailySummary[] | WeeklySummary[] | AISummaryData[]
 ): number {
   return Array.isArray(summaries) ? summaries.length : 0;
 }

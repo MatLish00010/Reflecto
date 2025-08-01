@@ -1,6 +1,6 @@
 import { useNotesByDate } from '@/entities/note';
-import { useDailySummariesByDateRange } from '@/entities/daily-summary';
-import { useWeeklySummaryByDateRange } from '@/entities/weekly-summary';
+import { useDailySummaries } from '@/entities/daily-summary';
+import { useWeeklySummaries } from '@/entities/weekly-summary';
 import { subDays } from 'date-fns';
 import { useMemo } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
@@ -35,12 +35,12 @@ export function useAnalyticsData() {
     data: dailySummaries,
     isLoading: dailyLoading,
     error: dailyError,
-  } = useDailySummariesByDateRange(fromDateISO, toDateISO);
+  } = useDailySummaries(fromDateISO, toDateISO);
   const {
     data: weeklySummaries,
     isLoading: weeklyLoading,
     error: weeklyError,
-  } = useWeeklySummaryByDateRange(fromDateISO, toDateISO);
+  } = useWeeklySummaries(fromDateISO, toDateISO);
 
   const isLoading = notesLoading || dailyLoading || weeklyLoading;
   const error = notesError || dailyError || weeklyError;

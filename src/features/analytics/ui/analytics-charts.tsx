@@ -313,6 +313,27 @@ export function AnalyticsCharts({
                         stroke="#8884d8"
                         fill="#8884d8"
                         fillOpacity={0.6}
+                        label={({
+                          value,
+                          x,
+                          y,
+                        }: {
+                          value: number;
+                          x: number;
+                          y: number;
+                        }) => (
+                          <text
+                            x={x}
+                            y={y}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            fontSize={12}
+                            fontWeight="bold"
+                            fill="#8884d8"
+                          >
+                            {value}
+                          </text>
+                        )}
                       />
                     </RadarChart>
                   </ResponsiveContainer>

@@ -23,37 +23,21 @@ export async function GET(request: NextRequest) {
     { operation: 'get_daily_summary' },
     withValidation(VALIDATION_SCHEMAS.dateRange, { validateQuery: true })(
       async (context: ApiContext, request: NextRequest, validatedData) => {
-        const { searchParams } = new URL(request.url);
-        const returnAll = searchParams.get('returnAll') === 'true';
-
         context.span.setAttribute('filters.from', validatedData.from || '');
         context.span.setAttribute('filters.to', validatedData.to || '');
-        context.span.setAttribute('filters.returnAll', returnAll);
 
         const dailySummaryService = ServiceFactory.createDailySummaryService(
           context.supabase
         );
 
-        if (returnAll) {
-          const summaries = await dailySummaryService.fetchSummaries(
-            context.user.id,
-            validatedData.from!,
-            validatedData.to!,
-            { span: context.span, operation: 'get_daily_summary' }
-          );
+        const summary = await dailySummaryService.fetchSingleSummary(
+          context.user.id,
+          validatedData.from!,
+          validatedData.to!,
+          { span: context.span, operation: 'get_daily_summary' }
+        );
 
-          context.span.setAttribute('summaries.count', summaries.length);
-          return { summaries };
-        } else {
-          const summary = await dailySummaryService.fetchSingleSummary(
-            context.user.id,
-            validatedData.from!,
-            validatedData.to!,
-            { span: context.span, operation: 'get_daily_summary' }
-          );
-
-          return { summary };
-        }
+        return { summary };
       }
     )
   );
