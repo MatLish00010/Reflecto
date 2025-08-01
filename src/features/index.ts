@@ -7,3 +7,5 @@ export * from './daily-summary-generation';
 export * from './feedback';
 export * from './onboarding';
 export * from './weekly-summary-generation';
+export * from './home-content';
+export * from './analytics';

@@ -1,4 +1,5 @@
 export {
-  useWeeklySummaryByDateRange,
+  useWeeklySummary,
+  useWeeklySummaries,
   weeklySummaryKeys,
 } from './model/use-weekly-summary';

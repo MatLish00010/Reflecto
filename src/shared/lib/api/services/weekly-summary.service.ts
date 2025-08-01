@@ -69,6 +69,75 @@ export class WeeklySummaryService {
     return decryptedSummary!;
   }
 
+  async fetchSummaries(
+    userId: string,
+    from: string,
+    to: string,
+    options: WeeklySummaryServiceOptions = {}
+  ): Promise<AISummaryData[]> {
+    const { span, operation = 'fetch_weekly_summaries' } = options;
+
+    const { data, error } = await this.supabase
+      .from('weekly_summaries')
+      .select('*')
+      .eq('user_id', userId)
+      .gte('week_start_date', from)
+      .lte('week_end_date', to)
+      .order('week_start_date', { ascending: false });
+
+    if (error) {
+      safeSentry.captureException(error, {
+        tags: { operation },
+        extra: { userId, from, to },
+      });
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
+      span?.setAttribute('summaries.found', false);
+      return [];
+    }
+
+    const summaries: AISummaryData[] = [];
+
+    for (const item of data) {
+      const { value: decryptedSummary, error: decryptError } =
+        decryptField<AISummaryData>({
+          encrypted: item.summary as string,
+          span,
+          operation: 'decrypt_weekly_summary',
+          parse: true,
+        });
+
+      if (decryptError) {
+        safeSentry.captureException(
+          new Error('Failed to decrypt weekly summary'),
+          {
+            tags: { operation },
+            extra: { userId, itemId: item.id },
+          }
+        );
+        throw decryptError;
+      }
+
+      // Merge database fields with decrypted summary data
+      const summaryWithMetadata = {
+        ...decryptedSummary!,
+        id: item.id,
+        created_at: item.created_at,
+        user_id: item.user_id,
+        week_start_date: item.week_start_date,
+        week_end_date: item.week_end_date,
+      };
+
+      summaries.push(summaryWithMetadata);
+    }
+
+    span?.setAttribute('summaries.found', true);
+    span?.setAttribute('summaries.count', summaries.length);
+    return summaries;
+  }
+
   async saveSummary(
     summary: AISummaryData,
     userId: string,

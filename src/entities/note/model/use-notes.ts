@@ -52,6 +52,7 @@ export function useNotesByDate(from?: string, to?: string) {
       return notes as Note[];
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000, // 5 minutes
     retry: false,
   });
 

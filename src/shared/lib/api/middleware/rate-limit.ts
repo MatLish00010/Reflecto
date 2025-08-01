@@ -126,7 +126,28 @@ function getRateLimitStore(): RateLimitStore {
 // Default key generator - uses IP address
 function defaultKeyGenerator(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for');
-  const ip = forwarded ? forwarded.split(',')[0] : 'unknown';
+  const realIp = request.headers.get('x-real-ip');
+  const cfConnectingIp = request.headers.get('cf-connecting-ip');
+
+  let ip = 'unknown';
+
+  if (forwarded) {
+    ip = forwarded.split(',')[0].trim();
+  } else if (realIp) {
+    ip = realIp.trim();
+  } else if (cfConnectingIp) {
+    ip = cfConnectingIp.trim();
+  }
+
+  if (ip === 'unknown' && process.env.NODE_ENV === 'development') {
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+    const userAgentHash = userAgent.split('').reduce((a, b) => {
+      a = (a << 5) - a + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    ip = `dev-${Math.abs(userAgentHash)}`;
+  }
+
   return `rate-limit:${ip}`;
 }
 
@@ -143,6 +164,12 @@ export function withRateLimit(config: RateLimitConfig) {
           typeof arg === 'object' && arg !== null && 'span' in arg
       )?.span;
 
+      if (process.env.NODE_ENV === 'development') {
+        console.log(
+          `[Rate Limit] Key: ${key}, Method: ${request.method}, URL: ${request.url}`
+        );
+      }
+
       try {
         const { count, resetTime } = await getRateLimitStore().increment(
           key,
@@ -153,8 +180,19 @@ export function withRateLimit(config: RateLimitConfig) {
         span?.setAttribute('rate_limit.limit', config.maxRequests);
         span?.setAttribute('rate_limit.reset_time', resetTime);
 
+        if (process.env.NODE_ENV === 'development') {
+          console.log(
+            `[Rate Limit] Count: ${count}/${config.maxRequests}, Reset: ${new Date(resetTime).toISOString()}`
+          );
+        }
+
         if (count > config.maxRequests) {
           span?.setAttribute('rate_limit.exceeded', true);
+
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`[Rate Limit] EXCEEDED for key: ${key}`);
+          }
+
           return createErrorResponse(
             'Too many requests',
             429,

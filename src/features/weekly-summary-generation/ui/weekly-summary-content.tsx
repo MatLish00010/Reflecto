@@ -2,16 +2,12 @@
 
 import { useCallback, useMemo, useEffect } from 'react';
 import { useCreateWeeklySummary } from '@/features/weekly-summary-generation';
-import { useWeeklySummaryByDateRange } from '@/entities/weekly-summary';
-import { useDailySummariesByDateRange } from '@/entities/daily-summary';
+import { useWeeklySummary } from '@/entities/weekly-summary';
+import { useDailySummaries } from '@/entities/daily-summary';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
-import {
-  getWeekRange,
-  toIsoDate,
-  useWeekFromUrl,
-} from '@/shared/lib/date-utils';
+import { getWeekRange, useWeekFromUrl } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '@/shared/ui';
 import { WeekPicker } from '@/shared/ui';
@@ -46,18 +42,18 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
     data: weeklySummary,
     isLoading: weeklySummaryLoading,
     error: weeklySummaryError,
-  } = useWeeklySummaryByDateRange(
-    toIsoDate(selectedDateStart),
-    toIsoDate(selectedDateEnd)
+  } = useWeeklySummary(
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
   );
 
   const {
     data: dailySummaries,
     isLoading: dailySummariesLoading,
     error: dailySummariesError,
-  } = useDailySummariesByDateRange(
-    toIsoDate(selectedDateStart),
-    toIsoDate(selectedDateEnd)
+  } = useDailySummaries(
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
   );
 
   const createWeeklySummaryMutation = useCreateWeeklySummary();
@@ -75,8 +71,8 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
       return;
     }
     createWeeklySummaryMutation.mutate({
-      from: toIsoDate(selectedDateStart),
-      to: toIsoDate(selectedDateEnd),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
   }, [
     isAuthenticated,
@@ -92,8 +88,8 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
       return;
     }
     createWeeklySummaryMutation.mutate({
-      from: toIsoDate(selectedDateStart),
-      to: toIsoDate(selectedDateEnd),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
   }, [
     isAuthenticated,

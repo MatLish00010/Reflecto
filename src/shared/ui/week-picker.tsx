@@ -5,10 +5,11 @@ import { Button } from '@/shared/ui/button';
 import { Calendar } from '@/shared/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-import { format, addWeeks, subWeeks } from 'date-fns';
+import { addWeeks, subWeeks } from 'date-fns';
 import { cn } from '@/shared/lib/utils';
-import { getLocaleByLang, getWeekRange } from '@/shared/lib/date-utils';
+import { getWeekRange } from '@/shared/lib/date-utils';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useFormatters } from '@/shared/hooks';
 import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 
@@ -18,7 +19,8 @@ interface WeekPickerProps {
 }
 
 export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
-  const { t, lang } = useTranslation();
+  const { t } = useTranslation();
+  const { formatDate, locale } = useFormatters();
   const { isAuthenticated } = useUser();
   const { openModal } = useAuthModalContext();
 
@@ -86,11 +88,7 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
             <CalendarIcon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
             {selectedDate && weekStart && weekEnd ? (
               <span className="truncate">
-                {format(weekStart, 'MMM d', { locale: getLocaleByLang(lang) })}{' '}
-                -{' '}
-                {format(weekEnd, 'MMM d, yyyy', {
-                  locale: getLocaleByLang(lang),
-                })}
+                {formatDate(weekStart, 'WEEK')} - {formatDate(weekEnd, 'LONG')}
               </span>
             ) : (
               <span>{t('aiAnalysis.selectWeek')}</span>
@@ -103,7 +101,7 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
             selected={selectedDate || undefined}
             onSelect={handleDateSelect}
             initialFocus
-            locale={getLocaleByLang(lang)}
+            locale={locale}
             disabled={date => date > new Date()}
             showOutsideDays={false}
             className="rounded-md border"

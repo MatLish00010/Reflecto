@@ -1,6 +1,7 @@
 export {
   useDailySummaryByDateRange,
   useTodayAISummary,
-  useDailySummariesByDateRange,
+  useDailySummary,
+  useDailySummaries,
   dailySummaryKeys,
 } from './model/use-daily-summary';

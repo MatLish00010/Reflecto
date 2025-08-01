@@ -7,7 +7,7 @@ import { useNotesByDate } from '@/entities/note';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { AuthRequiredMessage } from '@/shared/components';
-import { getDateRangeForDay, toIsoDate } from '@/shared/lib/date-utils';
+import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '@/shared/ui';
 import { useUser } from '@/entities';
@@ -46,8 +46,8 @@ export function AISummary({
   const { isAuthenticated, isLoading: isUserLoading } = useUser();
 
   const { data: notes, isLoading: notesLoading } = useNotesByDate(
-    toIsoDate(selectedDateStart),
-    toIsoDate(selectedDateEnd)
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
   );
 
   const {
@@ -55,8 +55,8 @@ export function AISummary({
     isLoading: summaryLoading,
     error: summaryError,
   } = useDailySummaryByDateRange(
-    toIsoDate(selectedDateStart),
-    toIsoDate(selectedDateEnd)
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
   );
 
   const createSummaryMutation = useCreateSummary();
@@ -73,8 +73,8 @@ export function AISummary({
     }
     createSummaryMutation.mutate({
       notes: notesTexts,
-      from: toIsoDate(selectedDateStart),
-      to: toIsoDate(selectedDateEnd),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
   }, [
     isAuthenticated,
@@ -92,8 +92,8 @@ export function AISummary({
     }
     createSummaryMutation.mutate({
       notes: notesTexts,
-      from: toIsoDate(selectedDateStart),
-      to: toIsoDate(selectedDateEnd),
+      from: selectedDateStart.toISOString(),
+      to: selectedDateEnd.toISOString(),
     });
   }, [
     isAuthenticated,

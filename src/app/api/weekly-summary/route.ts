@@ -18,7 +18,6 @@ import {
   withRateLimit,
   RATE_LIMIT_CONFIGS,
 } from '@/shared/lib/api';
-import { toIsoDate } from '@/shared/lib/date-utils';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
@@ -26,18 +25,13 @@ export async function GET(request: NextRequest) {
     { operation: 'get_weekly_summary' },
     withValidation(VALIDATION_SCHEMAS.dateRange, { validateQuery: true })(
       async (context: ApiContext, request: NextRequest, validatedData) => {
-        context.span.setAttribute(
-          'filters.from',
-          validatedData.from ? toIsoDate(validatedData.from) : ''
-        );
-        context.span.setAttribute(
-          'filters.to',
-          validatedData.to ? toIsoDate(validatedData.to) : ''
-        );
+        context.span.setAttribute('filters.from', validatedData.from || '');
+        context.span.setAttribute('filters.to', validatedData.to || '');
 
         const weeklySummaryService = ServiceFactory.createWeeklySummaryService(
           context.supabase
         );
+
         const summary = await weeklySummaryService.fetchSingleSummary(
           context.user.id,
           validatedData.from!,
@@ -58,11 +52,8 @@ export async function POST(request: NextRequest) {
     withValidation(VALIDATION_SCHEMAS.weeklySummary)(
       async (context: ApiContext, request: NextRequest, validatedData) => {
         context.span.setAttribute('locale', validatedData.locale);
-        context.span.setAttribute(
-          'filters.from',
-          toIsoDate(validatedData.from)
-        );
-        context.span.setAttribute('filters.to', toIsoDate(validatedData.to));
+        context.span.setAttribute('filters.from', validatedData.from);
+        context.span.setAttribute('filters.to', validatedData.to);
 
         const dailySummaryService = ServiceFactory.createDailySummaryService(
           context.supabase
@@ -126,7 +117,7 @@ export async function POST(request: NextRequest) {
         await weeklySummaryService.saveSummary(
           validatedSummary,
           context.user.id,
-          toIsoDate(validatedData.from),
+          validatedData.from,
           { span: context.span, operation: 'create_weekly_summary' }
         );
 

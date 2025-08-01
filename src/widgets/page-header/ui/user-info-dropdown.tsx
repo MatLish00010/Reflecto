@@ -49,7 +49,9 @@ export function UserInfoDropdown() {
           className="flex items-center gap-2 min-w-0 max-w-[200px]"
         >
           <User className="h-4 w-4 flex-shrink-0" />
-          <span className="truncate text-left">{displayName}</span>
+          <span className="truncate text-left hidden sm:inline">
+            {displayName}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
