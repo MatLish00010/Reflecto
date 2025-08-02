@@ -10,6 +10,7 @@ import {
 } from '@/shared/ui/dropdown-menu';
 import { Globe } from 'lucide-react';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useLocale } from '@/shared/contexts/locale-context';
 
 const languages = [
   { code: 'ru', flag: '🇷🇺', name: 'russian' },
@@ -28,16 +29,16 @@ export function LanguageToggle() {
   const router = useRouter();
   const pathname = usePathname();
   const { t } = useTranslation();
-
-  const currentLang = pathname?.split('/')[1] || 'ru';
+  const { currentLocale } = useLocale();
 
   const switchLanguage = (langCode: string) => {
     const pathWithoutLang = pathname?.replace(/^\/[a-z]{2}/, '') || '/';
-    router.push(`/${langCode}${pathWithoutLang}`);
+    const newPath = `/${langCode}${pathWithoutLang}`;
+    router.push(newPath);
   };
 
   const currentLanguage =
-    languages.find(lang => lang.code === currentLang) || languages[0];
+    languages.find(lang => lang.code === currentLocale) || languages[0];
 
   return (
     <DropdownMenu>
@@ -52,7 +53,7 @@ export function LanguageToggle() {
           <DropdownMenuItem
             key={language.code}
             onClick={() => switchLanguage(language.code)}
-            className={currentLang === language.code ? 'bg-accent' : ''}
+            className={currentLocale === language.code ? 'bg-accent' : ''}
           >
             <span className="mr-2">{language.flag}</span>
             {t(`languages.${language.name}`)}

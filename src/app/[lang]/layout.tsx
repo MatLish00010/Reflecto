@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { ThemeProvider } from '@/shared/providers/theme-provider';
 import { AlertProvider } from '@/shared/providers/alert-provider';
 import { TranslationProvider } from '@/shared/contexts/translation-context';
+import { LocaleProvider } from '@/shared/contexts/locale-context';
 import { AuthModalProvider } from '@/shared/contexts/auth-modal-context';
 import { QueryProvider } from '@/shared/providers/query-provider';
 import { PageHeader } from '@/widgets/page-header';
@@ -11,6 +12,7 @@ import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
 import { getDictionary } from '@/shared/dictionaries';
 import { OnboardingGuide } from '@/features';
 import { QueryErrorHandler } from '@/shared/components/error-handler';
+import { SUPPORTED_LOCALES } from '@/shared/lib/language-detector';
 
 import '../globals.css';
 
@@ -25,18 +27,7 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateStaticParams() {
-  return [
-    { lang: 'en' },
-    { lang: 'ru' },
-    { lang: 'de' },
-    { lang: 'fr' },
-    { lang: 'es' },
-    { lang: 'it' },
-    { lang: 'pt' },
-    { lang: 'ja' },
-    { lang: 'ko' },
-    { lang: 'zh' },
-  ];
+  return SUPPORTED_LOCALES.map(lang => ({ lang }));
 }
 
 export async function generateMetadata({
@@ -75,22 +66,24 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider dict={dict} lang={lang}>
-            <QueryProvider>
-              <AlertProvider>
-                <AuthModalProvider>
-                  {/* Global error handler for query param errors */}
-                  <QueryErrorHandler />
-                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-                    <div className="max-w-4xl mx-auto">
-                      <PageHeader />
-                      <OnboardingGuide />
-                      {children}
+            <LocaleProvider initialLocale={lang}>
+              <QueryProvider>
+                <AlertProvider>
+                  <AuthModalProvider>
+                    {/* Global error handler for query param errors */}
+                    <QueryErrorHandler />
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+                      <div className="max-w-4xl mx-auto">
+                        <PageHeader />
+                        <OnboardingGuide />
+                        {children}
+                      </div>
                     </div>
-                  </div>
-                  <AuthModalWrapper />
-                </AuthModalProvider>
-              </AlertProvider>
-            </QueryProvider>
+                    <AuthModalWrapper />
+                  </AuthModalProvider>
+                </AlertProvider>
+              </QueryProvider>
+            </LocaleProvider>
           </TranslationProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}

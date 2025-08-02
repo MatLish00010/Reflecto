@@ -1,4 +1,5 @@
 import 'server-only';
+import { SUPPORTED_LOCALES } from '@/shared/lib/language-detector';
 
 const dictionaries = {
   en: () => import('./en.json').then(module => module.default),
@@ -14,9 +15,13 @@ const dictionaries = {
 };
 
 export const getDictionary = async (locale: string) => {
-  const dictionary = dictionaries[locale as keyof typeof dictionaries];
-  if (dictionary) {
-    return dictionary();
+  if (
+    SUPPORTED_LOCALES.includes(locale as (typeof SUPPORTED_LOCALES)[number])
+  ) {
+    const dictionary = dictionaries[locale as keyof typeof dictionaries];
+    if (dictionary) {
+      return dictionary();
+    }
   }
   // Fallback to English if locale is not supported
   return dictionaries.en();

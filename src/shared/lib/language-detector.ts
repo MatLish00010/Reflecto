@@ -1,7 +1,7 @@
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
-export const supportedLocales = [
+export const SUPPORTED_LOCALES = [
   'en',
   'ru',
   'de',
@@ -13,9 +13,11 @@ export const supportedLocales = [
   'ko',
   'zh',
 ] as const;
-export const defaultLocale = 'en';
 
-export type SupportedLocale = (typeof supportedLocales)[number];
+export const supportedLocales = SUPPORTED_LOCALES;
+export const DEFAULT_LOCALE = 'ru';
+
+export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
 export function detectUserLanguage(request: Request): SupportedLocale {
   const negotiatorHeaders: Record<string, string> = {};
@@ -23,11 +25,11 @@ export function detectUserLanguage(request: Request): SupportedLocale {
 
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
 
-  const detectedLocale = match(languages, supportedLocales, defaultLocale);
+  const detectedLocale = match(languages, supportedLocales, DEFAULT_LOCALE);
 
   return supportedLocales.includes(detectedLocale as SupportedLocale)
     ? (detectedLocale as SupportedLocale)
-    : defaultLocale;
+    : DEFAULT_LOCALE;
 }
 
 export function isLocaleSupported(locale: string): locale is SupportedLocale {

@@ -3,26 +3,28 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useLocale } from '@/shared/contexts/locale-context';
 import { Button } from '@/shared/ui/button';
 import { BarChart3, History, Home } from 'lucide-react';
 
 export function Navigation() {
   const { t } = useTranslation();
+  const { currentLocale } = useLocale();
   const pathname = usePathname();
 
   const navItems = [
     {
-      href: '/',
+      href: `/${currentLocale}`,
       label: t('navigation.home'),
       icon: Home,
     },
     {
-      href: '/history',
+      href: `/${currentLocale}/history`,
       label: t('navigation.history'),
       icon: History,
     },
     {
-      href: '/analytics',
+      href: `/${currentLocale}/analytics`,
       label: t('navigation.analytics'),
       icon: BarChart3,
     },
@@ -32,7 +34,10 @@ export function Navigation() {
     <nav className="flex items-center gap-2 mb-6">
       {navItems.map(item => {
         const Icon = item.icon;
-        const isActive = pathname === item.href;
+        const isActive =
+          pathname === item.href ||
+          (item.href.endsWith(`/${currentLocale}`) &&
+            pathname === `/${currentLocale}`);
 
         return (
           <Link key={item.href} href={item.href}>
