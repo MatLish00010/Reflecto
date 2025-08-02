@@ -1,66 +1,116 @@
 'use client';
 
 import { Suspense } from 'react';
-import { RefreshCw } from 'lucide-react';
-import { Card, CardContent } from '@/shared/ui/card';
-import {
-  TabsWithURL,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/shared/ui/tabs';
+import { RefreshCw, Calendar } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
 import { NewEntryForm } from '@/widgets/new-entry-form';
-import { HistoryAndSummary } from '@/widgets/history-and-summary';
-import { WeeklySummaryWidget } from '@/widgets/weekly-summary';
+import { AISummary } from '@/features/daily-summary-generation';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useLocale } from '@/shared/contexts/locale-context';
+import { useFormatters } from '@/shared/hooks';
+import { useNotesByDate } from '@/entities/note';
+import { getDateRangeForDay } from '@/shared/lib/date-utils';
+import { useMemo } from 'react';
+import Link from 'next/link';
 
 export function HomeContent() {
   const { t } = useTranslation();
+  const { currentLocale } = useLocale();
+  const { formatDate } = useFormatters();
+
+  const { selectedDateStart, selectedDateEnd } = useMemo(() => {
+    const today = new Date();
+    const range = getDateRangeForDay(today);
+    return {
+      selectedDateStart: new Date(range.from),
+      selectedDateEnd: new Date(range.to),
+    };
+  }, []);
+
+  // Fetch recent notes for today
+  const { data: todayNotes = [] } = useNotesByDate(
+    selectedDateStart.toISOString(),
+    selectedDateEnd.toISOString()
+  );
+
+  // Get last 3 notes for quick overview
+  const recentNotes = todayNotes.slice(0, 3);
 
   return (
-    <>
+    <div className="space-y-8">
       <Card>
-        <CardContent className="pt-6">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">
+            {t('newEntry.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           <NewEntryForm />
         </CardContent>
       </Card>
 
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center p-8">
-            <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">
+            {t('aiAnalysis.dailySummaryTitle')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Suspense
+            fallback={
+              <div className="flex justify-center items-center p-8">
+                <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
+            }
+          >
+            <AISummary
+              selectedDate={new Date()}
+              selectedDateStart={selectedDateStart}
+              selectedDateEnd={selectedDateEnd}
+            />
+          </Suspense>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-xl font-semibold">
+              {t('home.recentNotes')}
+            </CardTitle>
+            <Link href={`/${currentLocale}/history`}>
+              <Button variant="outline" size="sm">
+                {t('home.viewAll')}
+              </Button>
+            </Link>
           </div>
-        }
-      >
-        <TabsWithURL
-          defaultValue="daily"
-          urlParam="tab"
-          className="w-full mt-8"
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="daily">
-              {t('aiAnalysis.tabs.daily')}
-            </TabsTrigger>
-            <TabsTrigger value="weekly">
-              {t('aiAnalysis.tabs.weekly')}
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="daily" className="mt-6">
-            <Card>
-              <CardContent className="pt-6">
-                <HistoryAndSummary />
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="weekly" className="mt-6">
-            <Card>
-              <CardContent className="pt-6">
-                <WeeklySummaryWidget />
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </TabsWithURL>
-      </Suspense>
-    </>
+        </CardHeader>
+        <CardContent>
+          {recentNotes.length > 0 ? (
+            <div className="space-y-4">
+              {recentNotes.map(note => (
+                <div
+                  key={note.id}
+                  className="p-4 border rounded-lg bg-muted/50"
+                >
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {note.note || ''}
+                  </p>
+                  <div className="text-xs text-muted-foreground mt-2">
+                    {formatDate(note.created_at, 'DATETIME')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>{t('home.noNotesToday')}</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

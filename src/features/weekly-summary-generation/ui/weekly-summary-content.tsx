@@ -17,10 +17,15 @@ import { InsufficientSummariesMessage } from './insufficient-summaries-message';
 
 interface WeeklySummaryContentProps {
   className?: string;
+  externalSelectedDate?: Date;
 }
 
-export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
-  const { selectedDate, updateWeek } = useWeekFromUrl();
+export function WeeklySummaryContent({
+  className,
+  externalSelectedDate,
+}: WeeklySummaryContentProps) {
+  const { selectedDate: urlSelectedDate, updateWeek } = useWeekFromUrl();
+  const selectedDate = externalSelectedDate || urlSelectedDate;
   const { showError } = useAlertContext();
   const { openModal } = useAuthModalContext();
 
@@ -144,12 +149,14 @@ export function WeeklySummaryContent({ className }: WeeklySummaryContentProps) {
   return (
     <div className={className}>
       <div className="space-y-4">
-        <div className="flex items-center justify-center sm:justify-start">
-          <WeekPicker
-            selectedDate={selectedDate}
-            onWeekChange={handleWeekChange}
-          />
-        </div>
+        {!externalSelectedDate && (
+          <div className="flex items-center justify-center sm:justify-start">
+            <WeekPicker
+              selectedDate={selectedDate}
+              onWeekChange={handleWeekChange}
+            />
+          </div>
+        )}
 
         {isLoading ? (
           <AISummaryLoadingSkeleton />

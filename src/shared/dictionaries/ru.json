@@ -3,6 +3,16 @@
     "title": "Reflecto",
     "description": "Записывайте свои мысли и получайте AI-анализ"
   },
+  "home": {
+    "recentNotes": "Последние записи",
+    "viewAll": "Посмотреть все",
+    "noNotesToday": "Сегодня еще нет записей",
+    "quickActions": "Быстрые действия",
+    "goToArchive": "Перейти к архиву",
+    "archiveDescription": "Просмотр всех записей и анализ",
+    "weeklyAnalysis": "Недельный анализ",
+    "weeklyAnalysisDescription": "AI-анализ за неделю"
+  },
   "newEntry": {
     "title": "Новая запись",
     "description": "Опишите свой день, мысли или события",
@@ -161,8 +171,20 @@
     "analytics": "Аналитика"
   },
   "history": {
-    "title": "История записей",
-    "description": "Ваши предыдущие записи и анализы",
+    "title": "Архив и анализ",
+    "description": "Просмотр всех записей и AI-анализ",
+    "searchPlaceholder": "Поиск по записям...",
+    "filters": "Фильтры",
+    "notes": "Записи",
+    "aiAnalysis": "AI Анализ",
+    "quickActions": "Быстрые действия",
+    "weeklyAnalysis": "Недельный анализ",
+    "weeklyAnalysisDescription": "AI-анализ за неделю",
+    "exportData": "Экспорт данных",
+    "exportDataDescription": "Экспорт записей в различных форматах",
+    "period": "Период",
+    "day": "День",
+    "week": "Неделя",
     "loginRequired": "Войдите в систему для просмотра истории",
     "emptyState": "Здесь будут отображаться ваши записи",
     "loading": "Загрузка записей...",

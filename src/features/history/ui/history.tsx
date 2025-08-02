@@ -13,12 +13,21 @@ interface HistoryProps {
   selectedDate: Date;
   selectedDateStart?: Date;
   selectedDateEnd?: Date;
+  notes?: Array<{
+    id: number;
+    note: string | null;
+    created_at: string;
+    user_id: string | null;
+  }>;
+  searchQuery?: string;
 }
 
 export function History({
   selectedDate: externalSelectedDate,
   selectedDateStart: externalSelectedDateStart,
   selectedDateEnd: externalSelectedDateEnd,
+  notes: externalNotes,
+  searchQuery,
 }: HistoryProps) {
   const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
@@ -42,13 +51,16 @@ export function History({
   const { isAuthenticated, isLoading: isUserLoading } = useUser();
 
   const {
-    data: notes = [],
+    data: fetchedNotes = [],
     isLoading: isNotesLoading,
     error,
   } = useNotesByDate(
     selectedDateStart.toISOString(),
     selectedDateEnd.toISOString()
   );
+
+  // Use external notes if provided, otherwise use fetched notes
+  const notes = externalNotes || fetchedNotes;
 
   const handleToggleShowAll = useCallback(() => {
     setShowAll(prev => !prev);
@@ -82,6 +94,7 @@ export function History({
           notes={notes}
           showAll={showAll}
           onToggleShowAll={handleToggleShowAll}
+          searchQuery={searchQuery}
         />
       )}
     </div>

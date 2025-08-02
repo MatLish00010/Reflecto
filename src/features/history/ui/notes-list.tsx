@@ -9,9 +9,15 @@ interface NotesListProps {
   notes: Note[];
   showAll: boolean;
   onToggleShowAll: () => void;
+  searchQuery?: string;
 }
 
-export function NotesList({ notes, showAll, onToggleShowAll }: NotesListProps) {
+export function NotesList({
+  notes,
+  showAll,
+  onToggleShowAll,
+  searchQuery,
+}: NotesListProps) {
   const { t } = useTranslation();
 
   const displayedNotes = showAll ? notes : notes.slice(0, 3);
@@ -28,7 +34,7 @@ export function NotesList({ notes, showAll, onToggleShowAll }: NotesListProps) {
   return (
     <div className="space-y-2">
       {displayedNotes.map(note => (
-        <NoteItem key={note.id} note={note} />
+        <NoteItem key={note.id} note={note} searchQuery={searchQuery} />
       ))}
 
       {hasMoreNotes && (

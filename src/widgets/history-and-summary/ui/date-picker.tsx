@@ -40,7 +40,7 @@ export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
         <Button
           variant="outline"
           className={cn(
-            'w-[240px] justify-start text-left font-normal',
+            'w-full sm:w-[240px] justify-start text-left font-normal text-sm sm:text-base',
             !selectedDate && 'text-muted-foreground'
           )}
         >
@@ -52,7 +52,7 @@ export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="w-auto p-0 sm:align-start" align="center">
         <Calendar
           mode="single"
           selected={selectedDate || undefined}

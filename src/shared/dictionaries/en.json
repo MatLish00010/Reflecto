@@ -3,6 +3,16 @@
     "title": "Reflecto",
     "description": "Write down your thoughts and get AI analysis"
   },
+  "home": {
+    "recentNotes": "Recent Notes",
+    "viewAll": "View All",
+    "noNotesToday": "No notes for today yet",
+    "quickActions": "Quick Actions",
+    "goToArchive": "Go to Archive",
+    "archiveDescription": "View all notes and analysis",
+    "weeklyAnalysis": "Weekly Analysis",
+    "weeklyAnalysisDescription": "AI analysis for the week"
+  },
   "newEntry": {
     "title": "New Entry",
     "description": "Describe your day, thoughts or events",
@@ -161,8 +171,20 @@
     "analytics": "Analytics"
   },
   "history": {
-    "title": "Entry History",
-    "description": "Your previous entries and analyses",
+    "title": "Archive & Analysis",
+    "description": "View all entries and AI analysis",
+    "searchPlaceholder": "Search entries...",
+    "filters": "Filters",
+    "notes": "Notes",
+    "aiAnalysis": "AI Analysis",
+    "quickActions": "Quick Actions",
+    "weeklyAnalysis": "Weekly Analysis",
+    "weeklyAnalysisDescription": "AI analysis for the week",
+    "exportData": "Export Data",
+    "exportDataDescription": "Export entries in various formats",
+    "period": "Period",
+    "day": "Day",
+    "week": "Week",
     "loginRequired": "Please log in to view history",
     "emptyState": "Your entries will be displayed here",
     "loading": "Loading entries...",

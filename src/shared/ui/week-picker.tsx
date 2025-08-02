@@ -95,7 +95,7 @@ export function WeekPicker({ selectedDate, onWeekChange }: WeekPickerProps) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0 sm:align-start" align="center">
           <Calendar
             mode="single"
             selected={selectedDate || undefined}

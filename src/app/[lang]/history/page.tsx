@@ -2,8 +2,7 @@
 
 import { useUser } from '@/entities/user';
 import { AuthRequiredMessage } from '@/shared/components';
-import { History } from '@/features/history';
-import { HistoryHeader } from '@/features/history/ui/history-header';
+import { HistoryPage as HistoryPageComponent } from '@/features/history/ui/history-page';
 
 export default function HistoryPage() {
   const { user } = useUser();
@@ -14,8 +13,7 @@ export default function HistoryPage() {
 
   return (
     <div className="container mx-auto">
-      <HistoryHeader />
-      <History selectedDate={new Date()} />
+      <HistoryPageComponent selectedDate={new Date()} />
     </div>
   );
 }
