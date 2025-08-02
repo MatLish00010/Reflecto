@@ -7,7 +7,7 @@ import { Navigation } from './navigation';
 export function PageHeader() {
   return (
     <header className="pb-8">
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start flex-wrap ">
         <Navigation />
         <div className="flex items-center gap-2">
           <FeedbackButton />
