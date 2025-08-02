@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Textarea } from '@/shared/ui/textarea';
 import { AudioInputTabs } from '@/features/voice-recording';
@@ -13,11 +13,16 @@ import { safeSentry } from '@/shared/lib/sentry';
 
 export function NewEntryForm() {
   const [content, setContent] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   const { t } = useTranslation();
   const { showSuccess, showError } = useAlertContext();
   const createNoteMutation = useCreateNote();
   const { isAuthenticated } = useUser();
   const { openModal } = useAuthModalContext();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleRecordingComplete = (text: string) => {
     setContent(prev => prev + (prev ? '\n' : '') + text);
@@ -97,7 +102,7 @@ export function NewEntryForm() {
         className="w-full"
         disabled={!content.trim() || createNoteMutation.isPending}
       >
-        {createNoteMutation.isPending
+        {isMounted && createNoteMutation.isPending
           ? t('newEntry.savingButton')
           : t('newEntry.saveButton')}
       </Button>
