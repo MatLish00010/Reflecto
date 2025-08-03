@@ -7,7 +7,7 @@ import {
   SpeechToTextService,
   OpenAIService,
   RedisService,
-} from '@/shared/lib/api/services';
+} from '@/shared/lib/api/services/server';
 
 export class ServiceFactory {
   static createNotesService(supabase: ApiContext['supabase']) {

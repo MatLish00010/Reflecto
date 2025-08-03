@@ -1,92 +1,84 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import type { Stripe } from 'stripe';
+import { stripeService } from '@/shared/lib/api/services/client';
+import { safeSentry } from '@/shared/lib/sentry';
+
+export const subscriptionKeys = {
+  all: ['subscriptions'] as const,
+  products: () => [...subscriptionKeys.all, 'products'] as const,
+};
+
+export const useSubscriptionProducts = () => {
+  return useQuery({
+    queryKey: subscriptionKeys.products(),
+    queryFn: async (): Promise<Stripe.Price[]> => {
+      const products = await stripeService.getProducts();
+      return products.sort((a, b) => {
+        const amountA = a.unit_amount || 0;
+        const amountB = b.unit_amount || 0;
+        return amountA - amountB;
+      });
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+export const useCheckout = () => {
+  return useMutation({
+    mutationFn: async (lookupKey: string) => {
+      const { url } = await stripeService.createCheckoutSession(lookupKey);
+      if (url) {
+        window.location.href = url;
+      }
+    },
+    onError: error => {
+      safeSentry.captureException(error, {
+        tags: { operation: 'create_checkout_session' },
+      });
+    },
+  });
+};
+
+export const useManageBilling = () => {
+  return useMutation({
+    mutationFn: async (sessionId: string) => {
+      const { url } = await stripeService.createPortalSession(sessionId);
+      if (url) {
+        window.location.href = url;
+      }
+    },
+    onError: error => {
+      safeSentry.captureException(error, {
+        tags: { operation: 'create_portal_session' },
+      });
+    },
+  });
+};
 
 export const useSubscriptions = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [products, setProducts] = useState<Stripe.Price[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const {
+    data: products = [],
+    isLoading: loadingProducts,
+    error: productsError,
+  } = useSubscriptionProducts();
 
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('/api/stripe/products');
-      const data = await response.json();
+  const checkoutMutation = useCheckout();
+  const manageBillingMutation = useManageBilling();
 
-      if (data.prices) {
-        const sortedProducts = data.prices.sort(
-          (a: Stripe.Price, b: Stripe.Price) => {
-            const amountA = a.unit_amount || 0;
-            const amountB = b.unit_amount || 0;
-            return amountA - amountB;
-          }
-        );
-        setProducts(sortedProducts);
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoadingProducts(false);
-    }
+  const handleCheckout = (lookupKey: string) => {
+    checkoutMutation.mutate(lookupKey);
   };
 
-  const handleCheckout = async (lookupKey: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/stripe/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          lookup_key: lookupKey,
-        }),
-      });
-
-      const { url } = await response.json();
-      if (url) {
-        window.location.href = url;
-      }
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleManageBilling = (sessionId: string) => {
+    manageBillingMutation.mutate(sessionId);
   };
-
-  const handleManageBilling = async (sessionId: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/stripe/create-portal-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          session_id: sessionId,
-        }),
-      });
-
-      const { url } = await response.json();
-      if (url) {
-        window.location.href = url;
-      }
-    } catch (error) {
-      console.error('Error creating portal session:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   return {
     products,
     loadingProducts,
-    isLoading,
+    isLoading: checkoutMutation.isPending || manageBillingMutation.isPending,
     handleCheckout,
     handleManageBilling,
+    error: productsError,
   };
 };
