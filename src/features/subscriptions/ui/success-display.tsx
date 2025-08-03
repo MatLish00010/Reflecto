@@ -22,7 +22,7 @@ export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({
   const { t } = useTranslation();
 
   return (
-    <section className="flex items-center justify-center p-4">
+    <section className="flex items-center justify-center">
       <div className="max-w-md w-full">
         <Card>
           <CardContent className="text-center py-8">

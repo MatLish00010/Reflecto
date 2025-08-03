@@ -68,7 +68,7 @@ export const ProductDisplay: React.FC<ProductDisplayProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center p-4">
+    <div className="flex items-center justify-center">
       <div className="max-w-6xl w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map(price => {

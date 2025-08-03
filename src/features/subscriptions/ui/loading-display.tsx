@@ -4,7 +4,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 export const LoadingDisplay: React.FC = () => {
   return (
-    <section className="flex items-center justify-center p-4">
+    <section className="flex items-center justify-center">
       <div className="max-w-6xl w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map(index => (
