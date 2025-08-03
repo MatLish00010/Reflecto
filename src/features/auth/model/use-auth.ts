@@ -227,8 +227,6 @@ export function useSignInWithGoogle() {
         throw new Error(error.message);
       }
 
-      // OAuth flow redirects to Google, so we don't get user data immediately
-      // The user will be redirected back to our callback URL
       return { success: true, url: data.url };
     },
     onError: error => {
