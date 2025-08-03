@@ -332,5 +332,22 @@
     "back": "Back",
     "finish": "Get Started!",
     "skip": "Skip"
+  },
+  "subscriptions": {
+    "product": "Product",
+    "month": "Month",
+    "three_month": "3 Months",
+    "six_month": "6 Months",
+    "year": "Year",
+    "save_20": "Save 20%",
+    "save_30": "Save 30%",
+    "processing": "Processing...",
+    "checkout": "Subscribe Now",
+    "features": "Unlock premium features and unlimited access",
+    "success": "Subscription Successful!",
+    "welcome": "Welcome to Reflecto Pro!",
+    "loading": "Loading...",
+    "manage_billing": "Manage your billing information",
+    "order_canceled": "Subscription canceled -- continue to browse and subscribe when you're ready."
   }
 }

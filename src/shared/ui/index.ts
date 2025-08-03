@@ -32,6 +32,7 @@ export { PageHeader } from './page-header';
 export { PeriodDisplay } from './period-display';
 export { Popover, PopoverContent, PopoverTrigger } from './popover';
 export { Skeleton } from './skeleton';
+export { Badge, badgeVariants } from './badge';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Textarea } from './textarea';
 export { AISummaryLoadingSkeleton, Summary } from './summary';
