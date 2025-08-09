@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { NewEntryForm } from '@/widgets/new-entry-form';
 import { AISummary } from '@/features/daily-summary-generation';
+import { NoteItem } from '@/features/history/ui/note-item';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useLocale } from '@/shared/contexts/locale-context';
-import { useFormatters } from '@/shared/hooks';
 import { useNotesByDate } from '@/entities/note';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { useMemo } from 'react';
@@ -17,7 +17,6 @@ import Link from 'next/link';
 export function HomeContent() {
   const { t } = useTranslation();
   const { currentLocale } = useLocale();
-  const { formatDate } = useFormatters();
 
   const { selectedDateStart, selectedDateEnd } = useMemo(() => {
     const today = new Date();
@@ -88,19 +87,9 @@ export function HomeContent() {
         </CardHeader>
         <CardContent>
           {recentNotes.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-2">
               {recentNotes.map(note => (
-                <div
-                  key={note.id}
-                  className="p-4 border rounded-lg bg-muted/50"
-                >
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {note.note || ''}
-                  </p>
-                  <div className="text-xs text-muted-foreground mt-2">
-                    {formatDate(note.created_at, 'DATETIME')}
-                  </div>
-                </div>
+                <NoteItem key={note.id} note={note} />
               ))}
             </div>
           ) : (
