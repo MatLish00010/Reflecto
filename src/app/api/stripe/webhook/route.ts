@@ -122,6 +122,112 @@ export async function POST(request: NextRequest) {
             safeSentry.captureMessage('Checkout session completed', 'info');
             break;
 
+          case 'customer.subscription.deleted':
+            const deletedSubscription = event.data
+              .object as Stripe.Subscription;
+            span.setAttribute('stripe.subscription.id', deletedSubscription.id);
+            span.setAttribute(
+              'stripe.subscription.customer_id',
+              deletedSubscription.customer as string
+            );
+
+            try {
+              const supabase = await createServiceClient();
+              const subscriptionsService =
+                ServiceFactory.createSubscriptionsService(supabase);
+
+              const existingSubscription =
+                await subscriptionsService.getSubscriptionBySubscriptionId(
+                  deletedSubscription.id,
+                  { span, operation: 'check_subscription_for_deletion' }
+                );
+
+              if (existingSubscription) {
+                await subscriptionsService.deleteSubscription(
+                  existingSubscription.id,
+                  { span, operation: 'delete_subscription_from_webhook' }
+                );
+
+                span.setAttribute('subscription.deleted', true);
+                safeSentry.captureMessage(
+                  `Subscription ${deletedSubscription.id} deleted from database`,
+                  'info'
+                );
+              } else {
+                span.setAttribute('subscription.not_found', true);
+                safeSentry.captureMessage(
+                  `Subscription ${deletedSubscription.id} not found in database`,
+                  'warning'
+                );
+              }
+            } catch (error) {
+              safeSentry.captureException(error as Error, {
+                tags: { operation: 'delete_subscription_from_webhook' },
+                extra: {
+                  subscriptionId: deletedSubscription.id,
+                  customerId: deletedSubscription.customer,
+                },
+              });
+            }
+            break;
+
+          case 'customer.subscription.updated':
+            const updatedSubscription = event.data
+              .object as Stripe.Subscription;
+            span.setAttribute('stripe.subscription.id', updatedSubscription.id);
+            span.setAttribute(
+              'stripe.subscription.customer_id',
+              updatedSubscription.customer as string
+            );
+            span.setAttribute(
+              'stripe.subscription.status',
+              updatedSubscription.status
+            );
+
+            if (
+              ['canceled', 'unpaid', 'past_due'].includes(
+                updatedSubscription.status
+              )
+            ) {
+              try {
+                const supabase = await createServiceClient();
+                const subscriptionsService =
+                  ServiceFactory.createSubscriptionsService(supabase);
+
+                const existingSubscription =
+                  await subscriptionsService.getSubscriptionBySubscriptionId(
+                    updatedSubscription.id,
+                    { span, operation: 'check_subscription_for_update' }
+                  );
+
+                if (existingSubscription) {
+                  await subscriptionsService.deleteSubscription(
+                    existingSubscription.id,
+                    {
+                      span,
+                      operation: 'delete_expired_subscription_from_webhook',
+                    }
+                  );
+
+                  span.setAttribute('subscription.expired_deleted', true);
+                  safeSentry.captureMessage(
+                    `Expired subscription ${updatedSubscription.id} deleted from database`,
+                    'info'
+                  );
+                }
+              } catch (error) {
+                safeSentry.captureException(error as Error, {
+                  tags: { operation: 'update_subscription_from_webhook' },
+                  extra: {
+                    subscriptionId: updatedSubscription.id,
+                    customerId: updatedSubscription.customer,
+                    status: updatedSubscription.status,
+                  },
+                });
+              }
+            }
+            break;
+
           case 'invoice.paid':
             console.log('invoice.paid');
             const invoice = event.data.object as Stripe.Invoice;
@@ -145,6 +251,60 @@ export async function POST(request: NextRequest) {
               'stripe.invoice.customer_id',
               failedInvoice.customer as string
             );
+
+            const subscriptionId = (
+              failedInvoice as Stripe.Invoice & { subscription?: string | null }
+            ).subscription;
+            if (subscriptionId) {
+              try {
+                const supabase = await createServiceClient();
+                const subscriptionsService =
+                  ServiceFactory.createSubscriptionsService(supabase);
+
+                const existingSubscription =
+                  await subscriptionsService.getSubscriptionBySubscriptionId(
+                    subscriptionId,
+                    { span, operation: 'check_subscription_for_failed_payment' }
+                  );
+
+                if (existingSubscription) {
+                  const subscription =
+                    await stripe.subscriptions.retrieve(subscriptionId);
+
+                  if (
+                    ['canceled', 'unpaid', 'past_due'].includes(
+                      subscription.status
+                    )
+                  ) {
+                    await subscriptionsService.deleteSubscription(
+                      existingSubscription.id,
+                      {
+                        span,
+                        operation: 'delete_subscription_after_failed_payment',
+                      }
+                    );
+
+                    span.setAttribute(
+                      'subscription.deleted_after_failed_payment',
+                      true
+                    );
+                    safeSentry.captureMessage(
+                      `Subscription ${subscription.id} deleted after failed payment`,
+                      'warning'
+                    );
+                  }
+                }
+              } catch (error) {
+                safeSentry.captureException(error as Error, {
+                  tags: { operation: 'handle_failed_payment' },
+                  extra: {
+                    invoiceId: failedInvoice.id,
+                    subscriptionId: subscriptionId,
+                    customerId: failedInvoice.customer,
+                  },
+                });
+              }
+            }
 
             // The payment failed or the customer does not have a valid payment method.
             // The subscription becomes past_due. Notify your customer and send them to the
