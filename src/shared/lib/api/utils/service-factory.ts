@@ -7,7 +7,8 @@ import {
   SpeechToTextService,
   OpenAIService,
   RedisService,
-} from '@/shared/lib/api/services';
+} from '@/shared/lib/api/services/server';
+import { SubscriptionsService } from '@/shared/lib/api/services/subscriptions.service';
 
 export class ServiceFactory {
   static createNotesService(supabase: ApiContext['supabase']) {
@@ -24,6 +25,10 @@ export class ServiceFactory {
 
   static createWeeklySummaryService(supabase: ApiContext['supabase']) {
     return new WeeklySummaryService(supabase);
+  }
+
+  static createSubscriptionsService(supabase: ApiContext['supabase']) {
+    return new SubscriptionsService(supabase);
   }
 
   static createSpeechToTextService() {

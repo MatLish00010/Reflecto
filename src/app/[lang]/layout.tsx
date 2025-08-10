@@ -6,13 +6,15 @@ import { AlertProvider } from '@/shared/providers/alert-provider';
 import { TranslationProvider } from '@/shared/contexts/translation-context';
 import { LocaleProvider } from '@/shared/contexts/locale-context';
 import { AuthModalProvider } from '@/shared/contexts/auth-modal-context';
+import { UserProvider } from '@/shared/contexts/user-context';
 import { QueryProvider } from '@/shared/providers/query-provider';
 import { PageHeader } from '@/widgets/page-header';
 import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
 import { getDictionary } from '@/shared/dictionaries';
 import { OnboardingGuide } from '@/features';
-import { QueryErrorHandler } from '@/shared/components/error-handler';
 import { SUPPORTED_LOCALES } from '@/shared/lib/language-detector';
+import { getServerUser } from '@/shared/lib/server-auth';
+import { AuthSync, QueryErrorHandler } from '@/shared/components';
 
 import '../globals.css';
 
@@ -54,6 +56,10 @@ export default async function RootLayout({
   const { lang } = await params;
   const dict = await getDictionary(lang);
 
+  const { user, isSubscribed } = await getServerUser();
+
+  console.log('isSubscribed', isSubscribed);
+
   return (
     <html lang={lang} suppressHydrationWarning>
       <body
@@ -70,16 +76,21 @@ export default async function RootLayout({
               <QueryProvider>
                 <AlertProvider>
                   <AuthModalProvider>
-                    {/* Global error handler for query param errors */}
-                    <QueryErrorHandler />
-                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-                      <div className="max-w-4xl mx-auto">
-                        <PageHeader />
-                        <OnboardingGuide />
-                        {children}
+                    <UserProvider
+                      initialUser={user}
+                      isSubscribed={isSubscribed}
+                    >
+                      <QueryErrorHandler />
+                      <AuthSync />
+                      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+                        <div className="max-w-4xl mx-auto">
+                          <PageHeader />
+                          <OnboardingGuide />
+                          {children}
+                        </div>
                       </div>
-                    </div>
-                    <AuthModalWrapper />
+                      <AuthModalWrapper />
+                    </UserProvider>
                   </AuthModalProvider>
                 </AlertProvider>
               </QueryProvider>
