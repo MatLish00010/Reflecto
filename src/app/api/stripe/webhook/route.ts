@@ -1,8 +1,6 @@
 import { NextRequest } from 'next/server';
 import Stripe from 'stripe';
 import { safeSentry } from '@/shared/lib/sentry';
-import { createServiceClient } from '@/shared/lib/supabase/server';
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
 
@@ -68,10 +66,6 @@ export async function POST(request: NextRequest) {
 
             if (session.customer && session.subscription) {
               try {
-                const supabase = await createServiceClient();
-                const subscriptionsService =
-                  ServiceFactory.createSubscriptionsService(supabase);
-
                 const userId = session.metadata?.user_id;
 
                 if (!userId) {
@@ -83,30 +77,35 @@ export async function POST(request: NextRequest) {
                   break;
                 }
 
-                const existingSubscription =
-                  await subscriptionsService.getSubscriptionByCustomerId(
-                    session.customer as string,
-                    { span, operation: 'check_existing_subscription' }
-                  );
-
-                if (!existingSubscription) {
-                  await subscriptionsService.createSubscription(
-                    {
+                const response = await fetch(
+                  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-subscription`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                    },
+                    body: JSON.stringify({
                       userId,
                       stripeCustomerId: session.customer as string,
                       stripeSubscriptionId: session.subscription as string,
-                    },
-                    { span, operation: 'create_subscription_from_webhook' }
-                  );
+                    }),
+                  }
+                );
 
-                  span.setAttribute('subscription.saved', true);
-                  safeSentry.captureMessage(
-                    'Subscription saved to database',
-                    'info'
-                  );
-                } else {
-                  span.setAttribute('subscription.already_exists', true);
+                if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(`Edge Function error: ${errorData.error}`);
                 }
+
+                const { subscription } = await response.json();
+
+                span.setAttribute('subscription.saved', true);
+                span.setAttribute('subscription.id', subscription.id);
+                safeSentry.captureMessage(
+                  'Subscription saved to database via Edge Function',
+                  'info'
+                );
               } catch (error) {
                 safeSentry.captureException(error as Error, {
                   tags: { operation: 'save_subscription_to_database' },
@@ -132,25 +131,53 @@ export async function POST(request: NextRequest) {
             );
 
             try {
-              const supabase = await createServiceClient();
-              const subscriptionsService =
-                ServiceFactory.createSubscriptionsService(supabase);
+              const getResponse = await fetch(
+                `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/get-subscription-by-customer`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                  },
+                  body: JSON.stringify({
+                    stripeCustomerId: deletedSubscription.customer as string,
+                  }),
+                }
+              );
 
-              const existingSubscription =
-                await subscriptionsService.getSubscriptionBySubscriptionId(
-                  deletedSubscription.id,
-                  { span, operation: 'check_subscription_for_deletion' }
-                );
+              if (!getResponse.ok) {
+                const errorData = await getResponse.json();
+                throw new Error(`Get subscription error: ${errorData.error}`);
+              }
+
+              const { subscription: existingSubscription } =
+                await getResponse.json();
 
               if (existingSubscription) {
-                await subscriptionsService.deleteSubscription(
-                  existingSubscription.id,
-                  { span, operation: 'delete_subscription_from_webhook' }
+                const deleteResponse = await fetch(
+                  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/delete-subscription`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                    },
+                    body: JSON.stringify({
+                      subscriptionId: existingSubscription.id,
+                    }),
+                  }
                 );
+
+                if (!deleteResponse.ok) {
+                  const errorData = await deleteResponse.json();
+                  throw new Error(
+                    `Delete subscription error: ${errorData.error}`
+                  );
+                }
 
                 span.setAttribute('subscription.deleted', true);
                 safeSentry.captureMessage(
-                  `Subscription ${deletedSubscription.id} deleted from database`,
+                  `Subscription ${deletedSubscription.id} deleted from database via Edge Function`,
                   'info'
                 );
               } else {
@@ -190,28 +217,53 @@ export async function POST(request: NextRequest) {
               )
             ) {
               try {
-                const supabase = await createServiceClient();
-                const subscriptionsService =
-                  ServiceFactory.createSubscriptionsService(supabase);
+                const getResponse = await fetch(
+                  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/get-subscription-by-customer`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                    },
+                    body: JSON.stringify({
+                      stripeCustomerId: updatedSubscription.customer as string,
+                    }),
+                  }
+                );
 
-                const existingSubscription =
-                  await subscriptionsService.getSubscriptionBySubscriptionId(
-                    updatedSubscription.id,
-                    { span, operation: 'check_subscription_for_update' }
-                  );
+                if (!getResponse.ok) {
+                  const errorData = await getResponse.json();
+                  throw new Error(`Get subscription error: ${errorData.error}`);
+                }
+
+                const { subscription: existingSubscription } =
+                  await getResponse.json();
 
                 if (existingSubscription) {
-                  await subscriptionsService.deleteSubscription(
-                    existingSubscription.id,
+                  const deleteResponse = await fetch(
+                    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/delete-subscription`,
                     {
-                      span,
-                      operation: 'delete_expired_subscription_from_webhook',
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                      },
+                      body: JSON.stringify({
+                        subscriptionId: existingSubscription.id,
+                      }),
                     }
                   );
 
+                  if (!deleteResponse.ok) {
+                    const errorData = await deleteResponse.json();
+                    throw new Error(
+                      `Delete subscription error: ${errorData.error}`
+                    );
+                  }
+
                   span.setAttribute('subscription.expired_deleted', true);
                   safeSentry.captureMessage(
-                    `Expired subscription ${updatedSubscription.id} deleted from database`,
+                    `Expired subscription ${updatedSubscription.id} deleted from database via Edge Function`,
                     'info'
                   );
                 }
@@ -257,15 +309,27 @@ export async function POST(request: NextRequest) {
             ).subscription;
             if (subscriptionId) {
               try {
-                const supabase = await createServiceClient();
-                const subscriptionsService =
-                  ServiceFactory.createSubscriptionsService(supabase);
+                const getResponse = await fetch(
+                  `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/get-subscription-by-customer`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                    },
+                    body: JSON.stringify({
+                      stripeCustomerId: failedInvoice.customer as string,
+                    }),
+                  }
+                );
 
-                const existingSubscription =
-                  await subscriptionsService.getSubscriptionBySubscriptionId(
-                    subscriptionId,
-                    { span, operation: 'check_subscription_for_failed_payment' }
-                  );
+                if (!getResponse.ok) {
+                  const errorData = await getResponse.json();
+                  throw new Error(`Get subscription error: ${errorData.error}`);
+                }
+
+                const { subscription: existingSubscription } =
+                  await getResponse.json();
 
                 if (existingSubscription) {
                   const subscription =
@@ -276,20 +340,33 @@ export async function POST(request: NextRequest) {
                       subscription.status
                     )
                   ) {
-                    await subscriptionsService.deleteSubscription(
-                      existingSubscription.id,
+                    const deleteResponse = await fetch(
+                      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/delete-subscription`,
                       {
-                        span,
-                        operation: 'delete_subscription_after_failed_payment',
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+                        },
+                        body: JSON.stringify({
+                          subscriptionId: existingSubscription.id,
+                        }),
                       }
                     );
+
+                    if (!deleteResponse.ok) {
+                      const errorData = await deleteResponse.json();
+                      throw new Error(
+                        `Delete subscription error: ${errorData.error}`
+                      );
+                    }
 
                     span.setAttribute(
                       'subscription.deleted_after_failed_payment',
                       true
                     );
                     safeSentry.captureMessage(
-                      `Subscription ${subscription.id} deleted after failed payment`,
+                      `Subscription ${subscription.id} deleted after failed payment via Edge Function`,
                       'warning'
                     );
                   }

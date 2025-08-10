@@ -5,3 +5,4 @@ export * from './feedback.service';
 export * from './speech-to-text.service';
 export * from './openai.service';
 export * from './stripe.service';
+export * from './stripe.service';
