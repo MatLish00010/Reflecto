@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import Stripe from 'stripe';
 import { safeSentry } from '@/shared/lib/sentry';
 
-const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: NextRequest) {
   return safeSentry.startSpanAsync(
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         }
 
         let event: Stripe.Event;
-        const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET!;
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
         if (!webhookSecret) {
           span.setAttribute('error', true);
