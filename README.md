@@ -84,6 +84,44 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 - [Formatters Documentation](./docs/formatters.md) - Guide for using the `useFormatters` hook
 - [Rate Limiting](./docs/rate-limiting.md) - API rate limiting implementation
 
+## Testing
+
+### Stripe Test Cards
+
+For testing payment flows in development and Sentry:
+
+- **Payment succeeds**: `4242 4242 4242 4242`
+- **Payment requires authentication**: `4000 0025 0000 3155`
+- **Payment is declined**: `4000 0000 0000 9995`
+
+### Sentry Webhooks
+
+For local testing of Sentry webhooks:
+
+1. Install [Sentry CLI](https://docs.sentry.io/product/cli/installation/):
+
+   ```bash
+   # macOS
+   brew install getsentry/tools/sentry-cli
+
+   # or via npm
+   npm install -g @sentry/cli
+   ```
+
+2. Configure Sentry CLI:
+
+   ```bash
+   sentry-cli login
+   ```
+
+3. Start local webhook server:
+
+   ```bash
+   sentry-cli webhook serve --url-prefix /api/sentry/webhook
+   ```
+
+4. Configure webhook URL in Sentry Dashboard to `http://localhost:3000/api/sentry/webhook`
+
 ## Project Structure
 
 ```
