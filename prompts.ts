@@ -8,9 +8,21 @@ export const aiSummaryPrompts = {
 - Указывайте временные рамки, если они упоминаются
 - Используйте конкретные детали вместо общих фраз
 
+РАЗБИВКА ПО ТОПИКАМ:
+- Анализируйте каждую категорию отдельно
+- Если в записях есть подходящий контент для топика - заполняйте его
+- Если для топика нет подходящего контента - оставляйте пустой массив []
+- НЕ создавайте искусственные наблюдения для пустых топиков
+- НЕ используйте общие фразы типа "в целом день был спокойным" если нет конкретных фактов
+
 ПРИМЕР ПРАВИЛЬНОГО АНАЛИЗА:
 ❌ 'Вы испытывали стресс на работе'
 ✅ 'Вы упомянули, что "рабочие встречи были долгими и неэффективными", что вызвало разочарование'
+
+ПРИМЕР РАБОТЫ С ТОПИКАМИ:
+- Если есть записи о работе → заполняем keyEvents, triggers, cognitivePatterns
+- Если нет записей о здоровье → оставляем resources: [], progress: []
+- Если нет эмоциональных моментов → оставляем emotionalMoments: []
 
 ИЗБЕГАЙТЕ общих фраз типа:
 - 'вы часто...'
@@ -64,11 +76,16 @@ export const aiSummaryPrompts = {
 - recommendations (массив строк) — рекомендации
 - copingStrategies (массив строк) — техники совладания
 
-ВАЖНО: Все массивы должны содержать только строки, а не объекты. Например:
-"keyEvents": ["Событие 1 с деталями", "Событие 2 с деталями"]
-НЕ: "keyEvents": [{"event": "...", "details": "..."}]
+ВАЖНО: 
+- Все массивы должны содержать только строки, а не объекты
+- Если для топика нет подходящего контента - возвращайте пустой массив []
+- НЕ создавайте искусственные наблюдения для заполнения пустых топиков
+- Каждое наблюдение должно содержать конкретные детали из записей дневника
 
-ОБЯЗАТЕЛЬНО: Каждое наблюдение должно содержать конкретные детали из записей дневника.`,
+Пример правильного ответа:
+"keyEvents": ["Событие 1 с деталями", "Событие 2 с деталями"]
+"resources": [] // если нет записей о ресурсах
+"emotionalMoments": [] // если нет эмоциональных моментов`,
 
   en: `Your diary entries for the day:
 {notes}
@@ -79,9 +96,21 @@ ANALYZE CONCRETELY:
 - Indicate time frames if mentioned
 - Use specific details instead of general phrases
 
+TOPIC BREAKDOWN:
+- Analyze each category separately
+- If there is suitable content in the entries for a topic - fill it
+- If there is no suitable content for a topic - leave it as empty array []
+- DO NOT create artificial observations for empty topics
+- DO NOT use general phrases like "overall the day was calm" if there are no specific facts
+
 EXAMPLE OF CORRECT ANALYSIS:
 ❌ 'You experienced stress at work'
 ✅ 'You mentioned that "work meetings were long and inefficient", which caused disappointment'
+
+EXAMPLE OF TOPIC HANDLING:
+- If there are work-related entries → fill keyEvents, triggers, cognitivePatterns
+- If there are no health-related entries → leave resources: [], progress: []
+- If there are no emotional moments → leave emotionalMoments: []
 
 AVOID general phrases like:
 - 'you often...'
@@ -135,11 +164,16 @@ Answer in JSON format:
 - recommendations (array of strings) - recommendations
 - copingStrategies (array of strings) - coping techniques
 
-IMPORTANT: All arrays must contain only strings, not objects. For example:
-"keyEvents": ["Event 1 with details", "Event 2 with details"]
-NOT: "keyEvents": [{"event": "...", "details": "..."}]
+IMPORTANT: 
+- All arrays must contain only strings, not objects
+- If there is no suitable content for a topic - return empty array []
+- DO NOT create artificial observations to fill empty topics
+- Each observation must contain specific details from diary entries
 
-MANDATORY: Each observation must contain specific details from diary entries.`,
+Example of correct response:
+"keyEvents": ["Event 1 with details", "Event 2 with details"]
+"resources": [] // if there are no resource-related entries
+"emotionalMoments": [] // if there are no emotional moments`,
 };
 
 export const aiSummarySystemPrompts = {
@@ -175,9 +209,21 @@ export const weeklySummaryPrompts = {
 - Показывайте, как события развивались во времени
 - Используйте конкретные детали вместо общих фраз
 
+РАЗБИВКА ПО ТОПИКАМ:
+- Анализируйте каждую категорию отдельно
+- Если в дневных саммари есть подходящий контент для топика - заполняйте его
+- Если для топика нет подходящего контента - оставляйте пустой массив []
+- НЕ создавайте искусственные наблюдения для пустых топиков
+- НЕ используйте общие фразы типа "в целом неделя была продуктивной" если нет конкретных фактов
+
 ПРИМЕР ПРАВИЛЬНОГО АНАЛИЗА:
 ❌ 'Вы часто беспокоитесь о работе'
 ✅ 'В понедельник вы беспокоились о рабочих встречах, в среду - о показателях продуктивности, в пятницу - о подготовке к важному событию'
+
+ПРИМЕР РАБОТЫ С ТОПИКАМИ:
+- Если есть записи о работе из разных дней → заполняем keyEvents, triggers, cognitivePatterns
+- Если нет записей о здоровье за неделю → оставляем resources: [], progress: []
+- Если нет эмоциональных моментов → оставляем emotionalMoments: []
 
 ИЗБЕГАЙТЕ общих фраз типа:
 - 'вы часто...'
@@ -230,11 +276,16 @@ export const weeklySummaryPrompts = {
 - recommendations (массив строк) — рекомендации
 - copingStrategies (массив строк) — техники совладания
 
-ВАЖНО: Все массивы должны содержать только строки, а не объекты. Например:
-"keyEvents": ["Понедельник: Событие 1 с деталями", "Среда: Событие 2 с деталями"]
-НЕ: "keyEvents": [{"day": "...", "event": "...", "details": "..."}]
+ВАЖНО: 
+- Все массивы должны содержать только строки, а не объекты
+- Если для топика нет подходящего контента - возвращайте пустой массив []
+- НЕ создавайте искусственные наблюдения для заполнения пустых топиков
+- Каждое наблюдение должно содержать конкретные детали из дневных записей
 
-ОБЯЗАТЕЛЬНО: Каждое наблюдение должно содержать конкретные даты и детали из дневных записей.`,
+Пример правильного ответа:
+"keyEvents": ["Понедельник: Событие 1 с деталями", "Среда: Событие 2 с деталями"]
+"resources": [] // если нет записей о ресурсах за неделю
+"emotionalMoments": [] // если нет эмоциональных моментов`,
 
   en: `ATTENTION: Analyze ALL days of the week without exception. Each day contains important information.
 
@@ -249,9 +300,21 @@ ANALYZE CONCRETELY:
 - Show how events developed over time
 - Use specific details instead of general phrases
 
+TOPIC BREAKDOWN:
+- Analyze each category separately
+- If there is suitable content in daily summaries for a topic - fill it
+- If there is no suitable content for a topic - leave it as empty array []
+- DO NOT create artificial observations for empty topics
+- DO NOT use general phrases like "overall the week was productive" if there are no specific facts
+
 EXAMPLE OF CORRECT ANALYSIS:
 ❌ 'You often worry about work'
 ✅ 'On Monday you worried about work meetings, on Wednesday - about productivity indicators, on Friday - about preparing for an important event'
+
+EXAMPLE OF TOPIC HANDLING:
+- If there are work-related entries from different days → fill keyEvents, triggers, cognitivePatterns
+- If there are no health-related entries for the week → leave resources: [], progress: []
+- If there are no emotional moments → leave emotionalMoments: []
 
 AVOID general phrases like:
 - 'you often...'
@@ -304,11 +367,16 @@ Answer in JSON format:
 - recommendations (array of strings) - recommendations
 - copingStrategies (array of strings) - coping techniques
 
-IMPORTANT: All arrays must contain only strings, not objects. For example:
-"keyEvents": ["Monday: Event 1 with details", "Wednesday: Event 2 with details"]
-NOT: "keyEvents": [{"day": "...", "event": "...", "details": "..."}]
+IMPORTANT: 
+- All arrays must contain only strings, not objects
+- If there is no suitable content for a topic - return empty array []
+- DO NOT create artificial observations to fill empty topics
+- Each observation must contain specific details from daily entries
 
-MANDATORY: Each observation must contain specific dates and details from daily entries.`,
+Example of correct response:
+"keyEvents": ["Monday: Event 1 with details", "Wednesday: Event 2 with details"]
+"resources": [] // if there are no resource-related entries for the week
+"emotionalMoments": [] // if there are no emotional moments`,
 };
 
 export const weeklySummarySystemPrompts = {

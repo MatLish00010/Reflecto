@@ -31,54 +31,71 @@ export function SummaryContent({ summary }: SummaryContentProps) {
         content={summary.mainStory}
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <SummaryCard
-          icon={Clock}
-          titleKey="aiAnalysis.keyEvents"
-          content={summary.keyEvents || []}
-          {...CARD_COLOR_SCHEMES.keyEvents}
-        />
-        <SummaryCard
-          icon={Heart}
-          titleKey="aiAnalysis.emotionalMoments"
-          content={summary.emotionalMoments || []}
-          {...CARD_COLOR_SCHEMES.emotionalMoments}
-        />
-        <SummaryCard
-          icon={Target}
-          titleKey="aiAnalysis.cognitivePatterns"
-          content={summary.cognitivePatterns || []}
-          {...CARD_COLOR_SCHEMES.cognitivePatterns}
-        />
-        <SummaryCard
-          icon={Activity}
-          titleKey="aiAnalysis.behavioralPatterns"
-          content={summary.behavioralPatterns || []}
-          {...CARD_COLOR_SCHEMES.behavioralPatterns}
-        />
-        <SummaryCard
-          icon={Zap}
-          titleKey="aiAnalysis.triggers"
-          content={summary.triggers || []}
-          {...CARD_COLOR_SCHEMES.triggers}
-        />
-        <SummaryCard
-          icon={Shield}
-          titleKey="aiAnalysis.resources"
-          content={summary.resources || []}
-          {...CARD_COLOR_SCHEMES.resources}
-        />
-        <SummaryCard
-          icon={TrendingUp}
-          titleKey="aiAnalysis.progress"
-          content={summary.progress || []}
-          {...CARD_COLOR_SCHEMES.progress}
-        />
-        <SummaryCard
-          icon={Star}
-          titleKey="aiAnalysis.observations"
-          content={summary.observations || []}
-          {...CARD_COLOR_SCHEMES.observations}
-        />
+        {summary.keyEvents && summary.keyEvents.length > 0 && (
+          <SummaryCard
+            icon={Clock}
+            titleKey="aiAnalysis.keyEvents"
+            content={summary.keyEvents}
+            {...CARD_COLOR_SCHEMES.keyEvents}
+          />
+        )}
+        {summary.emotionalMoments && summary.emotionalMoments.length > 0 && (
+          <SummaryCard
+            icon={Heart}
+            titleKey="aiAnalysis.emotionalMoments"
+            content={summary.emotionalMoments}
+            {...CARD_COLOR_SCHEMES.emotionalMoments}
+          />
+        )}
+        {summary.cognitivePatterns && summary.cognitivePatterns.length > 0 && (
+          <SummaryCard
+            icon={Target}
+            titleKey="aiAnalysis.cognitivePatterns"
+            content={summary.cognitivePatterns}
+            {...CARD_COLOR_SCHEMES.cognitivePatterns}
+          />
+        )}
+        {summary.behavioralPatterns &&
+          summary.behavioralPatterns.length > 0 && (
+            <SummaryCard
+              icon={Activity}
+              titleKey="aiAnalysis.behavioralPatterns"
+              content={summary.behavioralPatterns}
+              {...CARD_COLOR_SCHEMES.behavioralPatterns}
+            />
+          )}
+        {summary.triggers && summary.triggers.length > 0 && (
+          <SummaryCard
+            icon={Zap}
+            titleKey="aiAnalysis.triggers"
+            content={summary.triggers}
+            {...CARD_COLOR_SCHEMES.triggers}
+          />
+        )}
+        {summary.resources && summary.resources.length > 0 && (
+          <SummaryCard
+            icon={Shield}
+            titleKey="aiAnalysis.resources"
+            content={summary.resources}
+            {...CARD_COLOR_SCHEMES.resources}
+          />
+        )}
+        {summary.progress && summary.progress.length > 0 && (
+          <SummaryCard
+            icon={TrendingUp}
+            titleKey="aiAnalysis.progress"
+            content={summary.progress}
+            {...CARD_COLOR_SCHEMES.progress}
+          />
+        )}
+        {summary.observations && summary.observations.length > 0 && (
+          <SummaryCard
+            icon={Star}
+            titleKey="aiAnalysis.observations"
+            content={summary.observations}
+            {...CARD_COLOR_SCHEMES.observations}
+          />
+        )}
       </div>
       {summary.ideas && summary.ideas.length > 0 && (
         <SummaryCard
