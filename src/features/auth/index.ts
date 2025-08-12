@@ -3,6 +3,7 @@ export {
   useSignIn,
   useSignUp,
   useSignOut,
+  useSignOutWithTracing,
   useResetPassword,
   useUpdatePassword,
   useSignInWithGoogle,

@@ -147,6 +147,48 @@ export function useSignOut() {
   });
 }
 
+export function useSignOutWithTracing() {
+  const signOutMutation = useSignOut();
+
+  const handleSignOut = async (componentName: string = 'Unknown') => {
+    return safeSentry.startSpanAsync(
+      {
+        op: 'ui.click',
+        name: 'User Logout',
+      },
+      async span => {
+        try {
+          span.setAttribute('component', componentName);
+          span.setAttribute('action', 'signOut');
+
+          await signOutMutation.mutateAsync();
+
+          span.setAttribute('success', true);
+        } catch (error) {
+          safeSentry.captureException(error as Error, {
+            tags: {
+              component: componentName,
+              action: 'signOut',
+            },
+          });
+          span.setAttribute('error', true);
+
+          const { logger } = safeSentry;
+          logger.error('Sign out error', {
+            component: componentName,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
+        }
+      }
+    );
+  };
+
+  return {
+    handleSignOut,
+    isPending: signOutMutation.isPending,
+  };
+}
+
 export function useResetPassword() {
   const { showError } = useAlertContext();
 

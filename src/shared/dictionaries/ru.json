@@ -168,7 +168,9 @@
   "navigation": {
     "home": "Главная",
     "history": "История",
-    "analytics": "Аналитика"
+    "analytics": "Аналитика",
+    "subscriptions": "Подписки",
+    "menu": "Меню"
   },
   "history": {
     "title": "Архив и анализ",

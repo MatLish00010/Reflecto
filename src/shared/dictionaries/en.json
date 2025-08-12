@@ -168,7 +168,9 @@
   "navigation": {
     "home": "Home",
     "history": "History",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "subscriptions": "Subscriptions",
+    "menu": "Menu"
   },
   "history": {
     "title": "Archive & Analysis",

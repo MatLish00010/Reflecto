@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useLocale } from '@/shared/contexts/locale-context';
 import { Button } from '@/shared/ui/button';
-import { BarChart3, History, Home } from 'lucide-react';
+import { BarChart3, History, Home, CreditCard } from 'lucide-react';
 
 export function Navigation() {
   const { t } = useTranslation();
@@ -28,10 +28,15 @@ export function Navigation() {
       label: t('navigation.analytics'),
       icon: BarChart3,
     },
+    {
+      href: `/${currentLocale}/subscriptions`,
+      label: t('navigation.subscriptions'),
+      icon: CreditCard,
+    },
   ];
 
   return (
-    <nav className="flex items-center gap-2 mb-6">
+    <nav className="hidden md:flex items-center gap-2 mb-6">
       {navItems.map(item => {
         const Icon = item.icon;
         const isActive =

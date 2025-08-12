@@ -39,3 +39,12 @@ export { AISummaryLoadingSkeleton, Summary } from './summary';
 export { GeneratePrompt } from './generate-prompt';
 export { WeekPicker } from './week-picker';
 export { GradientCard } from './gradient-card';
+export {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from './sheet';
