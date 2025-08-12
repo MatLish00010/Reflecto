@@ -46,7 +46,7 @@ export class OpenAIService {
 
   async callOpenAI({
     messages,
-    model = 'gpt-4o-mini',
+    model = 'gpt-4o',
     temperature = 0.7,
     maxTokens = 4000,
     options = {},
