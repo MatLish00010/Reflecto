@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useLocale } from '@/shared/contexts/locale-context';
 import { Button } from '@/shared/ui/button';
-import { BarChart3, History, Home, CreditCard, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -16,35 +14,16 @@ import {
 } from '@/shared/ui/sheet';
 import { UserInfoDropdown } from './user-info-dropdown';
 import { FeedbackButton } from '@/features/feedback';
+import { useNavigation } from '../model/use-navigation';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { useLocale } from '@/shared/contexts/locale-context';
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
   const { currentLocale } = useLocale();
+  const { navItems } = useNavigation();
   const pathname = usePathname();
-
-  const navItems = [
-    {
-      href: `/${currentLocale}`,
-      label: t('navigation.home'),
-      icon: Home,
-    },
-    {
-      href: `/${currentLocale}/history`,
-      label: t('navigation.history'),
-      icon: History,
-    },
-    {
-      href: `/${currentLocale}/analytics`,
-      label: t('navigation.analytics'),
-      icon: BarChart3,
-    },
-    {
-      href: `/${currentLocale}/subscriptions`,
-      label: t('navigation.subscriptions'),
-      icon: CreditCard,
-    },
-  ];
 
   const handleItemClick = () => {
     setIsOpen(false);

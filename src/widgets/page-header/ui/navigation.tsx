@@ -2,38 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useLocale } from '@/shared/contexts/locale-context';
 import { Button } from '@/shared/ui/button';
-import { BarChart3, History, Home, CreditCard } from 'lucide-react';
+import { useNavigation } from '../model/use-navigation';
 
 export function Navigation() {
-  const { t } = useTranslation();
-  const { currentLocale } = useLocale();
+  const { navItems, currentLocale } = useNavigation();
   const pathname = usePathname();
-
-  const navItems = [
-    {
-      href: `/${currentLocale}`,
-      label: t('navigation.home'),
-      icon: Home,
-    },
-    {
-      href: `/${currentLocale}/history`,
-      label: t('navigation.history'),
-      icon: History,
-    },
-    {
-      href: `/${currentLocale}/analytics`,
-      label: t('navigation.analytics'),
-      icon: BarChart3,
-    },
-    {
-      href: `/${currentLocale}/subscriptions`,
-      label: t('navigation.subscriptions'),
-      icon: CreditCard,
-    },
-  ];
 
   return (
     <nav className="hidden md:flex items-center gap-2 mb-6">
