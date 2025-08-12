@@ -12,7 +12,7 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { languages } from '../config/languages';
 import { useLanguageSwitch } from '../utils/language-utils';
 
-export function LanguageToggle() {
+export function MobileLanguageToggle() {
   const { t } = useTranslation();
   const { switchLanguage, currentLanguage, currentLocale } =
     useLanguageSwitch();
@@ -20,12 +20,13 @@ export function LanguageToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">{currentLanguage.flag}</span>
+        <Button variant="outline" className="w-full justify-start">
+          <Globe className="h-4 w-4 mr-3" />
+          <span>{t('languages.language')}</span>
+          <span className="ml-auto">{currentLanguage.flag}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-full">
         {languages.map(language => (
           <DropdownMenuItem
             key={language.code}

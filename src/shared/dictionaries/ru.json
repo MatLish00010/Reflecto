@@ -222,7 +222,8 @@
     "portuguese": "Português",
     "japanese": "日本語",
     "korean": "한국어",
-    "chinese": "中文"
+    "chinese": "中文",
+    "language": "Язык"
   },
   "errors": {
     "audioFileNotFound": "Аудиофайл не найден",
@@ -240,7 +241,8 @@
     "toggleTheme": "Переключить тему",
     "light": "Светлая",
     "dark": "Темная",
-    "system": "Системная"
+    "system": "Системная",
+    "theme": "Тема"
   },
   "user": {
     "loading": "Загрузка информации о пользователе...",

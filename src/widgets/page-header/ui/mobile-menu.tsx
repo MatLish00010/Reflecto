@@ -14,6 +14,8 @@ import {
 } from '@/shared/ui/sheet';
 import { UserInfoDropdown } from './user-info-dropdown';
 import { FeedbackButton } from '@/features/feedback';
+import { MobileLanguageToggle } from '@/features/language-toggle';
+import { MobileThemeToggle } from '@/features/theme-toggle';
 import { useNavigation } from '../model/use-navigation';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useLocale } from '@/shared/contexts/locale-context';
@@ -69,6 +71,8 @@ export function MobileMenu() {
           <div className="border-t pt-4">
             <div className="flex flex-col gap-2">
               <FeedbackButton />
+              <MobileLanguageToggle />
+              <MobileThemeToggle />
               <UserInfoDropdown />
             </div>
           </div>

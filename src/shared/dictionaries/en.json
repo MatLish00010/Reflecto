@@ -222,7 +222,8 @@
     "portuguese": "Português",
     "japanese": "日本語",
     "korean": "한국어",
-    "chinese": "中文"
+    "chinese": "中文",
+    "language": "Language"
   },
   "errors": {
     "audioFileNotFound": "Audio file not found",
@@ -240,7 +241,8 @@
     "toggleTheme": "Toggle theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "theme": "Theme"
   },
   "user": {
     "loading": "Loading user information...",
