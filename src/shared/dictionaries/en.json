@@ -352,6 +352,10 @@
     "welcome": "Welcome to Reflecto Pro!",
     "loading": "Loading...",
     "manage_billing": "Manage your billing information",
-    "order_canceled": "Subscription canceled -- continue to browse and subscribe when you're ready."
+    "order_canceled": "Subscription canceled -- continue to browse and subscribe when you're ready.",
+    "pro": "Pro",
+    "subscription": "Subscription",
+    "active": "Active",
+    "premium": "Premium"
   }
 }

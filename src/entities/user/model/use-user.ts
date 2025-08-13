@@ -53,7 +53,6 @@ export function useUser() {
       staleTime: 2 * 60 * 1000, // 2 minutes
       refetchOnWindowFocus: true,
     });
-  console.log({ isSubscribed });
   return {
     user: user || null,
     isAuthenticated: !!user,

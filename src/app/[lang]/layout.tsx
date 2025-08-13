@@ -58,8 +58,6 @@ export default async function RootLayout({
 
   const { user, isSubscribed } = await getServerUser();
 
-  console.log('isSubscribed', isSubscribed);
-
   return (
     <html lang={lang} suppressHydrationWarning>
       <body

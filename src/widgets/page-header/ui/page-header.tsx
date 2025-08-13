@@ -4,12 +4,18 @@ import { UserInfoDropdown } from './user-info-dropdown';
 import { FeedbackButton } from '@/features/feedback';
 import { Navigation } from './navigation';
 import { MobileMenu } from './mobile-menu';
+import { MobileUserInfo } from './mobile-user-info';
 
 export function PageHeader() {
   return (
     <header className="pb-8">
       <div className="flex justify-between items-start flex-wrap">
-        <Navigation />
+        <div className="flex items-center gap-2">
+          <Navigation />
+          <div className="md:hidden">
+            <MobileMenu />
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             <FeedbackButton />
@@ -18,7 +24,7 @@ export function PageHeader() {
             <UserInfoDropdown />
           </div>
           <div className="md:hidden">
-            <MobileMenu />
+            <MobileUserInfo />
           </div>
         </div>
       </div>

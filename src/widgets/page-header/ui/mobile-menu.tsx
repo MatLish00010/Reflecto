@@ -12,7 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/shared/ui/sheet';
-import { UserInfoDropdown } from './user-info-dropdown';
 import { FeedbackButton } from '@/features/feedback';
 import { MobileLanguageToggle } from '@/features/language-toggle';
 import { MobileThemeToggle } from '@/features/theme-toggle';
@@ -73,7 +72,6 @@ export function MobileMenu() {
               <FeedbackButton />
               <MobileLanguageToggle />
               <MobileThemeToggle />
-              <UserInfoDropdown />
             </div>
           </div>
         </div>

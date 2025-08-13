@@ -41,7 +41,7 @@ const getSavingsBadge = (
   );
 
   if (savingsPercent > 0) {
-    return <Badge variant="success">-{savingsPercent}%</Badge>;
+    return <Badge variant="premium">-{savingsPercent}%</Badge>;
   }
 
   return null;
