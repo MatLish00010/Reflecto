@@ -24,11 +24,9 @@ export function useUser() {
       } = await supabase.auth.getUser();
 
       if (error) {
-        if (error.message !== 'Auth session missing!') {
-          safeSentry.captureException(error, {
-            tags: { operation: 'get_user' },
-          });
-        }
+        safeSentry.captureException(error, {
+          tags: { operation: 'get_user' },
+        });
         return null;
       }
 

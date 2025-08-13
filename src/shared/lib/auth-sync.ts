@@ -15,6 +15,16 @@ export async function syncAuthSession(): Promise<void> {
       try {
         const supabase = createBrowserClient();
 
+        // First check if we have an existing session before trying to refresh
+        const {
+          data: { session: existingSession },
+        } = await supabase.auth.getSession();
+
+        if (!existingSession) {
+          span.setAttribute('auth.no_session', true);
+          return; // No session to refresh
+        }
+
         // Try to refresh the session to ensure it's up to date
         const { data, error } = await supabase.auth.refreshSession();
 
@@ -23,23 +33,24 @@ export async function syncAuthSession(): Promise<void> {
             tags: { operation: 'sync_auth_session' },
           });
           span.setAttribute('error', true);
-          console.warn('Failed to refresh session:', error.message);
+          span.setAttribute('error.type', 'refresh_failed');
         } else if (data.session) {
           span.setAttribute('auth.session_refreshed', true);
           span.setAttribute('auth.user_present', !!data.session.user);
           if (data.session.user) {
             span.setAttribute('auth.user_id', data.session.user.id);
           }
-          console.log('Session refreshed successfully');
         } else {
           span.setAttribute('auth.no_session', true);
         }
       } catch (error) {
-        safeSentry.captureException(error as Error, {
-          tags: { operation: 'sync_auth_session' },
-        });
+        if (error instanceof Error) {
+          safeSentry.captureException(error as Error, {
+            tags: { operation: 'sync_auth_session' },
+          });
+        }
         span.setAttribute('error', true);
-        console.warn('Session sync error:', error);
+        span.setAttribute('error.type', 'unexpected_error');
       }
     }
   );

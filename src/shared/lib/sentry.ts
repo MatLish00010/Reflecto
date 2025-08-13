@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { shouldFilterError, getErrorFilter } from './sentry-error-config';
 
 // Check if Sentry is enabled (only in production)
 const isSentryEnabled = process.env.NODE_ENV === 'production';
@@ -32,6 +33,32 @@ interface SentryContext {
 export const safeSentry = {
   // Exception capturing
   captureException: (error: Error, context?: SentryContext) => {
+    // Check if this error should be filtered out
+    if (shouldFilterError(error)) {
+      const filter = getErrorFilter(error);
+      if (isSentryEnabled) {
+        // In production, we still want to track filtered errors but with specific tags
+        const enhancedContext = {
+          ...context,
+          tags: {
+            ...context?.tags,
+            ...filter?.tags,
+            filtered: 'true',
+            reason: filter?.reason || 'unknown',
+          },
+        };
+        Sentry.captureException(error, enhancedContext);
+      } else {
+        // In development, log filtered errors with clear indication
+        console.log(
+          `Sentry (dev): Filtered exception - ${filter?.reason || 'unknown'}:`,
+          error.message,
+          { filter: filter?.tags, context }
+        );
+      }
+      return;
+    }
+
     if (isSentryEnabled) {
       Sentry.captureException(error, context);
     } else {

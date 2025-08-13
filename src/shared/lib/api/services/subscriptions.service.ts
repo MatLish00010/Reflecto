@@ -243,7 +243,6 @@ export const subscriptionsClientService = {
           safeSentry.captureException(error as Error, {
             tags: { operation: 'check_user_subscription' },
           });
-          console.error('Error checking user subscription:', error);
           return false;
         }
       }

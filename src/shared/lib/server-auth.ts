@@ -25,7 +25,7 @@ export async function getServerUser(): Promise<{
             tags: { operation: 'get_server_user' },
           });
           span.setAttribute('error', true);
-          console.error('Error getting user:', error);
+          span.setAttribute('error.type', 'get_user_failed');
           return { user: null, isSubscribed: false };
         }
 
@@ -60,10 +60,7 @@ export async function getServerUser(): Promise<{
               tags: { operation: 'get_user_subscriptions_for_auth' },
             });
             span.setAttribute('subscription_check_error', true);
-            console.error(
-              'Error checking user subscription:',
-              subscriptionError
-            );
+            span.setAttribute('error.type', 'subscription_check_failed');
             return { user, isSubscribed: false };
           }
         }
@@ -74,7 +71,7 @@ export async function getServerUser(): Promise<{
           tags: { operation: 'get_server_user' },
         });
         span.setAttribute('error', true);
-        console.error('Server auth error:', error);
+        span.setAttribute('error.type', 'server_auth_error');
         return { user: null, isSubscribed: false };
       }
     }
