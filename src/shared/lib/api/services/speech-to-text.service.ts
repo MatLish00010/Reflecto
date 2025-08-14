@@ -52,7 +52,7 @@ export class SpeechToTextService {
 
     try {
       const transcription = await this.openai.audio.transcriptions.create({
-        model: 'gpt-4o-transcribe',
+        model: prompt ? 'gpt-4o-transcribe' : 'whisper-1',
         file: audioFile,
         response_format: 'text',
         prompt: prompt || undefined,
