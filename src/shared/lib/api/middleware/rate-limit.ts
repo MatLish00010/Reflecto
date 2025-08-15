@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { createErrorResponse } from '../utils/response-helpers';
 import type { Span } from '@sentry/types';
 import { ServiceFactory } from '../utils/service-factory';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export interface RateLimitConfig {
   windowMs: number; // Time window in milliseconds
@@ -42,7 +43,9 @@ class RedisRateLimitStore implements RateLimitStore {
     try {
       return await this.getRedisService().incrementRateLimit(key, windowMs);
     } catch (error) {
-      console.error('Redis rate limit increment error:', error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'rate_limit_increment' },
+      });
       throw error;
     }
   }
@@ -54,7 +57,9 @@ class RedisRateLimitStore implements RateLimitStore {
     try {
       return await this.getRedisService().getRateLimit(key, windowMs);
     } catch (error) {
-      console.error('Redis rate limit get error:', error);
+      safeSentry.captureException(error as Error, {
+        tags: { operation: 'rate_limit_get' },
+      });
       return undefined;
     }
   }

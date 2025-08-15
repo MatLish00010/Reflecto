@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createServerClient } from '@/shared/lib/server';
 import type { User } from '@supabase/supabase-js';
 import { createErrorResponse } from '@/shared/lib/api/utils/response-helpers';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export async function authenticateUser(): Promise<{
   isAuthenticated: boolean;
@@ -34,7 +35,9 @@ export async function authenticateUser(): Promise<{
       user,
     };
   } catch (error) {
-    console.error('Authentication error:', error);
+    safeSentry.captureException(error as Error, {
+      tags: { operation: 'authenticate_user' },
+    });
     return {
       isAuthenticated: false,
       error: 'Authentication failed',

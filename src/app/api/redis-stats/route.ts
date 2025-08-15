@@ -1,8 +1,8 @@
-import * as Sentry from '@sentry/nextjs';
+import { safeSentry } from '@/shared/lib/sentry';
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 
 export async function GET() {
-  return Sentry.startSpan(
+  return safeSentry.startSpan(
     {
       op: 'http.server',
       name: 'GET /api/redis-stats',
@@ -40,8 +40,9 @@ export async function GET() {
           },
         });
       } catch (error) {
-        console.error('Failed to get Redis stats:', error);
-        Sentry.captureException(error);
+        safeSentry.captureException(error as Error, {
+          tags: { operation: 'get_redis_stats' },
+        });
 
         return Response.json(
           {
