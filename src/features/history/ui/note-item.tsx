@@ -14,16 +14,19 @@ interface NoteItemProps {
   searchQuery?: string;
 }
 
+const MAX_CHARACTERS_TO_SHOW = 300;
+
 export function NoteItem({ note, searchQuery }: NoteItemProps) {
   const { t } = useTranslation();
   const { formatDate } = useFormatters();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const noteText = note.note || '';
-  const shouldShowExpandButton = noteText.length > 100;
+  const shouldShowExpandButton = noteText.length > MAX_CHARACTERS_TO_SHOW;
   const displayText = isExpanded
     ? noteText
-    : noteText.slice(0, 300) + (shouldShowExpandButton ? '...' : '');
+    : noteText.slice(0, MAX_CHARACTERS_TO_SHOW) +
+      (shouldShowExpandButton ? '...' : '');
 
   const highlightText = (text: string, query?: string) => {
     if (!query || query.trim() === '') return text;
