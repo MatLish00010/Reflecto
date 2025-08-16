@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { RefreshCw, Calendar } from 'lucide-react';
+import { RefreshCw, Calendar, Brain } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { NewEntryForm } from '@/widgets/new-entry-form';
@@ -37,11 +37,11 @@ export function HomeContent() {
   const recentNotes = todayNotes.slice(0, 3);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       <Card>
         <CardHeader>
           <CardTitle className="text-sm md:text-base font-normal">
-            <p>{t('newEntry.title')}</p>
+            {t('newEntry.title')}
             <p className="text-xs text-muted-foreground">
               {t('newEntry.contentLabel')}
             </p>
@@ -54,7 +54,8 @@ export function HomeContent() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl font-semibold">
+          <CardTitle className="text-sm md:text-base font-normal flex items-center gap-2">
+            <Brain className="text-purple-600 h-6 w-6" />
             {t('aiAnalysis.dailySummaryTitle')}
           </CardTitle>
         </CardHeader>

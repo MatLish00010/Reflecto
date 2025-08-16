@@ -80,7 +80,7 @@ export function NewEntryForm() {
   };
 
   return (
-    <div id="new-entry-form" className="space-y-4">
+    <div id="new-entry-form" className="space-y-3.5">
       <div>
         <Textarea
           id="content"

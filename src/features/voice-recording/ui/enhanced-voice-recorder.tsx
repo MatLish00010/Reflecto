@@ -212,7 +212,7 @@ export function EnhancedVoiceRecorder({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3.5">
       <div className="flex gap-2">
         {!isRecording ? (
           <Button
@@ -261,7 +261,7 @@ export function EnhancedVoiceRecorder({
         </div>
       )}
 
-      <div className="text-xs text-muted-foreground text-center">
+      <div className="text-[10px] text-muted-foreground text-center">
         {t('newEntry.voiceRecording.recognizesSpeech')}
       </div>
     </div>

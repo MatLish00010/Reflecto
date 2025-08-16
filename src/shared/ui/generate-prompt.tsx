@@ -30,8 +30,8 @@ export function GeneratePrompt({
     if (!hasNotes) {
       if (isToday) {
         return (
-          <div className="space-y-3 sm:space-y-4 text-center">
-            <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100">
+          <div className="space-y-2 sm:space-y-4 text-center">
+            <h3 className="text-sm sm:text-lg font-medium text-gray-900 dark:text-gray-100">
               {t('aiAnalysis.noNotesTodayTitle')}
             </h3>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 px-2 sm:px-0">
@@ -78,11 +78,9 @@ export function GeneratePrompt({
   };
 
   return (
-    <div className="text-center py-6 sm:py-8 px-4 sm:px-0">
-      <div className="flex flex-col items-center space-y-4 sm:space-y-6">
-        <div className="p-2 sm:p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
-          <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 dark:text-blue-400" />
-        </div>
+    <div className="text-center py-7 sm:py-8">
+      <div className="flex flex-col items-center space-y-3.5 sm:space-y-6">
+        <Brain className="h-12 w-12 text-blue-400" />
         <div className="w-full max-w-sm sm:max-w-md">{renderContent()}</div>
       </div>
     </div>

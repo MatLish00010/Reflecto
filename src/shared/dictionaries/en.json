@@ -77,7 +77,7 @@
     "tryItYourself": "Try it yourself",
     "weeklySummaryTitle": "Weekly AI Analysis",
     "weeklySummaryDescription": "Analysis of your daily summaries for the week",
-    "dailySummaryTitle": "Daily AI Summary",
+    "dailySummaryTitle": "Summary",
     "dailySummaryDescription": "AI analysis of your daily entries and thoughts",
     "insufficientDailySummariesTitle": "Insufficient Daily Summaries",
     "insufficientDailySummariesDescription": "To create a weekly summary, you need to create more than 3 daily summaries for the selected week",
