@@ -2,8 +2,8 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { PageHeader, PeriodDisplay } from '@/shared/ui';
 
 interface AnalyticsHeaderProps {
-  fromDate: Date;
-  toDate: Date;
+  fromDate: Date | string;
+  toDate: Date | string;
 }
 
 export function AnalyticsHeader({ fromDate, toDate }: AnalyticsHeaderProps) {

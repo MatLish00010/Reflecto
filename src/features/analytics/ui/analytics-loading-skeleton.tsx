@@ -2,8 +2,8 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import { AnalyticsHeader } from './analytics-header';
 
 interface AnalyticsLoadingSkeletonProps {
-  fromDate: Date;
-  toDate: Date;
+  fromDate: Date | string;
+  toDate: Date | string;
 }
 
 export function AnalyticsLoadingSkeleton({

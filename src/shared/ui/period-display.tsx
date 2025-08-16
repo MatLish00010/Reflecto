@@ -2,8 +2,8 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { useFormatters } from '@/shared/hooks';
 
 interface PeriodDisplayProps {
-  fromDate: Date;
-  toDate: Date;
+  fromDate: Date | string;
+  toDate: Date | string;
 }
 
 export function PeriodDisplay({ fromDate, toDate }: PeriodDisplayProps) {
