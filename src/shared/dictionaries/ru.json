@@ -32,7 +32,8 @@
       "errorMessage": "Ошибка при распознавании речи. Попробуйте еще раз.",
       "speechRecognition": "Распознавание речи",
       "recognizesSpeech": "Распознает речь на исходном языке",
-      "errorAccessingMicrophone": "Ошибка доступа к микрофону"
+      "errorAccessingMicrophone": "Ошибка доступа к микрофону",
+      "recommendedDuration": "Рекомендуется записывать не более 2 минут"
     }
   },
   "aiAnalysis": {

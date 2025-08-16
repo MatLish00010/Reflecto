@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Mic, Square, RotateCcw } from 'lucide-react';
+import { Mic, Square, RotateCcw, Clock } from 'lucide-react';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { safeSentry } from '@/shared/lib/sentry';
@@ -16,6 +16,12 @@ interface EnhancedVoiceRecorderProps {
   disabled?: boolean;
 }
 
+const formatTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
+
 export function EnhancedVoiceRecorder({
   onRecordingComplete,
   isRecording,
@@ -23,13 +29,35 @@ export function EnhancedVoiceRecorder({
   disabled = false,
 }: EnhancedVoiceRecorderProps) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const isResetRef = useRef(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { showError } = useAlertContext();
   const { t } = useTranslation();
   const { isAuthenticated } = useUser();
   const { openModal } = useAuthModalContext();
+
+  useEffect(() => {
+    if (isRecording) {
+      timerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      setRecordingTime(0);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isRecording]);
 
   const startRecording = async () => {
     if (!isAuthenticated) {
@@ -215,9 +243,21 @@ export function EnhancedVoiceRecorder({
       </div>
 
       {isRecording && (
-        <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
-          <div className="w-2 h-2 bg-red-600 dark:bg-red-400 rounded-full animate-pulse"></div>
-          {t('newEntry.voiceRecording.recordingIndicator')}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
+            <div className="w-2 h-2 bg-red-600 dark:bg-red-400 rounded-full animate-pulse"></div>
+            {t('newEntry.voiceRecording.recordingIndicator')}
+          </div>
+
+          <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+            <div className="flex items-center gap-2 text-red-600 dark:text-red-400 mb-1">
+              <Clock className="w-4 h-4" />
+              <span className="font-medium">{formatTime(recordingTime)}</span>
+            </div>
+            <div className="text-xs text-red-600 dark:text-red-400">
+              {t('newEntry.voiceRecording.recommendedDuration')}
+            </div>
+          </div>
         </div>
       )}
 

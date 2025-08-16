@@ -82,19 +82,14 @@ export function NewEntryForm() {
   return (
     <div id="new-entry-form" className="space-y-4">
       <div>
-        <label htmlFor="content" className="block text-sm font-medium mb-2">
-          {t('newEntry.contentLabel')}
-        </label>
         <Textarea
           id="content"
           value={content}
           onChange={e => setContent(e.target.value)}
           placeholder={t('newEntry.contentPlaceholder')}
-          className="min-h-[200px]"
+          className="mb-3.5"
         />
-        <div className="mt-2">
-          <AudioInputTabs onAudioProcessed={handleRecordingComplete} />
-        </div>
+        <AudioInputTabs onAudioProcessed={handleRecordingComplete} />
       </div>
       <Button
         onClick={handleSave}

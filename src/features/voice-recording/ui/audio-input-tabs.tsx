@@ -19,13 +19,11 @@ export function AudioInputTabs({
   };
 
   return (
-    <div className="space-y-4">
-      <EnhancedVoiceRecorder
-        onRecordingComplete={handleRecordingComplete}
-        isRecording={isRecording}
-        onRecordingChange={setIsRecording}
-        disabled={disabled}
-      />
-    </div>
+    <EnhancedVoiceRecorder
+      onRecordingComplete={handleRecordingComplete}
+      isRecording={isRecording}
+      onRecordingChange={setIsRecording}
+      disabled={disabled}
+    />
   );
 }

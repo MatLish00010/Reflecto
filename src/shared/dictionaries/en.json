@@ -32,7 +32,8 @@
       "errorMessage": "Error recognizing speech. Please try again.",
       "speechRecognition": "Speech Recognition",
       "recognizesSpeech": "Recognizes speech in the original language",
-      "errorAccessingMicrophone": "Error accessing microphone"
+      "errorAccessingMicrophone": "Error accessing microphone",
+      "recommendedDuration": "It is recommended to record no more than 2 minutes"
     }
   },
   "aiAnalysis": {

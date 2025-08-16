@@ -40,8 +40,11 @@ export function HomeContent() {
     <div className="space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">
-            {t('newEntry.title')}
+          <CardTitle className="text-sm md:text-base font-normal">
+            <p>{t('newEntry.title')}</p>
+            <p className="text-xs text-muted-foreground">
+              {t('newEntry.contentLabel')}
+            </p>
           </CardTitle>
         </CardHeader>
         <CardContent>
