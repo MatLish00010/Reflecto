@@ -1,4 +1,11 @@
-import { format, parseISO, startOfWeek, endOfWeek } from 'date-fns';
+import {
+  format,
+  parseISO,
+  startOfWeek,
+  endOfWeek,
+  subDays,
+  startOfDay,
+} from 'date-fns';
 import {
   ru,
   enUS,
@@ -95,6 +102,16 @@ export function getWeekRange(date: Date): { from: string; to: string } {
   return {
     from: getStartOfDayUTC(startOfWeek),
     to: getEndOfDayUTC(endOfWeek),
+  };
+}
+
+export function getAnalyticsDateRange(): { from: string; to: string } {
+  const today = startOfDay(new Date());
+  const thirtyDaysAgo = startOfDay(subDays(today, 30));
+
+  return {
+    from: getStartOfDayUTC(thirtyDaysAgo),
+    to: getStartOfDayUTC(today),
   };
 }
 
