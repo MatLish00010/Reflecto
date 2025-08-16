@@ -8,7 +8,15 @@ import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { Bug } from 'lucide-react';
 
-export function FeedbackButton() {
+interface FeedbackButtonProps {
+  variant?: 'default' | 'mobile';
+  className?: string;
+}
+
+export function FeedbackButton({
+  variant = 'default',
+  className,
+}: FeedbackButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
   const { isAuthenticated } = useUser();
@@ -22,17 +30,24 @@ export function FeedbackButton() {
     setIsModalOpen(true);
   };
 
+  const buttonClassName =
+    variant === 'mobile' ? 'w-full justify-start' : 'flex items-center gap-2';
+
   return (
     <>
       <Button
         variant="outline"
-        size="sm"
         onClick={handleClick}
-        className="flex items-center gap-2"
+        className={`${buttonClassName} ${className || ''}`}
         title={t('feedback.description')}
       >
         <Bug className="h-4 w-4" />
-        <span className="hidden sm:inline">{t('feedback.button')}</span>
+        {variant === 'mobile' && (
+          <span className="ml-3">{t('feedback.button')}</span>
+        )}
+        {variant === 'default' && (
+          <span className="hidden sm:inline">{t('feedback.button')}</span>
+        )}
       </Button>
 
       <FeedbackModal
