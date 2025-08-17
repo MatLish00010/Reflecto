@@ -144,42 +144,66 @@ const nextConfig: NextConfig = {
       config.optimization.usedExports = true;
       config.optimization.sideEffects = false;
 
+      // Additional optimizations
+      config.optimization.moduleIds = 'deterministic';
+      config.optimization.chunkIds = 'deterministic';
+      config.optimization.runtimeChunk = 'single';
+
+      // Better compression
+      config.optimization.minimizer = config.optimization.minimizer || [];
+      if (config.optimization.minimizer.length > 0) {
+        const terserPlugin = config.optimization.minimizer.find(
+          (plugin: { constructor: { name: string } }) =>
+            plugin.constructor.name === 'TerserPlugin'
+        );
+        if (terserPlugin) {
+          terserPlugin.options.terserOptions = {
+            ...terserPlugin.options.terserOptions,
+            compress: {
+              ...terserPlugin.options.terserOptions?.compress,
+              drop_console: true,
+              drop_debugger: true,
+              pure_funcs: ['console.log', 'console.info', 'console.debug'],
+            },
+            mangle: {
+              ...terserPlugin.options.terserOptions?.mangle,
+              safari10: true,
+            },
+          };
+        }
+      }
+
       config.optimization.splitChunks = {
         chunks: 'all',
         maxInitialRequests: 25,
-        minSize: 20000,
-        maxSize: 244000, // Chunk size limit
+        minSize: 15000, // Reduced for better splitting
+        maxSize: 200000, // Reduced chunk size limit
         cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
+          // React and core libraries
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
             chunks: 'all',
-            priority: 10,
+            priority: 40,
             reuseExistingChunk: true,
           },
-          common: {
-            name: 'common',
-            minChunks: 2,
+          // Next.js
+          next: {
+            test: /[\\/]node_modules[\\/]next[\\/]/,
+            name: 'next',
             chunks: 'all',
-            enforce: true,
-            priority: 5,
+            priority: 35,
             reuseExistingChunk: true,
           },
+          // Analytics and charts (heavy)
           analytics: {
             test: /[\\/]node_modules[\\/]recharts[\\/]/,
             name: 'analytics',
-            chunks: 'all',
-            priority: 20,
+            chunks: 'async', // Only async loading
+            priority: 30,
             reuseExistingChunk: true,
           },
-          sentry: {
-            test: /[\\/]node_modules[\\/]@sentry[\\/]/,
-            name: 'sentry',
-            chunks: 'all',
-            priority: 15,
-            reuseExistingChunk: true,
-          },
-          // New optimizations
+          // UI components
           ui: {
             test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
             name: 'ui',
@@ -187,18 +211,45 @@ const nextConfig: NextConfig = {
             priority: 25,
             reuseExistingChunk: true,
           },
+          // Icons
           icons: {
             test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
             name: 'icons',
             chunks: 'all',
-            priority: 30,
+            priority: 20,
             reuseExistingChunk: true,
           },
+          // Utilities
           utils: {
             test: /[\\/]node_modules[\\/](clsx|tailwind-merge|date-fns)[\\/]/,
             name: 'utils',
             chunks: 'all',
-            priority: 35,
+            priority: 15,
+            reuseExistingChunk: true,
+          },
+          // Sentry (error tracking)
+          sentry: {
+            test: /[\\/]node_modules[\\/]@sentry[\\/]/,
+            name: 'sentry',
+            chunks: 'all',
+            priority: 10,
+            reuseExistingChunk: true,
+          },
+          // Other vendors
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+          // Common chunks
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            enforce: true,
+            priority: 1,
             reuseExistingChunk: true,
           },
         },

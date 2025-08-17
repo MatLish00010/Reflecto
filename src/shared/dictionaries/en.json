@@ -171,7 +171,9 @@
     "history": "History",
     "analytics": "Analytics",
     "subscriptions": "Subscriptions",
-    "menu": "Menu"
+    "menu": "Menu",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
   },
   "history": {
     "title": "Archive & Analysis",

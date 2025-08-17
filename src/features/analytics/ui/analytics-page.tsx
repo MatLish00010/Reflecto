@@ -1,21 +1,104 @@
 'use client';
 
+import { Suspense, useMemo } from 'react';
 import { useUser } from '@/entities/user';
 import { AuthRequiredMessage } from '@/shared/components/auth-required-message';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { AnalyticsHeader } from './analytics-header';
-import { AnalyticsStatsCards } from './analytics-stats-cards';
-import { AnalyticsProductivityCards } from './analytics-productivity-cards';
-import { AnalyticsCharts } from './analytics-charts';
 import { AnalyticsErrorState } from './analytics-error-state';
 import { AnalyticsEmptyState } from './analytics-empty-state';
 import { AnalyticsDataLoadingSkeleton } from './analytics-data-loading-skeleton';
 import { useAnalyticsData } from '../model/use-analytics-data';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for heavy components with optimized loading
+const AnalyticsCharts = dynamic(
+  () =>
+    import('./analytics-charts').then(mod => ({
+      default: mod.AnalyticsCharts,
+    })),
+  {
+    loading: () => (
+      <div className="h-64 animate-pulse bg-gray-200 rounded-lg flex items-center justify-center">
+        <div className="text-gray-500">Loading charts...</div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
+
+const AnalyticsStatsCards = dynamic(
+  () =>
+    import('./analytics-stats-cards').then(mod => ({
+      default: mod.AnalyticsStatsCards,
+    })),
+  {
+    loading: () => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-32 animate-pulse bg-gray-200 rounded-lg" />
+        ))}
+      </div>
+    ),
+    ssr: true,
+  }
+);
+
+const AnalyticsProductivityCards = dynamic(
+  () =>
+    import('./analytics-productivity-cards').then(mod => ({
+      default: mod.AnalyticsProductivityCards,
+    })),
+  {
+    loading: () => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-32 animate-pulse bg-gray-200 rounded-lg" />
+        ))}
+      </div>
+    ),
+    ssr: true,
+  }
+);
 
 export function Analytics() {
   const { user } = useUser();
   const { t } = useTranslation();
   const { data, isLoading, error, fromDate, toDate } = useAnalyticsData();
+
+  // Memoize data to prevent unnecessary re-renders (moved before conditional returns)
+  const memoizedData = useMemo(
+    () => ({
+      notes: data?.notes || [],
+      dailySummaries: data?.dailySummaries || [],
+      weeklySummaries: data?.weeklySummaries || [],
+      summaryStats: data?.summaryStats || {
+        mostActiveDay: '0',
+        avgEntriesPerDay: '0',
+        totalCharacters: 0,
+      },
+      productivityStats: data?.productivityStats || {
+        completionRate: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        longestNote: 0,
+      },
+      activityData: data?.activityData || [],
+      weeklyActivityData: data?.weeklyActivityData || [],
+      contentAnalysisData: data?.contentAnalysisData || {
+        lengthDistribution: [],
+        weekdayActivity: [],
+      },
+      timeAnalysisData: data?.timeAnalysisData || [],
+      emotionalData: data?.emotionalData || { weekdayProductivity: [] },
+      comparativeStats: data?.comparativeStats || {
+        currentMonth: 0,
+        previousMonth: 0,
+        improvement: 0,
+      },
+    }),
+    [data]
+  );
 
   if (!user) {
     return (
@@ -40,9 +123,9 @@ export function Analytics() {
   }
 
   const hasData =
-    data.notes.length > 0 ||
-    data.dailySummaries.length > 0 ||
-    data.weeklySummaries.length > 0;
+    memoizedData.notes.length > 0 ||
+    memoizedData.dailySummaries.length > 0 ||
+    memoizedData.weeklySummaries.length > 0;
 
   if (!hasData) {
     return (
@@ -58,39 +141,76 @@ export function Analytics() {
       <AnalyticsHeader fromDate={fromDate} toDate={toDate} />
 
       <div className="space-y-8">
+        {/* Priority 1: Stats Cards - Load first */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.overview')}
           </h2>
-          <AnalyticsStatsCards
-            notes={data.notes}
-            dailySummaries={data.dailySummaries}
-            weeklySummaries={data.weeklySummaries}
-            summaryStats={data.summaryStats}
-          />
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-32 animate-pulse bg-gray-200 rounded-lg"
+                  />
+                ))}
+              </div>
+            }
+          >
+            <AnalyticsStatsCards
+              notes={memoizedData.notes}
+              dailySummaries={memoizedData.dailySummaries}
+              weeklySummaries={memoizedData.weeklySummaries}
+              summaryStats={memoizedData.summaryStats}
+            />
+          </Suspense>
         </section>
 
+        {/* Priority 2: Productivity Cards */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.productivity')}
           </h2>
-          <AnalyticsProductivityCards
-            productivityStats={data.productivityStats}
-          />
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-32 animate-pulse bg-gray-200 rounded-lg"
+                  />
+                ))}
+              </div>
+            }
+          >
+            <AnalyticsProductivityCards
+              productivityStats={memoizedData.productivityStats}
+            />
+          </Suspense>
         </section>
 
+        {/* Priority 3: Charts - Load last (heaviest) */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.chartsAndInsights')}
           </h2>
-          <AnalyticsCharts
-            activityData={data.activityData}
-            weeklyActivityData={data.weeklyActivityData}
-            contentAnalysisData={data.contentAnalysisData}
-            timeAnalysisData={data.timeAnalysisData}
-            emotionalData={data.emotionalData}
-            comparativeStats={data.comparativeStats}
-          />
+          <Suspense
+            fallback={
+              <div className="h-64 animate-pulse bg-gray-200 rounded-lg flex items-center justify-center">
+                <div className="text-gray-500">Preparing charts...</div>
+              </div>
+            }
+          >
+            <AnalyticsCharts
+              activityData={memoizedData.activityData}
+              weeklyActivityData={memoizedData.weeklyActivityData}
+              contentAnalysisData={memoizedData.contentAnalysisData}
+              timeAnalysisData={memoizedData.timeAnalysisData}
+              emotionalData={memoizedData.emotionalData}
+              comparativeStats={memoizedData.comparativeStats}
+            />
+          </Suspense>
         </section>
       </div>
     </div>

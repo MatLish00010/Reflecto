@@ -33,11 +33,13 @@ export function useAnalyticsData() {
     isLoading: notesLoading,
     error: notesError,
   } = useNotesByDate(fromISO, toISO);
+
   const {
     data: dailySummaries,
     isLoading: dailyLoading,
     error: dailyError,
   } = useDailySummaries(fromISO, toISO);
+
   const {
     data: weeklySummaries,
     isLoading: weeklyLoading,

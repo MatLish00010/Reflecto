@@ -22,12 +22,16 @@ const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
   preload: true,
+  display: 'swap',
+  fallback: ['system-ui', 'arial'],
 });
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
   preload: true,
+  display: 'swap',
+  fallback: ['monospace'],
 });
 
 const OnboardingGuide = dynamic(
@@ -87,8 +91,12 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

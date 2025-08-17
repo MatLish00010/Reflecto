@@ -59,6 +59,9 @@ export function MobileMenu() {
           variant="outline"
           size="sm"
           onClick={() => handleMenuToggle(true)}
+          aria-label={t('navigation.openMenu')}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
         >
           <Menu className="h-4 w-4" />
         </Button>
@@ -96,6 +99,7 @@ export function MobileMenu() {
 
             {/* Menu */}
             <motion.div
+              id="mobile-menu"
               className="absolute inset-y-0 left-0 w-3/4 bg-background border-r shadow-lg"
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -131,6 +135,7 @@ export function MobileMenu() {
                       );
                     }}
                     className="p-1"
+                    aria-label={t('navigation.closeMenu')}
                   >
                     <X className="h-4 w-4" />
                   </Button>
