@@ -2,6 +2,7 @@
   "name": "ai-diary",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -16,7 +17,12 @@
     "test:coverage": "jest --coverage",
     "test:integration": "jest tests/integration",
     "type-check": "tsc --noEmit",
-    "check": "pnpm lint && pnpm type-check"
+    "check": "pnpm lint && pnpm type-check",
+    "analyze": "ANALYZE=true pnpm build",
+    "lighthouse": "node scripts/lighthouse.js",
+    "lighthouse:compare": "node scripts/lighthouse-compare.js",
+    "lighthouse:analyze": "node scripts/analyze-lighthouse-issues.js",
+    "lighthouse:metrics": "node scripts/lighthouse-metrics-summary.js"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "0.6.1",
@@ -53,6 +59,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
+    "@next/bundle-analyzer": "15.4.6",
     "@sentry/types": "9.42.0",
     "@tailwindcss/postcss": "4.1.11",
     "@tanstack/react-query-devtools": "5.83.0",
@@ -67,11 +74,12 @@
     "husky": "9.1.7",
     "jest": "30.0.5",
     "jest-environment-node": "30.0.5",
+    "lighthouse": "12.8.1",
     "lint-staged": "16.1.2",
     "prettier": "3.6.2",
+    "puppeteer": "24.16.2",
     "tailwindcss": "4.1.11",
     "ts-jest": "29.4.0",
-    "tw-animate-css": "1.3.5",
     "typescript": "5.8.3"
   },
   "lint-staged": {

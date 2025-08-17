@@ -1,5 +1,5 @@
 import { Button } from '@/shared/ui/button';
-import { Brain, RefreshCw } from 'lucide-react';
+import { Brain, RefreshCw } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 
 interface SummaryHeaderProps {

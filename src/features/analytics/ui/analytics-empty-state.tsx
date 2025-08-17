@@ -1,6 +1,6 @@
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3 } from '@/shared/icons';
 
 export function AnalyticsEmptyState() {
   const { t } = useTranslation();

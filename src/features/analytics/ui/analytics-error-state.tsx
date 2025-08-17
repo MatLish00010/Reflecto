@@ -1,6 +1,6 @@
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle } from '@/shared/icons';
 
 interface AnalyticsErrorStateProps {
   message?: string;

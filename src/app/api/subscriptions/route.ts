@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
           context.supabase
         );
 
-        // Проверяем, не существует ли уже такая подписка
+        // Check if subscription already exists
         const existingSubscription =
           await subscriptionsService.getSubscriptionByCustomerId(
             validatedData.stripeCustomerId,
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
           };
         }
 
-        // Создаем новую подписку
+        // Create new subscription
         const subscription = await subscriptionsService.createSubscription(
           {
             userId: context.user.id,

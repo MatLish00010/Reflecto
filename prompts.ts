@@ -84,8 +84,8 @@ export const aiSummaryPrompts = {
 
 Пример правильного ответа:
 "keyEvents": ["Событие 1 с деталями", "Событие 2 с деталями"]
-"resources": [] // если нет записей о ресурсах
-"emotionalMoments": [] // если нет эмоциональных моментов`,
+"resources": [] // if no resource records
+"emotionalMoments": [] // if no emotional moments`,
 
   en: `Your diary entries for the day:
 {notes}
@@ -284,8 +284,8 @@ export const weeklySummaryPrompts = {
 
 Пример правильного ответа:
 "keyEvents": ["Понедельник: Событие 1 с деталями", "Среда: Событие 2 с деталями"]
-"resources": [] // если нет записей о ресурсах за неделю
-"emotionalMoments": [] // если нет эмоциональных моментов`,
+"resources": [] // if no resource records for the week
+"emotionalMoments": [] // if no emotional moments`,
 
   en: `ATTENTION: Analyze ALL days of the week without exception. Each day contains important information.
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Crown } from 'lucide-react';
+import { Crown } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 
 interface SubscriptionIconProps {

@@ -3,7 +3,7 @@
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 import { useSignOutWithTracing } from '@/features/auth';
-import { LogOut } from 'lucide-react';
+import { LogOut } from '@/shared/icons';
 
 export function LogoutButton() {
   const { t } = useTranslation();

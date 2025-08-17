@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
-import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Clock, ChevronDown, ChevronUp } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useFormatters } from '@/shared/hooks';
 import { useState } from 'react';

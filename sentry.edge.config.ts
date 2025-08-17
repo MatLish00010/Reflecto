@@ -24,9 +24,9 @@ if (
       enableLogs: true,
     },
 
-    // Add console logging integration to capture console.error, console.warn, and console.log
+    // Add console logging integration to capture only errors and warnings
     integrations: [
-      Sentry.consoleLoggingIntegration({ levels: ['error', 'warn', 'log'] }),
+      Sentry.consoleLoggingIntegration({ levels: ['error', 'warn'] }),
     ],
   });
 } else {

@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { User, LogIn } from 'lucide-react';
+import { User, LogIn } from '@/shared/icons';
 import { SubscriptionIcon } from './subscription-icon';
 import {
   DropdownMenu,

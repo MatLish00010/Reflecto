@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { RefreshCw, Calendar, Brain } from 'lucide-react';
+import { RefreshCw, Calendar, Brain } from '@/shared/icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { NewEntryForm } from '@/widgets/new-entry-form';

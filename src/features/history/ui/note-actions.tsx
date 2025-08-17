@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { MoreVertical, Edit, Trash2 } from 'lucide-react';
+import { MoreVertical, Edit, Trash2 } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useUpdateNote, useDeleteNote } from '@/entities/note';
 import { useAlertContext } from '@/shared/providers/alert-provider';

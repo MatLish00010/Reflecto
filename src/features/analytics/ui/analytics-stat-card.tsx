@@ -1,4 +1,5 @@
-import { LucideIcon } from 'lucide-react';
+import { memo } from 'react';
+import { LucideIcon } from '@/shared/icons';
 import { GradientCard } from '@/shared/ui/gradient-card';
 
 interface AnalyticsStatCardProps {
@@ -16,7 +17,7 @@ interface AnalyticsStatCardProps {
   iconGradientTo: string;
 }
 
-export function AnalyticsStatCard({
+export const AnalyticsStatCard = memo(function AnalyticsStatCard({
   title,
   value,
   subtitle,
@@ -47,4 +48,4 @@ export function AnalyticsStatCard({
       variant="stats"
     />
   );
-}
+});

@@ -1,4 +1,4 @@
-import { Share2 } from 'lucide-react';
+import { Share2 } from '@/shared/icons';
 import { Button } from '@/shared/ui/button';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useAlertContext } from '@/shared/providers/alert-provider';

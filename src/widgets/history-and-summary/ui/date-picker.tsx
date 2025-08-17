@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Calendar } from '@/shared/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon } from '@/shared/icons';
 import { cn } from '@/shared/lib/utils';
 import { getLocaleByLang } from '@/shared/lib/date-utils';
 import { useTranslation } from '@/shared/contexts/translation-context';

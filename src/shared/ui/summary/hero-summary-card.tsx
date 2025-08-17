@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 
 interface HeroSummaryCardProps {

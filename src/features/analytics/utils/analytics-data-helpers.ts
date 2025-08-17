@@ -1,4 +1,8 @@
-import { format, subDays, startOfWeek, parseISO, getHours } from 'date-fns';
+import { format } from 'date-fns/format';
+import { subDays } from 'date-fns/subDays';
+import { startOfWeek } from 'date-fns/startOfWeek';
+import { parseISO } from 'date-fns/parseISO';
+import { getHours } from 'date-fns/getHours';
 import {
   Note,
   ActivityDataPoint,

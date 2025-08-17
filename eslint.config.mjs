@@ -11,6 +11,18 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  {
+    rules: {
+      // Ensure comments are in English only
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Comment',
+          message: 'Comments must be in English only',
+        },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;
