@@ -1,5 +1,5 @@
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from '@/shared/icons';
 
 export function useThemeUtils() {
   const { setTheme, theme } = useTheme();

@@ -1,31 +1,35 @@
 'use client';
 
 import * as React from 'react';
-import * as PopoverPrimitive from '@radix-ui/react-popover';
+import {
+  Root as PopoverRoot,
+  Trigger as PopoverTrigger,
+  Portal as PopoverPortal,
+  Content as PopoverContent,
+  Close as PopoverClose,
+} from '@radix-ui/react-popover';
 
 import { cn } from '@/shared/lib/utils';
 
-function Popover({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Root>) {
-  return <PopoverPrimitive.Root data-slot="popover" {...props} />;
+function Popover({ ...props }: React.ComponentProps<typeof PopoverRoot>) {
+  return <PopoverRoot data-slot="popover" {...props} />;
 }
 
-function PopoverTrigger({
+function PopoverTriggerComponent({
   ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {
-  return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
+}: React.ComponentProps<typeof PopoverTrigger>) {
+  return <PopoverTrigger data-slot="popover-trigger" {...props} />;
 }
 
-function PopoverContent({
+function PopoverContentComponent({
   className,
   align = 'center',
   sideOffset = 4,
   ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Content>) {
+}: React.ComponentProps<typeof PopoverContent>) {
   return (
-    <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Content
+    <PopoverPortal>
+      <PopoverContent
         data-slot="popover-content"
         align={align}
         sideOffset={sideOffset}
@@ -35,14 +39,19 @@ function PopoverContent({
         )}
         {...props}
       />
-    </PopoverPrimitive.Portal>
+    </PopoverPortal>
   );
 }
 
-function PopoverAnchor({
+function PopoverAnchorComponent({
   ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {
-  return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />;
+}: React.ComponentProps<typeof PopoverClose>) {
+  return <PopoverClose data-slot="popover-anchor" {...props} />;
 }
 
-export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor };
+export {
+  Popover,
+  PopoverTriggerComponent as PopoverTrigger,
+  PopoverContentComponent as PopoverContent,
+  PopoverAnchorComponent as PopoverAnchor,
+};

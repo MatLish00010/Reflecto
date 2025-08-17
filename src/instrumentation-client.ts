@@ -7,7 +7,8 @@ import * as Sentry from '@sentry/nextjs';
 // Only initialize Sentry in production and if DSN is provided
 if (
   process.env.NODE_ENV === 'production' &&
-  process.env.NEXT_PUBLIC_SENTRY_DSN
+  process.env.NEXT_PUBLIC_SENTRY_DSN &&
+  typeof window !== 'undefined'
 ) {
   Sentry.init({
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,

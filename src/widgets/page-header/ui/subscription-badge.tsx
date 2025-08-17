@@ -2,7 +2,7 @@
 
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { Badge } from '@/shared/ui/badge';
-import { Crown } from 'lucide-react';
+import { Crown } from '@/shared/icons';
 
 interface SubscriptionBadgeProps {
   isSubscribed: boolean;

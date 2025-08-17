@@ -9,7 +9,13 @@ import {
   useEffect,
 } from 'react';
 import { Alert, AlertDescription } from '@/shared/ui/alert';
-import { AlertCircle, CheckCircle, AlertTriangle, Info, X } from 'lucide-react';
+import {
+  AlertCircle,
+  CheckCircle,
+  AlertTriangle,
+  Info,
+  X,
+} from '@/shared/icons';
 import { Button } from '@/shared/ui/button';
 
 interface AlertState {

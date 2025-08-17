@@ -24,10 +24,10 @@ Deno.serve(async req => {
   }
 
   try {
-    // Получение данных из запроса
+    // Get data from request
     const { subscriptionId }: DeleteSubscriptionRequest = await req.json();
 
-    // Валидация входных данных
+    // Validate input data
     if (!subscriptionId) {
       return new Response(
         JSON.stringify({
@@ -40,13 +40,13 @@ Deno.serve(async req => {
       );
     }
 
-    // Создание Supabase клиента с service role
+    // Create Supabase client with service role
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Удаление подписки
+    // Delete subscription
     const { error } = await supabaseClient
       .from('subscriptions')
       .delete()

@@ -1,4 +1,4 @@
-import { LucideIcon, HelpCircle } from 'lucide-react';
+import { LucideIcon, HelpCircle } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { cn } from '@/shared/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';

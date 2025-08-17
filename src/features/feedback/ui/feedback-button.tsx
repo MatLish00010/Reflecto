@@ -6,7 +6,7 @@ import { FeedbackModal } from './feedback-modal';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { Bug } from 'lucide-react';
+import { Bug } from '@/shared/icons';
 
 interface FeedbackButtonProps {
   variant?: 'default' | 'mobile';

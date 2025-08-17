@@ -2,7 +2,7 @@
 
 import { useTranslation } from '@/shared/contexts/translation-context';
 import type { User } from '@supabase/supabase-js';
-import { Crown } from 'lucide-react';
+import { Crown } from '@/shared/icons';
 
 interface UserInfoProps {
   user: User;

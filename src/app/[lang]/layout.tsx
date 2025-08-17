@@ -11,7 +11,7 @@ import { QueryProvider } from '@/shared/providers/query-provider';
 import { PageHeader } from '@/widgets/page-header';
 import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
 import { getDictionary } from '@/shared/dictionaries';
-import { OnboardingGuide } from '@/features';
+import dynamic from 'next/dynamic';
 import { SUPPORTED_LOCALES } from '@/shared/lib/language-detector';
 import { getServerUser } from '@/shared/lib/server-auth';
 import { AuthSync, QueryErrorHandler } from '@/shared/components';
@@ -27,6 +27,10 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 });
+
+const OnboardingGuide = dynamic(() =>
+  import('@/features').then(mod => ({ default: mod.OnboardingGuide }))
+);
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map(lang => ({ lang }));

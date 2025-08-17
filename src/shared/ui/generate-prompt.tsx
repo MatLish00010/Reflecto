@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Brain, Sparkles, Calendar } from 'lucide-react';
+import { Brain, Sparkles, Calendar } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
 

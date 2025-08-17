@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns/format';
+import { parseISO } from 'date-fns/parseISO';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { getLocaleByLang } from '@/shared/lib/date-utils';
 

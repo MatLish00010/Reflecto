@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X } from '@/shared/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { safeSentry } from '@/shared/lib/sentry';
 import type { Span } from '@sentry/nextjs';

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Mic, Square, RotateCcw } from 'lucide-react';
+import { Mic, Square, RotateCcw } from '@/shared/icons';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { safeSentry } from '@/shared/lib/sentry';

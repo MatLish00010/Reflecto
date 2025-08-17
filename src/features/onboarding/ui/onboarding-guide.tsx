@@ -10,7 +10,7 @@ import {
 } from '@/shared/ui/dialog';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useOnboarding } from '../model/use-onboarding';
-import { BookOpen, PenTool, Brain, Shield, Sparkles } from 'lucide-react';
+import { BookOpen, PenTool, Brain, Shield, Sparkles } from '@/shared/icons';
 
 const STEPS = [
   {

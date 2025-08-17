@@ -2,7 +2,7 @@
 
 import { Button } from '@/shared/ui/button';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from '@/shared/icons';
 
 interface ShowMoreButtonProps {
   showAll: boolean;

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 
 import { Button } from '@/shared/ui/button';

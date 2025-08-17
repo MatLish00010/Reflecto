@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { Globe } from 'lucide-react';
+import { Globe } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { languages } from '../config/languages';
 import { useLanguageSwitch } from '../utils/language-utils';
