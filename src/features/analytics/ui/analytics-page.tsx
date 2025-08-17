@@ -7,9 +7,9 @@ import { AnalyticsHeader } from './analytics-header';
 import { AnalyticsStatsCards } from './analytics-stats-cards';
 import { AnalyticsProductivityCards } from './analytics-productivity-cards';
 import { AnalyticsCharts } from './analytics-charts';
-import { AnalyticsLoadingSkeleton } from './analytics-loading-skeleton';
 import { AnalyticsErrorState } from './analytics-error-state';
 import { AnalyticsEmptyState } from './analytics-empty-state';
+import { AnalyticsDataLoadingSkeleton } from './analytics-data-loading-skeleton';
 import { useAnalyticsData } from '../model/use-analytics-data';
 
 export function Analytics() {
@@ -27,7 +27,7 @@ export function Analytics() {
   }
 
   if (isLoading) {
-    return <AnalyticsLoadingSkeleton fromDate={fromDate} toDate={toDate} />;
+    return <AnalyticsDataLoadingSkeleton fromDate={fromDate} toDate={toDate} />;
   }
 
   if (error) {

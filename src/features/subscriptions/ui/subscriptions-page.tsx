@@ -6,7 +6,9 @@ import { useSubscriptions } from '../model/use-subscriptions';
 import { ProductDisplay } from './product-display';
 import { SuccessDisplay } from './success-display';
 import { MessageDisplay } from './message-display';
-import { LoadingDisplay } from './loading-display';
+import { ProductDisplaySkeleton } from './product-display-skeleton';
+import { SuccessDisplaySkeleton } from './success-display-skeleton';
+import { MessageDisplaySkeleton } from './message-display-skeleton';
 
 export const SubscriptionsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -34,10 +36,10 @@ export const SubscriptionsPage: React.FC = () => {
       setSuccess(false);
       setMessage(t('subscriptions.order_canceled'));
     }
-  }, [sessionId]);
+  }, [sessionId, t]);
 
   if (loadingProducts) {
-    return <LoadingDisplay />;
+    return <ProductDisplaySkeleton />;
   }
 
   if (!success && message === '') {
@@ -51,6 +53,9 @@ export const SubscriptionsPage: React.FC = () => {
   }
 
   if (success && sessionId !== '') {
+    if (isLoading) {
+      return <SuccessDisplaySkeleton />;
+    }
     return (
       <SuccessDisplay
         sessionId={sessionId}
@@ -58,6 +63,10 @@ export const SubscriptionsPage: React.FC = () => {
         onManageBilling={handleManageBilling}
       />
     );
+  }
+
+  if (isLoading) {
+    return <MessageDisplaySkeleton />;
   }
 
   return <MessageDisplay message={message} />;
