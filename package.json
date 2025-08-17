@@ -18,11 +18,7 @@
     "test:integration": "jest tests/integration",
     "type-check": "tsc --noEmit",
     "check": "pnpm lint && pnpm type-check",
-    "analyze": "ANALYZE=true pnpm build",
-    "lighthouse": "node scripts/lighthouse.js",
-    "lighthouse:compare": "node scripts/lighthouse-compare.js",
-    "lighthouse:analyze": "node scripts/analyze-lighthouse-issues.js",
-    "lighthouse:metrics": "node scripts/lighthouse-metrics-summary.js"
+    "analyze": "ANALYZE=true pnpm build"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "0.6.1",
@@ -74,10 +70,8 @@
     "husky": "9.1.7",
     "jest": "30.0.5",
     "jest-environment-node": "30.0.5",
-    "lighthouse": "12.8.1",
     "lint-staged": "16.1.2",
     "prettier": "3.6.2",
-    "puppeteer": "24.16.2",
     "tailwindcss": "4.1.11",
     "ts-jest": "29.4.0",
     "typescript": "5.8.3"
