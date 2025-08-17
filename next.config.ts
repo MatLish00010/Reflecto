@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   generateEtags: false,
 
+  reactStrictMode: true,
+
   experimental: {
     clientTraceMetadata: ['*'],
     optimizePackageImports: [
@@ -23,6 +25,9 @@ const nextConfig: NextConfig = {
       'date-fns',
       'clsx',
       'tailwind-merge',
+      '@tanstack/react-query',
+      'react-hook-form',
+      'zod',
     ],
   },
 
@@ -35,7 +40,7 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // HTTP headers for caching
+  // HTTP headers for caching and performance
   async headers() {
     return [
       {
@@ -53,6 +58,15 @@ const nextConfig: NextConfig = {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },
+          // Performance headers
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
+          },
         ],
       },
       {
@@ -66,6 +80,52 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/api/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
+      // Cache images and fonts
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/(.*\\.(?:jpg|jpeg|gif|png|svg|ico|webp|avif))',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/(.*\\.(?:css|js))',
         headers: [
           {
             key: 'Cache-Control',

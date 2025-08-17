@@ -16,8 +16,8 @@ if (
     // Add optional integrations for additional features
     integrations: [
       Sentry.replayIntegration(),
-      // Add console logging integration to capture console.error, console.warn, and console.log
-      Sentry.consoleLoggingIntegration({ levels: ['error', 'warn', 'log'] }),
+      // Add console logging integration to capture only errors and warnings
+      Sentry.consoleLoggingIntegration({ levels: ['error', 'warn'] }),
     ],
 
     // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.

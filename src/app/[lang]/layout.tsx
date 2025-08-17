@@ -21,15 +21,22 @@ import '../globals.css';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+  preload: true,
 });
 
-const OnboardingGuide = dynamic(() =>
-  import('@/features').then(mod => ({ default: mod.OnboardingGuide }))
+const OnboardingGuide = dynamic(
+  () => import('@/features').then(mod => ({ default: mod.OnboardingGuide })),
+  {
+    loading: () => (
+      <div className="h-4 w-4 animate-pulse bg-gray-200 rounded" />
+    ),
+  }
 );
 
 export async function generateStaticParams() {
@@ -47,6 +54,21 @@ export async function generateMetadata({
   return {
     title: dict.app.title,
     description: dict.app.description,
+    metadataBase: new URL('https://reflecto-virid.vercel.app'),
+    openGraph: {
+      title: dict.app.title,
+      description: dict.app.description,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.app.title,
+      description: dict.app.description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
   };
 }
 
@@ -64,6 +86,10 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} suppressHydrationWarning>
+      <head>
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
