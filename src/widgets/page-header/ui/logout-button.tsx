@@ -13,8 +13,9 @@ export function LogoutButton() {
     <DropdownMenuItem
       onClick={() => handleSignOut('LogoutButton')}
       disabled={isPending}
+      className="h-10"
     >
-      <LogOut className="mr-2 h-4 w-4" />
+      <LogOut className="mr-2 h-5 w-5" />
       {isPending ? t('user.loggingOut') : t('user.logout')}
     </DropdownMenuItem>
   );

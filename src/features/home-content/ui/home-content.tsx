@@ -79,7 +79,7 @@ export function HomeContent() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-semibold">
+            <CardTitle className="text-sm md:text-base font-normal">
               {t('home.recentNotes')}
             </CardTitle>
             <Link href={`/${currentLocale}/history`}>
@@ -97,9 +97,11 @@ export function HomeContent() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>{t('home.noNotesToday')}</p>
+            <div className="relative text-center py-10 text-muted-foreground overflow-hidden">
+              <div className="relative z-10">
+                <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p className="text-sm md:text-base">{t('home.noNotesToday')}</p>
+              </div>
             </div>
           )}
         </CardContent>
