@@ -1,98 +1,38 @@
 export const CARD_COLOR_SCHEMES = {
   mainStory: {
-    gradientFrom: 'from-blue-50',
-    gradientTo: 'to-purple-50',
-    darkGradientFrom: 'dark:from-blue-950/20',
-    darkGradientTo: 'dark:to-purple-950/20',
-    iconGradientFrom: 'from-blue-500',
-    iconGradientTo: 'to-purple-600',
+    color: '#3B82F6', // blue-500
   },
   keyEvents: {
-    gradientFrom: 'from-amber-50',
-    gradientTo: 'to-orange-50',
-    darkGradientFrom: 'dark:from-amber-950/20',
-    darkGradientTo: 'dark:to-orange-950/20',
-    iconGradientFrom: 'from-amber-500',
-    iconGradientTo: 'to-orange-600',
+    color: '#F59E0B', // amber-500
   },
   emotionalMoments: {
-    gradientFrom: 'from-pink-50',
-    gradientTo: 'to-rose-50',
-    darkGradientFrom: 'dark:from-pink-950/20',
-    darkGradientTo: 'dark:to-rose-950/20',
-    iconGradientFrom: 'from-pink-500',
-    iconGradientTo: 'to-rose-600',
+    color: '#EC4899', // pink-500
   },
   ideas: {
-    gradientFrom: 'from-cyan-50',
-    gradientTo: 'to-blue-50',
-    darkGradientFrom: 'dark:from-cyan-950/20',
-    darkGradientTo: 'dark:to-blue-950/20',
-    iconGradientFrom: 'from-cyan-500',
-    iconGradientTo: 'to-blue-600',
+    color: '#06B6D4', // cyan-500
   },
   cognitivePatterns: {
-    gradientFrom: 'from-purple-50',
-    gradientTo: 'to-violet-50',
-    darkGradientFrom: 'dark:from-purple-950/20',
-    darkGradientTo: 'dark:to-violet-950/20',
-    iconGradientFrom: 'from-purple-500',
-    iconGradientTo: 'to-violet-600',
+    color: '#8B5CF6', // purple-500
   },
   behavioralPatterns: {
-    gradientFrom: 'from-indigo-50',
-    gradientTo: 'to-blue-50',
-    darkGradientFrom: 'dark:from-indigo-950/20',
-    darkGradientTo: 'dark:to-blue-950/20',
-    iconGradientFrom: 'from-indigo-500',
-    iconGradientTo: 'to-blue-600',
+    color: '#6366F1', // indigo-500
   },
   triggers: {
-    gradientFrom: 'from-red-50',
-    gradientTo: 'to-pink-50',
-    darkGradientFrom: 'dark:from-red-950/20',
-    darkGradientTo: 'dark:to-pink-950/20',
-    iconGradientFrom: 'from-red-500',
-    iconGradientTo: 'to-pink-600',
+    color: '#EF4444', // red-500
   },
   resources: {
-    gradientFrom: 'from-emerald-50',
-    gradientTo: 'to-green-50',
-    darkGradientFrom: 'dark:from-emerald-950/20',
-    darkGradientTo: 'dark:to-green-950/20',
-    iconGradientFrom: 'from-emerald-500',
-    iconGradientTo: 'to-green-600',
+    color: '#10B981', // emerald-500
   },
   progress: {
-    gradientFrom: 'from-teal-50',
-    gradientTo: 'to-cyan-50',
-    darkGradientFrom: 'dark:from-teal-950/20',
-    darkGradientTo: 'dark:to-cyan-950/20',
-    iconGradientFrom: 'from-teal-500',
-    iconGradientTo: 'to-cyan-600',
+    color: '#14B8A6', // teal-500
   },
   observations: {
-    gradientFrom: 'from-yellow-50',
-    gradientTo: 'to-amber-50',
-    darkGradientFrom: 'dark:from-yellow-950/20',
-    darkGradientTo: 'dark:to-amber-950/20',
-    iconGradientFrom: 'from-yellow-500',
-    iconGradientTo: 'to-amber-600',
+    color: '#EAB308', // yellow-500
   },
   recommendations: {
-    gradientFrom: 'from-green-50',
-    gradientTo: 'to-emerald-50',
-    darkGradientFrom: 'dark:from-green-950/20',
-    darkGradientTo: 'dark:to-emerald-950/20',
-    iconGradientFrom: 'from-green-500',
-    iconGradientTo: 'to-emerald-600',
+    color: '#22C55E', // green-500
   },
   copingStrategies: {
-    gradientFrom: 'from-amber-50',
-    gradientTo: 'to-orange-50',
-    darkGradientFrom: 'dark:from-amber-950/20',
-    darkGradientTo: 'dark:to-orange-950/20',
-    iconGradientFrom: 'from-amber-500',
-    iconGradientTo: 'to-orange-600',
+    color: '#F97316', // orange-500
   },
 } as const;

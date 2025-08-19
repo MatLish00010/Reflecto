@@ -15,7 +15,6 @@ import {
 import { ShareButton } from './share-button';
 import { AISummaryData } from '@/shared/types';
 import { SummaryCard } from './summary-card';
-import { HeroSummaryCard } from './hero-summary-card';
 import { CARD_COLOR_SCHEMES } from './color-schemes';
 
 interface SummaryContentProps {
@@ -25,26 +24,51 @@ interface SummaryContentProps {
 export function SummaryContent({ summary }: SummaryContentProps) {
   return (
     <div className="space-y-6">
-      <HeroSummaryCard
-        icon={Sparkles}
-        titleKey="aiAnalysis.mainStory"
-        content={summary.mainStory}
-      />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {summary.keyEvents && summary.keyEvents.length > 0 && (
-          <SummaryCard
-            icon={Clock}
-            titleKey="aiAnalysis.keyEvents"
-            content={summary.keyEvents}
-            {...CARD_COLOR_SCHEMES.keyEvents}
-          />
-        )}
         {summary.emotionalMoments && summary.emotionalMoments.length > 0 && (
           <SummaryCard
             icon={Heart}
             titleKey="aiAnalysis.emotionalMoments"
             content={summary.emotionalMoments}
-            {...CARD_COLOR_SCHEMES.emotionalMoments}
+            color={CARD_COLOR_SCHEMES.emotionalMoments.color}
+          />
+        )}
+        <SummaryCard
+          icon={Sparkles}
+          titleKey="aiAnalysis.mainStory"
+          content={summary.mainStory}
+          color={CARD_COLOR_SCHEMES.mainStory.color}
+        />
+        {summary.keyEvents && summary.keyEvents.length > 0 && (
+          <SummaryCard
+            icon={Clock}
+            titleKey="aiAnalysis.keyEvents"
+            content={summary.keyEvents}
+            color={CARD_COLOR_SCHEMES.keyEvents.color}
+          />
+        )}
+        {summary.observations && summary.observations.length > 0 && (
+          <SummaryCard
+            icon={Star}
+            titleKey="aiAnalysis.observations"
+            content={summary.observations}
+            color={CARD_COLOR_SCHEMES.observations.color}
+          />
+        )}
+        {summary.ideas && summary.ideas.length > 0 && (
+          <SummaryCard
+            icon={LightbulbIcon}
+            titleKey="aiAnalysis.ideas"
+            content={summary.ideas}
+            color={CARD_COLOR_SCHEMES.ideas.color}
+          />
+        )}
+        {summary.recommendations && summary.recommendations.length > 0 && (
+          <SummaryCard
+            icon={Brain}
+            titleKey="aiAnalysis.recommendations"
+            content={summary.recommendations}
+            color={CARD_COLOR_SCHEMES.recommendations.color}
           />
         )}
         {summary.cognitivePatterns && summary.cognitivePatterns.length > 0 && (
@@ -52,7 +76,7 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             icon={Target}
             titleKey="aiAnalysis.cognitivePatterns"
             content={summary.cognitivePatterns}
-            {...CARD_COLOR_SCHEMES.cognitivePatterns}
+            color={CARD_COLOR_SCHEMES.cognitivePatterns.color}
           />
         )}
         {summary.behavioralPatterns &&
@@ -61,15 +85,15 @@ export function SummaryContent({ summary }: SummaryContentProps) {
               icon={Activity}
               titleKey="aiAnalysis.behavioralPatterns"
               content={summary.behavioralPatterns}
-              {...CARD_COLOR_SCHEMES.behavioralPatterns}
+              color={CARD_COLOR_SCHEMES.behavioralPatterns.color}
             />
           )}
-        {summary.triggers && summary.triggers.length > 0 && (
+        {summary.progress && summary.progress.length > 0 && (
           <SummaryCard
-            icon={Zap}
-            titleKey="aiAnalysis.triggers"
-            content={summary.triggers}
-            {...CARD_COLOR_SCHEMES.triggers}
+            icon={TrendingUp}
+            titleKey="aiAnalysis.progress"
+            content={summary.progress}
+            color={CARD_COLOR_SCHEMES.progress.color}
           />
         )}
         {summary.resources && summary.resources.length > 0 && (
@@ -77,50 +101,27 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             icon={Shield}
             titleKey="aiAnalysis.resources"
             content={summary.resources}
-            {...CARD_COLOR_SCHEMES.resources}
+            color={CARD_COLOR_SCHEMES.resources.color}
           />
         )}
-        {summary.progress && summary.progress.length > 0 && (
+        {summary.copingStrategies && summary.copingStrategies.length > 0 && (
           <SummaryCard
-            icon={TrendingUp}
-            titleKey="aiAnalysis.progress"
-            content={summary.progress}
-            {...CARD_COLOR_SCHEMES.progress}
+            icon={Lightbulb}
+            titleKey="aiAnalysis.copingStrategies"
+            content={summary.copingStrategies}
+            color={CARD_COLOR_SCHEMES.copingStrategies.color}
           />
         )}
-        {summary.observations && summary.observations.length > 0 && (
+        {summary.triggers && summary.triggers.length > 0 && (
           <SummaryCard
-            icon={Star}
-            titleKey="aiAnalysis.observations"
-            content={summary.observations}
-            {...CARD_COLOR_SCHEMES.observations}
+            icon={Zap}
+            titleKey="aiAnalysis.triggers"
+            content={summary.triggers}
+            color={CARD_COLOR_SCHEMES.triggers.color}
           />
         )}
       </div>
-      {summary.ideas && summary.ideas.length > 0 && (
-        <SummaryCard
-          icon={LightbulbIcon}
-          titleKey="aiAnalysis.ideas"
-          content={summary.ideas}
-          {...CARD_COLOR_SCHEMES.ideas}
-        />
-      )}
-      {summary.recommendations && summary.recommendations.length > 0 && (
-        <SummaryCard
-          icon={Brain}
-          titleKey="aiAnalysis.recommendations"
-          content={summary.recommendations}
-          {...CARD_COLOR_SCHEMES.recommendations}
-        />
-      )}
-      {summary.copingStrategies && summary.copingStrategies.length > 0 && (
-        <SummaryCard
-          icon={Lightbulb}
-          titleKey="aiAnalysis.copingStrategies"
-          content={summary.copingStrategies}
-          {...CARD_COLOR_SCHEMES.copingStrategies}
-        />
-      )}
+
       <div className="flex justify-center">
         <ShareButton summary={summary} />
       </div>
