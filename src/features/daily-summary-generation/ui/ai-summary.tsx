@@ -11,6 +11,7 @@ import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
 import { GeneratePrompt } from '@/shared/ui';
 import { useUser } from '@/entities';
+import { Loader2 } from '@/shared/icons';
 
 interface AISummaryProps {
   selectedDate?: Date;
@@ -105,17 +106,8 @@ export function AISummary({
   ]);
 
   const isLoading = useMemo(
-    () =>
-      summaryLoading ||
-      notesLoading ||
-      createSummaryMutation.isPending ||
-      isUserLoading,
-    [
-      summaryLoading,
-      notesLoading,
-      createSummaryMutation.isPending,
-      isUserLoading,
-    ]
+    () => summaryLoading || notesLoading || isUserLoading,
+    [summaryLoading, notesLoading, isUserLoading]
   );
 
   const hasData = useMemo(() => !!summary, [summary]);
@@ -131,8 +123,16 @@ export function AISummary({
     }
   }, [error, showError]);
 
-  if (isLoading) {
+  if (createSummaryMutation.isPending) {
     return <AISummaryLoadingSkeleton />;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="w-6 h-6 text-purple-500 animate-spin" />
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

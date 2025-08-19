@@ -83,6 +83,11 @@
     "insufficientDailySummariesDescription": "Для создания недельного саммари необходимо создать более 3 дневных саммари за выбранную неделю",
     "dailySummariesCount": "Дневных саммари создано",
     "noData": "Нет данных",
+    "analyzingYourEntries": "Анализирую ваши записи",
+    "aiProcessingThoughts": "ИИ обрабатывает ваши мысли и формирует инсайты...",
+    "emotionAnalysis": "Анализ эмоций",
+    "patternSearch": "Поиск паттернов",
+    "insightGeneration": "Генерация инсайтов",
     "tabs": {
       "daily": "Ежедневный анализ",
       "weekly": "Недельный анализ"

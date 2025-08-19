@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { RefreshCw, Calendar, Brain } from '@/shared/icons';
+import { Calendar, Brain, Loader2 } from '@/shared/icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { NewEntryForm } from '@/widgets/new-entry-form';
@@ -63,7 +63,7 @@ export function HomeContent() {
           <Suspense
             fallback={
               <div className="flex justify-center items-center p-8">
-                <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+                <Loader2 className="w-6 h-6 text-purple-500 animate-spin" />
               </div>
             }
           >

@@ -83,6 +83,11 @@
     "insufficientDailySummariesDescription": "To create a weekly summary, you need to create more than 3 daily summaries for the selected week",
     "dailySummariesCount": "Daily summaries created",
     "noData": "No data",
+    "analyzingYourEntries": "Analyzing your entries",
+    "aiProcessingThoughts": "AI processes your thoughts and forms insights...",
+    "emotionAnalysis": "Emotion analysis",
+    "patternSearch": "Pattern search",
+    "insightGeneration": "Insight generation",
     "tabs": {
       "daily": "Daily Summary",
       "weekly": "Weekly Summary"

@@ -25,6 +25,7 @@ export { Calendar, CalendarIcon } from 'lucide-react';
 export { Brain } from 'lucide-react';
 export { RefreshCw } from 'lucide-react';
 export { Sparkles } from 'lucide-react';
+export { Loader2 } from 'lucide-react';
 
 // Analytics icons
 export { Percent, Zap, Medal, AlignLeft } from 'lucide-react';
@@ -36,12 +37,10 @@ export { Mic, Square, RotateCcw } from 'lucide-react';
 // Onboarding icons
 export { BookOpen, PenTool, Shield } from 'lucide-react';
 
-// UI component icons
 export { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react';
 export { XIcon } from 'lucide-react';
 export { MinusIcon } from 'lucide-react';
 export { Share2 } from 'lucide-react';
 export { HelpCircle } from 'lucide-react';
 
-// Type exports
 export type { LucideIcon } from 'lucide-react';
