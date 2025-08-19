@@ -15,4 +15,5 @@ export interface AISummaryData {
   observations: string[];
   recommendations: string[];
   copingStrategies: string[];
+  conclusion: string[];
 }

@@ -11,6 +11,7 @@ import {
   Shield,
   Star,
   LightbulbIcon,
+  Eye,
 } from 'lucide-react';
 import { ShareButton } from './share-button';
 import { AISummaryData } from '@/shared/types';
@@ -118,6 +119,14 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             titleKey="aiAnalysis.triggers"
             content={summary.triggers}
             color={CARD_COLOR_SCHEMES.triggers.color}
+          />
+        )}
+        {summary.conclusion && summary.conclusion.length > 0 && (
+          <SummaryCard
+            icon={Eye}
+            titleKey="aiAnalysis.conclusion"
+            content={summary.conclusion}
+            color={CARD_COLOR_SCHEMES.conclusion.color}
           />
         )}
       </div>

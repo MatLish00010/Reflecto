@@ -35,4 +35,7 @@ export const CARD_COLOR_SCHEMES = {
   copingStrategies: {
     color: '#F97316', // orange-500
   },
+  conclusion: {
+    color: '#6B7280', // gray-500
+  },
 } as const;

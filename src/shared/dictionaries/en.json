@@ -60,6 +60,7 @@
     "resources": "Resources & Strengths",
     "progress": "Progress & Changes",
     "copingStrategies": "Coping Strategies",
+    "conclusion": "Conclusion",
     "fetchError": "Error generating summary",
     "selectDate": "Select date",
     "selectWeek": "Select week",
