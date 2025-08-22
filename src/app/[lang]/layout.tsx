@@ -14,10 +14,7 @@ import { getDictionary } from '@/shared/dictionaries';
 import dynamic from 'next/dynamic';
 import { SUPPORTED_LOCALES } from '@/shared/lib/language-detector';
 import { getServerUser } from '@/shared/lib/server-auth';
-import {
-  //  AuthSync,
-  QueryErrorHandler,
-} from '@/shared/components';
+import { AuthSync, QueryErrorHandler } from '@/shared/components';
 
 import '../globals.css';
 
@@ -120,7 +117,7 @@ export default async function RootLayout({
                       isSubscribed={isSubscribed}
                     >
                       <QueryErrorHandler />
-                      {/* <AuthSync /> */}
+                      <AuthSync />
                       <div className="min-h-screen bg-background dark:bg-background p-4">
                         <div className="max-w-4xl mx-auto">
                           <PageHeader />
