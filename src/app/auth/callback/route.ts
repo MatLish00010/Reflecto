@@ -12,7 +12,7 @@ import {
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
-    { operation: 'oauth_callback' },
+    { operation: 'oauth_callback', requireAuthentication: false },
     async (context: ApiContext, request: NextRequest) => {
       return safeSentry.startSpanAsync(
         {
