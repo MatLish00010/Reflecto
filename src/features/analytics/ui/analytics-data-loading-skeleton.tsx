@@ -1,16 +1,8 @@
 import { Skeleton } from '@/shared/ui/skeleton';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { PageHeader, PeriodDisplay } from '@/shared/ui';
+import { PageHeader } from '@/shared/ui';
 
-interface AnalyticsDataLoadingSkeletonProps {
-  fromDate: Date | string;
-  toDate: Date | string;
-}
-
-export function AnalyticsDataLoadingSkeleton({
-  fromDate,
-  toDate,
-}: AnalyticsDataLoadingSkeletonProps) {
+export function AnalyticsDataLoadingSkeleton() {
   const { t } = useTranslation();
 
   return (
@@ -18,11 +10,9 @@ export function AnalyticsDataLoadingSkeleton({
       <PageHeader
         title={t('analytics.title')}
         description={t('analytics.description')}
-        rightContent={<PeriodDisplay fromDate={fromDate} toDate={toDate} />}
       />
 
       <div className="space-y-8">
-        {/* Overview Section */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.overview')}
@@ -39,23 +29,6 @@ export function AnalyticsDataLoadingSkeleton({
                 </div>
                 <Skeleton className="h-8 w-16 mb-2" />
                 <Skeleton className="h-3 w-20" />
-              </div>
-            ))}
-          </div>
-
-          {/* Additional stats cards skeleton */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-md border border-gray-200 dark:border-gray-700"
-              >
-                <div className="flex items-center space-x-3 mb-3">
-                  <Skeleton className="h-8 w-8 rounded-lg" />
-                  <Skeleton className="h-4 w-28" />
-                </div>
-                <Skeleton className="h-8 w-16 mb-2" />
-                <Skeleton className="h-3 w-24" />
               </div>
             ))}
           </div>

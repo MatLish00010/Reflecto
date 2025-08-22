@@ -96,7 +96,7 @@
   },
   "analytics": {
     "title": "Analytics",
-    "description": "Analysis of your activity and diary writing patterns",
+    "description": "Analysis of your activity and diary writing patterns over the last month",
     "loginRequired": "Please log in to view analytics",
     "period": "Period",
     "overview": "Overview",

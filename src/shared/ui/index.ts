@@ -38,7 +38,7 @@ export { Textarea } from './textarea';
 export { AISummaryLoadingSkeleton, Summary } from './summary';
 export { GeneratePrompt } from './generate-prompt';
 export { WeekPicker } from './week-picker';
-export { GradientCard } from './gradient-card';
+export { StatisticCard } from './statistic-card';
 export {
   Sheet,
   SheetContent,

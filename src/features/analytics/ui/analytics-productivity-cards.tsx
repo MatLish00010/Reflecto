@@ -76,12 +76,7 @@ export const AnalyticsProductivityCards = memo(
                 subtitle={card.subtitle}
                 description={card.description}
                 icon={card.icon}
-                gradientFrom={card.gradientFrom}
-                gradientTo={card.gradientTo}
-                darkGradientFrom={card.darkGradientFrom}
-                darkGradientTo={card.darkGradientTo}
-                iconGradientFrom={card.iconGradientFrom}
-                iconGradientTo={card.iconGradientTo}
+                color={card.color}
               />
             ))}
           </div>

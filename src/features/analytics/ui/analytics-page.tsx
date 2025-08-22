@@ -11,7 +11,6 @@ import { AnalyticsDataLoadingSkeleton } from './analytics-data-loading-skeleton'
 import { useAnalyticsData } from '../model/use-analytics-data';
 import dynamic from 'next/dynamic';
 
-// Dynamic imports for heavy components with optimized loading
 const AnalyticsCharts = dynamic(
   () =>
     import('./analytics-charts').then(mod => ({
@@ -64,9 +63,8 @@ const AnalyticsProductivityCards = dynamic(
 export function Analytics() {
   const { user } = useUser();
   const { t } = useTranslation();
-  const { data, isLoading, error, fromDate, toDate } = useAnalyticsData();
+  const { data, isLoading, error } = useAnalyticsData();
 
-  // Memoize data to prevent unnecessary re-renders (moved before conditional returns)
   const memoizedData = useMemo(
     () => ({
       notes: data?.notes || [],
@@ -103,20 +101,20 @@ export function Analytics() {
   if (!user) {
     return (
       <div className="container mx-auto">
-        <AnalyticsHeader fromDate={fromDate} toDate={toDate} />
+        <AnalyticsHeader />
         <AuthRequiredMessage messageKey="analytics.loginRequired" />
       </div>
     );
   }
 
   if (isLoading) {
-    return <AnalyticsDataLoadingSkeleton fromDate={fromDate} toDate={toDate} />;
+    return <AnalyticsDataLoadingSkeleton />;
   }
 
   if (error) {
     return (
       <div className="container mx-auto">
-        <AnalyticsHeader fromDate={fromDate} toDate={toDate} />
+        <AnalyticsHeader />
         <AnalyticsErrorState message={error.message} />
       </div>
     );
@@ -130,7 +128,7 @@ export function Analytics() {
   if (!hasData) {
     return (
       <div className="container mx-auto">
-        <AnalyticsHeader fromDate={fromDate} toDate={toDate} />
+        <AnalyticsHeader />
         <AnalyticsEmptyState />
       </div>
     );
@@ -138,14 +136,10 @@ export function Analytics() {
 
   return (
     <div className="container mx-auto">
-      <AnalyticsHeader fromDate={fromDate} toDate={toDate} />
+      <AnalyticsHeader />
 
       <div className="space-y-8">
-        {/* Priority 1: Stats Cards - Load first */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-            {t('analytics.overview')}
-          </h2>
           <Suspense
             fallback={
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -167,7 +161,6 @@ export function Analytics() {
           </Suspense>
         </section>
 
-        {/* Priority 2: Productivity Cards */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.productivity')}
@@ -190,7 +183,6 @@ export function Analytics() {
           </Suspense>
         </section>
 
-        {/* Priority 3: Charts - Load last (heaviest) */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.chartsAndInsights')}

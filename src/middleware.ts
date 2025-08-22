@@ -19,6 +19,7 @@ function getLocale(request: Request): string {
 }
 
 export async function middleware(request: Request) {
+  console.log('LOL MIDLEWAER2');
   const pathname = new URL(request.url).pathname;
 
   const pathnameHasLocale = locales.some(

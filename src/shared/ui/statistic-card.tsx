@@ -3,7 +3,7 @@ import { useTranslation } from '@/shared/contexts/translation-context';
 import { cn } from '@/shared/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
-interface GradientCardProps {
+interface StatisticCardProps {
   icon: LucideIcon;
   title: string;
   titleKey?: string;
@@ -11,17 +11,13 @@ interface GradientCardProps {
   value?: string | number;
   subtitle?: string;
   description?: string;
-  gradientFrom: string;
-  gradientTo: string;
-  darkGradientFrom: string;
-  darkGradientTo: string;
-  iconGradientFrom: string;
-  iconGradientTo: string;
+  color: string;
+
   className?: string;
   variant?: 'summary' | 'stats';
 }
 
-export function GradientCard({
+export function StatisticCard({
   icon: Icon,
   title,
   titleKey,
@@ -29,15 +25,11 @@ export function GradientCard({
   value,
   subtitle,
   description,
-  gradientFrom,
-  gradientTo,
-  darkGradientFrom,
-  darkGradientTo,
-  iconGradientFrom,
-  iconGradientTo,
+  color,
+
   className = '',
   variant = 'summary',
-}: GradientCardProps) {
+}: StatisticCardProps) {
   const { t } = useTranslation();
 
   const renderContent = () => {
@@ -60,10 +52,10 @@ export function GradientCard({
       return content.map((item, index) => (
         <div key={index} className="flex items-start space-x-2">
           <div
-            className={cn(
-              'w-1.5 h-1.5 bg-gradient-to-r rounded-full mt-2 flex-shrink-0',
-              `${iconGradientFrom} ${iconGradientTo}`
-            )}
+            className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
+            style={{
+              backgroundColor: color,
+            }}
           />
           <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
             {item}
@@ -113,20 +105,17 @@ export function GradientCard({
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-xl bg-gradient-to-br',
-        `${gradientFrom} ${gradientTo}`,
-        `${darkGradientFrom} ${darkGradientTo}`,
-        'p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1',
+        'group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700',
         className
       )}
     >
       <div className="relative">
         <div className="flex items-center space-x-3 mb-3">
           <div
-            className={cn(
-              'p-2 bg-gradient-to-br rounded-lg shadow-md',
-              `${iconGradientFrom} ${iconGradientTo}`
-            )}
+            className="p-2 rounded-lg shadow-md"
+            style={{
+              backgroundColor: color,
+            }}
           >
             <Icon className="h-4 w-4 text-white" />
           </div>

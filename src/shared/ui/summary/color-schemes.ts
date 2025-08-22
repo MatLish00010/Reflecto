@@ -1,41 +1,41 @@
 export const CARD_COLOR_SCHEMES = {
   mainStory: {
-    color: '#3B82F6', // blue-500
+    color: '#3B82F6',
   },
   keyEvents: {
-    color: '#F59E0B', // amber-500
+    color: '#F59E0B',
   },
   emotionalMoments: {
-    color: '#EC4899', // pink-500
+    color: '#EC4899',
   },
   ideas: {
-    color: '#06B6D4', // cyan-500
+    color: '#06B6D4',
   },
   cognitivePatterns: {
-    color: '#8B5CF6', // purple-500
+    color: '#8B5CF6',
   },
   behavioralPatterns: {
-    color: '#6366F1', // indigo-500
+    color: '#6366F1',
   },
   triggers: {
-    color: '#EF4444', // red-500
+    color: '#EF4444',
   },
   resources: {
-    color: '#10B981', // emerald-500
+    color: '#10B981',
   },
   progress: {
-    color: '#14B8A6', // teal-500
+    color: '#14B8A6',
   },
   observations: {
-    color: '#EAB308', // yellow-500
+    color: '#EAB308',
   },
   recommendations: {
-    color: '#22C55E', // green-500
+    color: '#22C55E',
   },
   copingStrategies: {
-    color: '#F97316', // orange-500
+    color: '#F97316',
   },
   conclusion: {
-    color: '#6B7280', // gray-500
+    color: '#6B7280',
   },
 } as const;

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { LucideIcon } from '@/shared/icons';
-import { GradientCard } from '@/shared/ui/gradient-card';
+import { StatisticCard } from '@/shared/ui/statistic-card';
 
 interface AnalyticsStatCardProps {
   title: string;
@@ -9,12 +9,7 @@ interface AnalyticsStatCardProps {
   icon: LucideIcon;
   className?: string;
   description?: string;
-  gradientFrom: string;
-  gradientTo: string;
-  darkGradientFrom: string;
-  darkGradientTo: string;
-  iconGradientFrom: string;
-  iconGradientTo: string;
+  color: string;
 }
 
 export const AnalyticsStatCard = memo(function AnalyticsStatCard({
@@ -24,26 +19,16 @@ export const AnalyticsStatCard = memo(function AnalyticsStatCard({
   icon,
   className = '',
   description,
-  gradientFrom,
-  gradientTo,
-  darkGradientFrom,
-  darkGradientTo,
-  iconGradientFrom,
-  iconGradientTo,
+  color,
 }: AnalyticsStatCardProps) {
   return (
-    <GradientCard
+    <StatisticCard
       icon={icon}
       title={title}
       value={value}
       subtitle={subtitle}
       description={description}
-      gradientFrom={gradientFrom}
-      gradientTo={gradientTo}
-      darkGradientFrom={darkGradientFrom}
-      darkGradientTo={darkGradientTo}
-      iconGradientFrom={iconGradientFrom}
-      iconGradientTo={iconGradientTo}
+      color={color}
       className={className}
       variant="stats"
     />
