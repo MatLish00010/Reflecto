@@ -116,9 +116,8 @@ export function WeeklySummaryContent({
   const hasData = useMemo(() => !!weeklySummary, [weeklySummary]);
 
   const hasEnoughDailySummaries = useMemo(() => {
-    return true;
-    // return dailySummaries && dailySummaries.length > 3;
-  }, []);
+    return dailySummaries && dailySummaries.length > 3;
+  }, [dailySummaries]);
 
   const error = useMemo(
     () =>
