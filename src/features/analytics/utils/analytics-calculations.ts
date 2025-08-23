@@ -1,8 +1,10 @@
-import { Note, DailySummary, WeeklySummary } from '../types/analytics';
 import type { AISummaryData } from '@/shared/types';
+import type { DailySummary, Note, WeeklySummary } from '../types/analytics';
 
 export function calculateAverageNoteLength(notes: Note[]): number {
-  if (!notes || notes.length === 0) return 0;
+  if (!notes || notes.length === 0) {
+    return 0;
+  }
 
   const totalLength = notes.reduce(
     (acc, note) => acc + (note.note?.length || 0),
@@ -27,7 +29,9 @@ export function formatNumber(value: number): string {
 }
 
 export function calculateCompletionRate(notes: Note[]): number {
-  if (!notes || notes.length === 0) return 0;
+  if (!notes || notes.length === 0) {
+    return 0;
+  }
 
   const daysWithEntries = new Set();
   notes.forEach(note => {

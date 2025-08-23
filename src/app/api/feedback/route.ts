@@ -1,11 +1,11 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import {
   handleApiRequest,
-  withValidation,
-  VALIDATION_SCHEMAS,
-  ServiceFactory,
-  withRateLimit,
   RATE_LIMIT_CONFIGS,
+  ServiceFactory,
+  VALIDATION_SCHEMAS,
+  withRateLimit,
+  withValidation,
 } from '@/shared/lib/api';
 
 export async function GET(request: NextRequest) {
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     request,
     { operation: 'create_feedback' },
     withValidation(VALIDATION_SCHEMAS.createFeedback)(
-      async (context, request: NextRequest, validatedData) => {
+      async (context, _request: NextRequest, validatedData) => {
         context.span.setAttribute('feedback.type', validatedData.type);
         context.span.setAttribute(
           'feedback.title.length',

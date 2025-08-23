@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { Globe } from '@/shared/icons';
 import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
@@ -7,8 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { Globe } from '@/shared/icons';
-import { useTranslation } from '@/shared/contexts/translation-context';
 import { languages } from '../config/languages';
 import { useLanguageSwitch } from '../utils/language-utils';
 

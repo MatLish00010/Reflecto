@@ -1,8 +1,8 @@
-import { NextRequest } from 'next/server';
-import { createErrorResponse } from '../utils/response-helpers';
 import type { Span } from '@sentry/types';
-import { ServiceFactory } from '../utils/service-factory';
+import type { NextRequest } from 'next/server';
 import { safeSentry } from '@/shared/lib/sentry';
+import { createErrorResponse } from '../utils/response-helpers';
+import { ServiceFactory } from '../utils/service-factory';
 
 export interface RateLimitConfig {
   windowMs: number; // Time window in milliseconds
@@ -157,10 +157,10 @@ function defaultKeyGenerator(request: NextRequest): string {
 }
 
 export function withRateLimit(config: RateLimitConfig) {
-  return function <T extends unknown[]>(
+  return <T extends unknown[]>(
     handler: (request: NextRequest, ...args: T) => Promise<Response>
-  ) {
-    return async (request: NextRequest, ...args: T): Promise<Response> => {
+  ) =>
+    async (request: NextRequest, ...args: T): Promise<Response> => {
       const key = config.keyGenerator
         ? config.keyGenerator(request)
         : defaultKeyGenerator(request);
@@ -236,7 +236,6 @@ export function withRateLimit(config: RateLimitConfig) {
         throw error;
       }
     };
-  };
 }
 
 // Predefined rate limit configurations

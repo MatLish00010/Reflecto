@@ -1,6 +1,6 @@
-import { Skeleton } from '@/shared/ui/skeleton';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { PageHeader } from '@/shared/ui';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 export function AnalyticsDataLoadingSkeleton() {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ export function AnalyticsDataLoadingSkeleton() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             {Array.from({ length: 4 }).map((_, index) => (
               <div
-                key={index}
+                key={`overview-card-${index}`}
                 className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-md border border-gray-200 dark:border-gray-700"
               >
                 <div className="flex items-center space-x-3 mb-3">
@@ -42,7 +42,7 @@ export function AnalyticsDataLoadingSkeleton() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Array.from({ length: 4 }).map((_, index) => (
               <div
-                key={index}
+                key={`productivity-card-${index}`}
                 className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-md border border-gray-200 dark:border-gray-700"
               >
                 <div className="flex items-center space-x-3 mb-3">
@@ -65,7 +65,10 @@ export function AnalyticsDataLoadingSkeleton() {
             {/* Tabs skeleton */}
             <div className="flex space-x-2">
               {Array.from({ length: 5 }).map((_, index) => (
-                <Skeleton key={index} className="h-10 w-20 rounded-md" />
+                <Skeleton
+                  key={`tab-${index}`}
+                  className="h-10 w-20 rounded-md"
+                />
               ))}
             </div>
 

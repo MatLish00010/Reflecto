@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { safeSentry } from '@/shared/lib/sentry';
-import { withAuth, type ApiContext, type ApiHandlerOptions } from './auth';
 import {
   createErrorResponse,
   createSuccessResponse,
 } from '../utils/response-helpers';
+import { type ApiContext, type ApiHandlerOptions, withAuth } from './auth';
 
 export async function handleApiRequest<T>(
   request: NextRequest,
@@ -22,9 +22,19 @@ export async function handleApiRequest<T>(
     async span => {
       try {
         const authResult = await withAuth(request, { ...options, span });
-        if (authResult.error) return authResult.error;
+        if (authResult.error) {
+          return authResult.error;
+        }
 
-        const result = await handler(authResult.context!, request);
+        if (!authResult.context) {
+          return createErrorResponse(
+            new Error('Authentication context is missing'),
+            500,
+            options.operation
+          );
+        }
+
+        const result = await handler(authResult.context, request);
         span.setAttribute('success', true);
 
         // If result is already a Response, return it as is

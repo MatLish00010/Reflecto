@@ -1,25 +1,25 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { useNotesByDate } from '@/entities/note';
+import { AISummary } from '@/features/daily-summary-generation';
+import { WeeklySummaryContent } from '@/features/weekly-summary-generation';
+import { useTranslation } from '@/shared/contexts/translation-context';
 import { Search } from '@/shared/icons';
-import { Card, CardContent } from '@/shared/ui/card';
+import { getDateRangeForDay, getWeekRange } from '@/shared/lib/date-utils';
 import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
 import {
-  TabsWithURL,
   TabsContent,
   TabsList,
   TabsTrigger,
+  TabsWithURL,
 } from '@/shared/ui/tabs';
-import { useTranslation } from '@/shared/contexts/translation-context';
+import { WeekPicker } from '@/shared/ui/week-picker';
+import { DatePicker } from '@/widgets/history-and-summary/ui/date-picker';
 import { History } from './history';
 import { HistoryHeader } from './history-header';
-import { AISummary } from '@/features/daily-summary-generation';
-import { WeeklySummaryContent } from '@/features/weekly-summary-generation';
-import { DatePicker } from '@/widgets/history-and-summary/ui/date-picker';
-import { WeekPicker } from '@/shared/ui/week-picker';
-import { getDateRangeForDay, getWeekRange } from '@/shared/lib/date-utils';
-import { useNotesByDate } from '@/entities/note';
 
 interface HistoryPageProps {
   selectedDate?: Date;
@@ -57,7 +57,9 @@ export function HistoryPage({
   );
 
   const filteredNotes = useMemo(() => {
-    if (!searchQuery) return notes;
+    if (!searchQuery) {
+      return notes;
+    }
     return notes.filter(
       note =>
         note.note?.toLowerCase().includes(searchQuery.toLowerCase()) || false
@@ -148,6 +150,7 @@ export function HistoryPage({
                   />
                   {searchQuery && (
                     <button
+                      type="button"
                       onClick={() => setSearchQuery('')}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer"
                     >
@@ -156,6 +159,8 @@ export function HistoryPage({
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-label="Clear search"
+                        role="img"
                       >
                         <path
                           strokeLinecap="round"

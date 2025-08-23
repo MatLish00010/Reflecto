@@ -1,21 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import type { Span } from '@sentry/nextjs';
+import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/shared/ui/button';
-import { Menu, X } from '@/shared/icons';
-import { motion, AnimatePresence } from 'framer-motion';
-import { safeSentry } from '@/shared/lib/sentry';
-import type { Span } from '@sentry/nextjs';
+import { useId, useState } from 'react';
 import { FeedbackButton } from '@/features/feedback';
 import { MobileLanguageToggle } from '@/features/language-toggle';
 import { MobileThemeToggle } from '@/features/theme-toggle';
-import { useNavigation } from '../model/use-navigation';
-import { useTranslation } from '@/shared/contexts/translation-context';
 import { useLocale } from '@/shared/contexts/locale-context';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { Menu, X } from '@/shared/icons';
+import { safeSentry } from '@/shared/lib/sentry';
+import { Button } from '@/shared/ui/button';
+import { useNavigation } from '../model/use-navigation';
 
 export function MobileMenu() {
+  const menuId = useId();
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
   const { currentLocale } = useLocale();
@@ -99,7 +100,7 @@ export function MobileMenu() {
 
             {/* Menu */}
             <motion.div
-              id="mobile-menu"
+              id={menuId}
               className="absolute inset-y-0 left-0 w-3/4 bg-background border-r shadow-lg"
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}

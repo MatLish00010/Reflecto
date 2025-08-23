@@ -7,7 +7,10 @@ export function NotesSkeleton() {
   return (
     <div className="space-y-2">
       {[...Array(3)].map((_, index) => (
-        <Card key={index} className="relative py-4 px-4 gap-1">
+        <Card
+          key={`note-skeleton-${index}`}
+          className="relative py-4 px-4 gap-1"
+        >
           <CardHeader className="px-0">
             <div className="flex items-center space-x-2">
               <Skeleton className="h-3 w-3" />

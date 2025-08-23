@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useSubscriptions } from '../model/use-subscriptions';
-import { ProductDisplay } from './product-display';
-import { SuccessDisplay } from './success-display';
 import { MessageDisplay } from './message-display';
-import { ProductDisplaySkeleton } from './product-display-skeleton';
-import { SuccessDisplaySkeleton } from './success-display-skeleton';
 import { MessageDisplaySkeleton } from './message-display-skeleton';
+import { ProductDisplay } from './product-display';
+import { ProductDisplaySkeleton } from './product-display-skeleton';
+import { SuccessDisplay } from './success-display';
+import { SuccessDisplaySkeleton } from './success-display-skeleton';
 
 export const SubscriptionsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -36,7 +37,7 @@ export const SubscriptionsPage: React.FC = () => {
       setSuccess(false);
       setMessage(t('subscriptions.order_canceled'));
     }
-  }, [sessionId, t]);
+  }, [t]);
 
   if (loadingProducts) {
     return <ProductDisplaySkeleton />;

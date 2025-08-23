@@ -1,17 +1,16 @@
 'use client';
 
-import { useCallback, useMemo, useState, useEffect } from 'react';
-import { useCreateSummary } from '@/features/daily-summary-generation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useUser } from '@/entities';
 import { useDailySummaryByDateRange } from '@/entities/daily-summary';
 import { useNotesByDate } from '@/entities/note';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { useAlertContext } from '@/shared/providers/alert-provider';
+import { useCreateSummary } from '@/features/daily-summary-generation';
 import { AuthRequiredMessage } from '@/shared/components';
-import { getDateRangeForDay } from '@/shared/lib/date-utils';
-import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
-import { GeneratePrompt } from '@/shared/ui';
-import { useUser } from '@/entities';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 import { Loader2 } from '@/shared/icons';
+import { getDateRangeForDay } from '@/shared/lib/date-utils';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import { AISummaryLoadingSkeleton, GeneratePrompt, Summary } from '@/shared/ui';
 
 interface AISummaryProps {
   selectedDate?: Date;

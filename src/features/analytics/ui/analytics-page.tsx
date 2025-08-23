@@ -1,15 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Suspense, useMemo } from 'react';
 import { useUser } from '@/entities/user';
 import { AuthRequiredMessage } from '@/shared/components/auth-required-message';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { AnalyticsHeader } from './analytics-header';
-import { AnalyticsErrorState } from './analytics-error-state';
-import { AnalyticsEmptyState } from './analytics-empty-state';
-import { AnalyticsDataLoadingSkeleton } from './analytics-data-loading-skeleton';
 import { useAnalyticsData } from '../model/use-analytics-data';
-import dynamic from 'next/dynamic';
+import { AnalyticsDataLoadingSkeleton } from './analytics-data-loading-skeleton';
+import { AnalyticsEmptyState } from './analytics-empty-state';
+import { AnalyticsErrorState } from './analytics-error-state';
+import { AnalyticsHeader } from './analytics-header';
 
 const AnalyticsCharts = dynamic(
   () =>
@@ -35,7 +35,10 @@ const AnalyticsStatsCards = dynamic(
     loading: () => (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-32 animate-pulse bg-gray-200 rounded-lg" />
+          <div
+            key={`stats-loading-${i}`}
+            className="h-32 animate-pulse bg-gray-200 rounded-lg"
+          />
         ))}
       </div>
     ),
@@ -52,7 +55,10 @@ const AnalyticsProductivityCards = dynamic(
     loading: () => (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-32 animate-pulse bg-gray-200 rounded-lg" />
+          <div
+            key={`productivity-loading-${i}`}
+            className="h-32 animate-pulse bg-gray-200 rounded-lg"
+          />
         ))}
       </div>
     ),
@@ -145,7 +151,7 @@ export function Analytics() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div
-                    key={i}
+                    key={`fallback-stats-${i}`}
                     className="h-32 animate-pulse bg-gray-200 rounded-lg"
                   />
                 ))}
@@ -170,7 +176,7 @@ export function Analytics() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div
-                    key={i}
+                    key={`fallback-productivity-${i}`}
                     className="h-32 animate-pulse bg-gray-200 rounded-lg"
                   />
                 ))}

@@ -20,6 +20,7 @@ AI-powered personal diary application with analytics and insights.
 - **AI**: OpenAI API
 - **Monitoring**: Sentry
 - **Testing**: Jest
+- **Code Quality**: Biome (linting & formatting)
 - **Cache**: Redis (production)
 
 ## Getting Started
@@ -198,13 +199,50 @@ src/
 └── widgets/           # Reusable UI widgets
 ```
 
+## Development
+
+### Code Quality
+
+This project uses [Biome](https://biomejs.dev/) for linting and formatting:
+
+```bash
+# Check code quality
+pnpm lint
+
+# Fix linting issues
+pnpm lint:fix
+
+# Format code
+pnpm format
+
+# Check formatting
+pnpm format:check
+
+# Type checking
+pnpm type-check
+
+# Full check (lint + type-check)
+pnpm check
+```
+
+### Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm test` - Run tests
+- `pnpm test:watch` - Run tests in watch mode
+- `pnpm test:coverage` - Run tests with coverage
+- `pnpm test:integration` - Run integration tests
+
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+4. Run `pnpm check` to ensure code quality
+5. Add tests if applicable
+6. Submit a pull request
 
 ## License
 

@@ -1,15 +1,19 @@
-import { NextRequest } from 'next/server';
-import {
-  handleApiRequest,
-  type ApiContext,
-  withValidation,
-  withRateLimit,
-  RATE_LIMIT_CONFIGS,
-} from '@/shared/lib/api';
+import type { NextRequest } from 'next/server';
 import Stripe from 'stripe';
 import { z } from 'zod';
+import {
+  type ApiContext,
+  handleApiRequest,
+  RATE_LIMIT_CONFIGS,
+  withRateLimit,
+  withValidation,
+} from '@/shared/lib/api';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  throw new Error('STRIPE_SECRET_KEY environment variable is not set');
+}
+const stripe = new Stripe(stripeSecretKey);
 
 const YOUR_DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
@@ -22,7 +26,7 @@ export async function POST(request: NextRequest) {
     request,
     { operation: 'create_checkout_session' },
     withValidation(checkoutSessionSchema, { validateBody: true })(
-      async (context: ApiContext, request: NextRequest, validatedData) => {
+      async (context: ApiContext, _request: NextRequest, validatedData) => {
         context.span.setAttribute(
           'stripe.operation',
           'create_checkout_session'

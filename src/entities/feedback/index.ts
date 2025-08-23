@@ -1,1 +1,1 @@
-export { useFeedback, feedbackKeys } from './model/use-feedback';
+export { feedbackKeys, useFeedback } from './model/use-feedback';

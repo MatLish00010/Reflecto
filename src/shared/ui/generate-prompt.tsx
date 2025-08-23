@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { Button } from '@/shared/ui/button';
-import { Brain, Sparkles, Calendar } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { Brain, Calendar, Sparkles } from '@/shared/icons';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
+import { Button } from '@/shared/ui/button';
 
 interface GeneratePromptProps {
   selectedDate: Date;

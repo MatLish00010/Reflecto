@@ -1,6 +1,6 @@
+import type { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { NextRequest } from 'next/server';
-import { ApiContext, Errors } from '@/shared/lib/api';
+import { type ApiContext, Errors } from '@/shared/lib/api';
 
 export type ApiHandler<T = unknown> = (
   context: ApiContext,

@@ -1,5 +1,5 @@
-import { LucideIcon, HelpCircle } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { HelpCircle, type LucideIcon } from '@/shared/icons';
 import { cn } from '@/shared/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
@@ -86,6 +86,7 @@ export function StatisticCard({
         <Popover>
           <PopoverTrigger asChild>
             <button
+              type="button"
               className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex-shrink-0 mt-0.5 ml-2 cursor-pointer"
               aria-label="More information"
             >

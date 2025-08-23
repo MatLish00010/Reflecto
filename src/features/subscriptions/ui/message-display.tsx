@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { Card, CardContent } from '@/shared/ui/card';
 
 interface MessageDisplayProps {
@@ -17,6 +17,8 @@ export const MessageDisplay: React.FC<MessageDisplayProps> = ({ message }) => {
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-label="Warning icon"
+                role="img"
               >
                 <path
                   strokeLinecap="round"

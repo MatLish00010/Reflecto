@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { BookOpen, Brain, PenTool, Shield, Sparkles } from '@/shared/icons';
 import { Button } from '@/shared/ui/button';
 import {
   Dialog,
@@ -8,9 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog';
-import { useTranslation } from '@/shared/contexts/translation-context';
 import { useOnboarding } from '../model/use-onboarding';
-import { BookOpen, PenTool, Brain, Shield, Sparkles } from '@/shared/icons';
 
 const STEPS = [
   {
@@ -98,7 +98,7 @@ export function OnboardingGuide() {
           <div className="flex justify-center space-x-2">
             {STEPS.map((_, index) => (
               <div
-                key={index}
+                key={`step-indicator-${index}`}
                 className={`h-2 w-2 rounded-full transition-colors ${
                   index <= currentStep
                     ? 'bg-blue-600 dark:bg-blue-400'

@@ -1,6 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
+import { useSignIn, useSignInWithGoogle, useSignUp } from '@/features/auth';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { GoogleIcon } from '@/shared/icons/google-icon';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import { Button } from '@/shared/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,12 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog';
-import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useSignIn, useSignUp, useSignInWithGoogle } from '@/features/auth';
-import { GoogleIcon } from '@/shared/icons/google-icon';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -21,6 +21,10 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
+  const nameId = useId();
+  const emailId = useId();
+  const passwordId = useId();
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -120,11 +124,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
             <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
+              <label htmlFor={nameId} className="text-sm font-medium">
                 {t('auth.name')}
               </label>
               <Input
-                id="name"
+                id={nameId}
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
@@ -136,11 +140,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           )}
 
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label htmlFor={emailId} className="text-sm font-medium">
               {t('auth.email')}
             </label>
             <Input
-              id="email"
+              id={emailId}
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -151,11 +155,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
+            <label htmlFor={passwordId} className="text-sm font-medium">
               {t('auth.password')}
             </label>
             <Input
-              id="password"
+              id={passwordId}
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}

@@ -1,6 +1,6 @@
+import type { Span } from '@sentry/types';
 import { createClient, type RedisClientType } from 'redis';
 import { safeSentry } from '@/shared/lib/sentry';
-import type { Span } from '@sentry/types';
 
 export interface RedisServiceOptions {
   span?: Span;
@@ -123,7 +123,7 @@ export class RedisService {
       span?.setAttribute('redis.rate_limit.count', Number(count));
       span?.setAttribute('redis.rate_limit.key', String(windowKey));
 
-      return { count: parseInt(String(count)), resetTime };
+      return { count: parseInt(String(count), 10), resetTime };
     } catch (error) {
       safeSentry.captureException(
         error instanceof Error ? error : new Error(String(error)),
@@ -148,15 +148,17 @@ export class RedisService {
 
       // Parse memory info
       const usedMemory = parseInt(
-        memoryInfo.match(/used_memory:(\d+)/)?.[1] || '0'
+        memoryInfo.match(/used_memory:(\d+)/)?.[1] || '0',
+        10
       );
       const peakMemory = parseInt(
-        memoryInfo.match(/used_memory_peak:(\d+)/)?.[1] || '0'
+        memoryInfo.match(/used_memory_peak:(\d+)/)?.[1] || '0',
+        10
       );
 
       // Get total keys
       const dbInfo = await client.info('keyspace');
-      const totalKeys = parseInt(dbInfo.match(/keys=(\d+)/)?.[1] || '0');
+      const totalKeys = parseInt(dbInfo.match(/keys=(\d+)/)?.[1] || '0', 10);
 
       // Get rate limit keys
       const rateLimitKeys = await this.getRateLimitKeysCount();

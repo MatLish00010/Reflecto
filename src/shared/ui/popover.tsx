@@ -1,13 +1,13 @@
 'use client';
 
-import * as React from 'react';
 import {
+  Close as PopoverClose,
+  Content as PopoverContent,
+  Portal as PopoverPortal,
   Root as PopoverRoot,
   Trigger as PopoverTrigger,
-  Portal as PopoverPortal,
-  Content as PopoverContent,
-  Close as PopoverClose,
 } from '@radix-ui/react-popover';
+import type * as React from 'react';
 
 import { cn } from '@/shared/lib/utils';
 

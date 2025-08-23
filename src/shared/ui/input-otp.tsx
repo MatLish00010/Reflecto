@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
 import { OTPInput, OTPInputContext } from 'input-otp';
+import * as React from 'react';
 import { MinusIcon } from '@/shared/icons';
 
 import { cn } from '@/shared/lib/utils';
@@ -68,7 +68,7 @@ function InputOTPSlot({
 
 function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   return (
-    <div data-slot="input-otp-separator" role="separator" {...props}>
+    <div data-slot="input-otp-separator" {...props}>
       <MinusIcon />
     </div>
   );

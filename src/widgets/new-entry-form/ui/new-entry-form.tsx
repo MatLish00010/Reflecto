@@ -1,17 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/shared/ui/button';
-import { Textarea } from '@/shared/ui/textarea';
-import { AudioInputTabs } from '@/features/voice-recording';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useAlertContext } from '@/shared/providers/alert-provider';
+import { useEffect, useId, useState } from 'react';
 import { useCreateNote } from '@/entities/note';
 import { useUser } from '@/entities/user';
+import { AudioInputTabs } from '@/features/voice-recording';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { useTranslation } from '@/shared/contexts/translation-context';
 import { safeSentry } from '@/shared/lib/sentry';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import { Button } from '@/shared/ui/button';
+import { Textarea } from '@/shared/ui/textarea';
 
 export function NewEntryForm() {
+  const formId = useId();
+  const contentId = useId();
+
   const [content, setContent] = useState('');
   const [isMounted, setIsMounted] = useState(false);
   const { t } = useTranslation();
@@ -29,7 +32,9 @@ export function NewEntryForm() {
   };
 
   const handleSave = async () => {
-    if (!content.trim()) return;
+    if (!content.trim()) {
+      return;
+    }
 
     if (!isAuthenticated) {
       openModal();
@@ -80,10 +85,10 @@ export function NewEntryForm() {
   };
 
   return (
-    <div id="new-entry-form" className="space-y-3.5">
+    <div id={formId} className="space-y-3.5">
       <div>
         <Textarea
-          id="content"
+          id={contentId}
           value={content}
           onChange={e => setContent(e.target.value)}
           placeholder={t('newEntry.contentPlaceholder')}

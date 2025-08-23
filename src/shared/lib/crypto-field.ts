@@ -1,7 +1,7 @@
-import { safeEncrypt, safeDecrypt } from './crypto';
 import type { Span } from '@sentry/types';
-import { NextResponse } from 'next/server';
+import type { NextResponse } from 'next/server';
 import { createErrorResponse } from '@/shared/lib/api/utils/response-helpers';
+import { safeDecrypt, safeEncrypt } from './crypto';
 
 interface EncryptFieldParams {
   data: unknown;
@@ -41,10 +41,21 @@ export function decryptField<T = string>({
   error?: ReturnType<typeof NextResponse.json>;
 } {
   const { value, error } = safeDecrypt({ encrypted, span, operation });
-  if (error) return { error };
+  if (error) {
+    return { error };
+  }
   if (parse) {
     try {
-      return { value: JSON.parse(value!) as T };
+      if (!value) {
+        return {
+          error: createErrorResponse(
+            'Decrypted value is empty',
+            500,
+            operation
+          ),
+        };
+      }
+      return { value: JSON.parse(value) as T };
     } catch {
       return {
         error: createErrorResponse(

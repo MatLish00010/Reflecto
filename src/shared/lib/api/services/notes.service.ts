@@ -1,8 +1,8 @@
-import { safeSentry } from '@/shared/lib/sentry';
-import { encryptField, decryptField } from '@/shared/lib/crypto-field';
-import { getCurrentDateUTC } from '@/shared/lib/date-utils';
 import type { Span } from '@sentry/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { decryptField, encryptField } from '@/shared/lib/crypto-field';
+import { getCurrentDateUTC } from '@/shared/lib/date-utils';
+import { safeSentry } from '@/shared/lib/sentry';
 import type { Database } from '@/shared/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;
@@ -222,13 +222,17 @@ export class NotesService {
     }
 
     const decryptedNotes = (notes || []).map(noteObj => {
-      if (!noteObj.note) return noteObj;
+      if (!noteObj.note) {
+        return noteObj;
+      }
       const { value, error } = decryptField<string>({
         encrypted: noteObj.note,
         span,
         operation: 'decrypt_note',
       });
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
       return { ...noteObj, note: value || null };
     });
 

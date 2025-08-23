@@ -1,20 +1,20 @@
-import { useNotesByDate } from '@/entities/note';
-import { useDailySummaries } from '@/entities/daily-summary';
-import { useWeeklySummaries } from '@/entities/weekly-summary';
 import { useMemo } from 'react';
+import { useDailySummaries } from '@/entities/daily-summary';
+import { useNotesByDate } from '@/entities/note';
+import { useWeeklySummaries } from '@/entities/weekly-summary';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { AnalyticsData } from '../types/analytics';
+import { getAnalyticsDateRange } from '@/shared/lib/date-utils';
+import type { AnalyticsData } from '../types/analytics';
 import {
   prepareActivityData,
-  prepareWeeklyActivityData,
-  prepareContentAnalysisData,
-  prepareTimeAnalysisData,
-  prepareSummaryStats,
-  prepareProductivityStats,
-  prepareEmotionalData,
   prepareComparativeStats,
+  prepareContentAnalysisData,
+  prepareEmotionalData,
+  prepareProductivityStats,
+  prepareSummaryStats,
+  prepareTimeAnalysisData,
+  prepareWeeklyActivityData,
 } from '../utils/analytics-data-helpers';
-import { getAnalyticsDateRange } from '@/shared/lib/date-utils';
 
 export function useAnalyticsData() {
   const { t } = useTranslation();

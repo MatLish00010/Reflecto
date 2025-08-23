@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAlertContext } from '@/shared/providers/alert-provider';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { useAlertContext } from '@/shared/providers/alert-provider';
 
 interface QueryErrorHandlerProps {
   errorMap?: Record<string, string>;
@@ -32,7 +32,7 @@ export function QueryErrorHandler({
       showError(message);
 
       params.delete(paramName);
-      const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+      const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
       window.history.replaceState({}, '', newUrl);
     }
   }, [showError, t, errorMap, paramName]);

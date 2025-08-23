@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import {
   handleApiRequest,
-  validateRequiredFields,
-  ServiceFactory,
-  withRateLimit,
   RATE_LIMIT_CONFIGS,
+  ServiceFactory,
+  validateRequiredFields,
+  withRateLimit,
 } from '@/shared/lib/api';
 
 export async function POST(request: NextRequest) {

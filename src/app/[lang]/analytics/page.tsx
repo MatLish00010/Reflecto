@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import { AnalyticsPageSkeleton } from '@/features/analytics/ui/analytics-page-skeleton';
 
 // Dynamic import for analytics with streaming

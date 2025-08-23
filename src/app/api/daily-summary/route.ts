@@ -1,28 +1,28 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
+import {
+  AI_SUMMARY_ARRAY_FIELDS,
+  AI_SUMMARY_REQUIRED_FIELDS,
+  type ApiContext,
+  handleApiRequest,
+  RATE_LIMIT_CONFIGS,
+  ServiceFactory,
+  VALIDATION_SCHEMAS,
+  withRateLimit,
+  withValidation,
+} from '@/shared/lib/api';
+import type { AISummaryData } from '@/shared/types';
 import {
   getAISummaryPrompt,
   getAISummarySystemPrompt,
   type Locale,
 } from '../../../../prompts';
-import type { AISummaryData } from '@/shared/types';
-import {
-  handleApiRequest,
-  type ApiContext,
-  withValidation,
-  VALIDATION_SCHEMAS,
-  AI_SUMMARY_REQUIRED_FIELDS,
-  AI_SUMMARY_ARRAY_FIELDS,
-  ServiceFactory,
-  withRateLimit,
-  RATE_LIMIT_CONFIGS,
-} from '@/shared/lib/api';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
     request,
     { operation: 'get_daily_summary' },
     withValidation(VALIDATION_SCHEMAS.dateRange, { validateQuery: true })(
-      async (context: ApiContext, request: NextRequest, validatedData) => {
+      async (context: ApiContext, _request: NextRequest, validatedData) => {
         context.span.setAttribute('filters.from', validatedData.from || '');
         context.span.setAttribute('filters.to', validatedData.to || '');
 
@@ -30,10 +30,14 @@ export async function GET(request: NextRequest) {
           context.supabase
         );
 
+        if (!validatedData.from || !validatedData.to) {
+          return { error: 'Missing required date parameters' };
+        }
+
         const summary = await dailySummaryService.fetchSingleSummary(
           context.user.id,
-          validatedData.from!,
-          validatedData.to!,
+          validatedData.from,
+          validatedData.to,
           { span: context.span, operation: 'get_daily_summary' }
         );
 
@@ -48,7 +52,7 @@ export async function POST(request: NextRequest) {
     request,
     { operation: 'create_daily_summary' },
     withValidation(VALIDATION_SCHEMAS.dailySummary)(
-      async (context: ApiContext, request: NextRequest, validatedData) => {
+      async (context: ApiContext, _request: NextRequest, validatedData) => {
         context.span.setAttribute('locale', validatedData.locale);
         context.span.setAttribute('filters.from', validatedData.from);
         context.span.setAttribute('filters.to', validatedData.to);

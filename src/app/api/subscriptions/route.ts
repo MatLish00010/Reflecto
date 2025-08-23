@@ -1,12 +1,12 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { z } from 'zod';
 import {
-  handleApiRequest,
   type ApiContext,
-  withRateLimit,
+  handleApiRequest,
   RATE_LIMIT_CONFIGS,
+  withRateLimit,
   withValidation,
 } from '@/shared/lib/api';
-import { z } from 'zod';
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 
 const createSubscriptionSchema = z.object({
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     request,
     { operation: 'create_subscription' },
     withValidation(createSubscriptionSchema, { validateBody: true })(
-      async (context: ApiContext, request: NextRequest, validatedData) => {
+      async (context: ApiContext, _request: NextRequest, validatedData) => {
         context.span.setAttribute(
           'stripe.customer_id',
           validatedData.stripeCustomerId

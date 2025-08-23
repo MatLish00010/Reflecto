@@ -1,7 +1,7 @@
-import { createClient } from '@/shared/lib/supabase/server';
 import type { User } from '@supabase/supabase-js';
-import { safeSentry } from '@/shared/lib/sentry';
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
+import { safeSentry } from '@/shared/lib/sentry';
+import { createClient } from '@/shared/lib/supabase/server';
 
 export async function getServerUser(): Promise<{
   user: User | null;

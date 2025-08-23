@@ -1,12 +1,12 @@
-import React from 'react';
+import type React from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { Button } from '@/shared/ui/button';
 import {
   Card,
   CardContent,
-  CardTitle,
   CardDescription,
+  CardTitle,
 } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
 
 interface SuccessDisplayProps {
   sessionId: string;
@@ -32,6 +32,8 @@ export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-label="Success icon"
+                role="img"
               >
                 <path
                   strokeLinecap="round"

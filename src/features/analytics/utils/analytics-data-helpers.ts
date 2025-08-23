@@ -1,18 +1,18 @@
 import { format } from 'date-fns/format';
-import { subDays } from 'date-fns/subDays';
-import { startOfWeek } from 'date-fns/startOfWeek';
-import { parseISO } from 'date-fns/parseISO';
 import { getHours } from 'date-fns/getHours';
-import {
-  Note,
+import { parseISO } from 'date-fns/parseISO';
+import { startOfWeek } from 'date-fns/startOfWeek';
+import { subDays } from 'date-fns/subDays';
+import type {
   ActivityDataPoint,
-  WeeklyActivityDataPoint,
-  ContentAnalysisData,
-  TimeAnalysisDataPoint,
-  SummaryStats,
-  ProductivityStats,
-  EmotionalData,
   ComparativeStats,
+  ContentAnalysisData,
+  EmotionalData,
+  Note,
+  ProductivityStats,
+  SummaryStats,
+  TimeAnalysisDataPoint,
+  WeeklyActivityDataPoint,
 } from '../types/analytics';
 
 export function prepareActivityData(notes: Note[]): ActivityDataPoint[] {

@@ -1,16 +1,16 @@
 'use client';
 
 import { useCallback } from 'react';
+import { useUser } from '@/entities/user';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { useFormatters } from '@/shared/hooks';
+import { CalendarIcon } from '@/shared/icons';
+import { getLocaleByLang } from '@/shared/lib/date-utils';
+import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Calendar } from '@/shared/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { CalendarIcon } from '@/shared/icons';
-import { cn } from '@/shared/lib/utils';
-import { getLocaleByLang } from '@/shared/lib/date-utils';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useFormatters } from '@/shared/hooks';
-import { useUser } from '@/entities/user';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
 
 interface DatePickerProps {
   selectedDate: Date | null;

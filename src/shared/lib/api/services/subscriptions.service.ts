@@ -1,7 +1,7 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/shared/types/supabase';
 import type { Span } from '@sentry/types';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { safeSentry } from '@/shared/lib/sentry';
+import type { Database } from '@/shared/types/supabase';
 
 type Subscription = Database['public']['Tables']['subscriptions']['Row'];
 type SubscriptionUpdate =

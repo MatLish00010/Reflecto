@@ -1,18 +1,21 @@
 'use client';
 
-import { useCallback, useMemo, useEffect } from 'react';
-import { useCreateWeeklySummary } from '@/features/weekly-summary-generation';
-import { useWeeklySummary } from '@/entities/weekly-summary';
-import { useDailySummaries } from '@/entities/daily-summary';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { AuthRequiredMessage } from '@/shared/components';
-import { getWeekRange, useWeekFromUrl } from '@/shared/lib/date-utils';
-import { AISummaryLoadingSkeleton, Summary } from '@/shared/ui';
-import { GeneratePrompt } from '@/shared/ui';
-import { WeekPicker } from '@/shared/ui';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useUser } from '@/entities';
-import { AISummaryData } from '@/shared';
+import { useDailySummaries } from '@/entities/daily-summary';
+import { useWeeklySummary } from '@/entities/weekly-summary';
+import { useCreateWeeklySummary } from '@/features/weekly-summary-generation';
+import type { AISummaryData } from '@/shared';
+import { AuthRequiredMessage } from '@/shared/components';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { getWeekRange, useWeekFromUrl } from '@/shared/lib/date-utils';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import {
+  AISummaryLoadingSkeleton,
+  GeneratePrompt,
+  Summary,
+  WeekPicker,
+} from '@/shared/ui';
 import { InsufficientSummariesMessage } from './insufficient-summaries-message';
 
 interface WeeklySummaryContentProps {

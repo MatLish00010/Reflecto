@@ -1,22 +1,22 @@
 import {
+  Activity,
+  Brain,
   Clock,
+  Eye,
   Heart,
   Lightbulb,
-  Sparkles,
-  Target,
-  Brain,
-  Activity,
-  Zap,
-  TrendingUp,
-  Shield,
-  Star,
   LightbulbIcon,
-  Eye,
+  Shield,
+  Sparkles,
+  Star,
+  Target,
+  TrendingUp,
+  Zap,
 } from 'lucide-react';
-import { ShareButton } from './share-button';
-import { AISummaryData } from '@/shared/types';
-import { SummaryCard } from './summary-card';
+import type { AISummaryData } from '@/shared/types';
 import { CARD_COLOR_SCHEMES } from './color-schemes';
+import { ShareButton } from './share-button';
+import { SummaryCard } from './summary-card';
 
 interface SummaryContentProps {
   summary: AISummaryData;

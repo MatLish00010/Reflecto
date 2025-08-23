@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface BrainIconProps {
   className?: string;
   size?: number;
@@ -14,6 +12,8 @@ export function BrainIcon({ className = '', size = 24 }: BrainIconProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      aria-label="Brain icon"
+      role="img"
     >
       {/* Основной контур мозга */}
       <path

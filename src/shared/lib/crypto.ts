@@ -1,8 +1,8 @@
-import crypto from 'crypto';
-import { safeSentry } from '@/shared/lib/sentry';
-import { NextResponse } from 'next/server';
+import crypto from 'node:crypto';
 import type { Span } from '@sentry/types';
+import type { NextResponse } from 'next/server';
 import { createErrorResponse } from '@/shared/lib/api/utils/response-helpers';
+import { safeSentry } from '@/shared/lib/sentry';
 
 const ALGORITHM = 'aes-256-gcm';
 const IV_LENGTH = 12; // Recommended for GCM
@@ -10,11 +10,13 @@ const KEY_LENGTH = 32; // 256 bits
 
 function getKey(): Buffer {
   const key = process.env.NOTE_SECRET_KEY;
-  if (!key)
+  if (!key) {
     throw new Error('NOTE_SECRET_KEY is not set in environment variables');
+  }
   const buf = Buffer.from(key, 'base64');
-  if (buf.length !== KEY_LENGTH)
+  if (buf.length !== KEY_LENGTH) {
     throw new Error('NOTE_SECRET_KEY must be 32 bytes (base64-encoded)');
+  }
   return buf;
 }
 
@@ -63,7 +65,9 @@ export function safeEncrypt({
   try {
     return { value: encryptText(plainText) };
   } catch (e) {
-    if (span) span.setAttribute('error', true);
+    if (span) {
+      span.setAttribute('error', true);
+    }
     safeSentry.captureException(e as Error, { tags: { operation } });
     return {
       error: createErrorResponse('Failed to encrypt data', 500, operation),
@@ -88,7 +92,9 @@ export function safeDecrypt({
   try {
     return { value: decryptText(encrypted) };
   } catch (e) {
-    if (span) span.setAttribute('error', true);
+    if (span) {
+      span.setAttribute('error', true);
+    }
     safeSentry.captureException(e as Error, { tags: { operation } });
     return {
       error: createErrorResponse('Failed to decrypt data', 500, operation),

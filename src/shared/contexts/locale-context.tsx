@@ -1,13 +1,13 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import {
   createContext,
+  type ReactNode,
   useContext,
-  ReactNode,
-  useState,
   useEffect,
+  useState,
 } from 'react';
-import { usePathname } from 'next/navigation';
 import { SUPPORTED_LOCALES } from '@/shared/lib/language-detector';
 
 interface LocaleContextType {

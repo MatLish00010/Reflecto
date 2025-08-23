@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
-import { Feedback } from '@/shared/types';
 import { safeSentry } from '@/shared/lib/sentry';
+import type { Feedback } from '@/shared/types';
 
 export const feedbackKeys = {
   all: (userId: string) => ['feedback', userId] as const,

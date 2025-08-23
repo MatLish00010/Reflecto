@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/shared/ui/button';
-import { FeedbackModal } from './feedback-modal';
-import { useTranslation } from '@/shared/contexts/translation-context';
 import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { useTranslation } from '@/shared/contexts/translation-context';
 import { Bug } from '@/shared/icons';
+import { Button } from '@/shared/ui/button';
+import { FeedbackModal } from './feedback-modal';
 
 interface FeedbackButtonProps {
   variant?: 'default' | 'mobile';

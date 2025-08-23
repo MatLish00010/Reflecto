@@ -1,9 +1,9 @@
-import { NextRequest } from 'next/server';
-import {
-  withRateLimit,
-  RATE_LIMIT_CONFIGS,
-} from '@/shared/lib/api/middleware/rate-limit';
 import * as Sentry from '@sentry/nextjs';
+import type { NextRequest } from 'next/server';
+import {
+  RATE_LIMIT_CONFIGS,
+  withRateLimit,
+} from '@/shared/lib/api/middleware/rate-limit';
 
 // Test endpoint with very strict rate limit for demonstration
 const strictConfig = {
@@ -41,29 +41,29 @@ export const GET = withRateLimit(strictConfig)(async () => {
 });
 
 // Endpoint with AI rate limit for demonstrating different configurations
-export const POST = withRateLimit(RATE_LIMIT_CONFIGS.ai)(async (
-  request: NextRequest
-) => {
-  return Sentry.startSpan(
-    {
-      op: 'http.server',
-      name: 'AI Rate Limit Test',
-    },
-    async span => {
-      span.setAttribute('endpoint', '/api/rate-limit-test');
-      span.setAttribute('method', 'POST');
+export const POST = withRateLimit(RATE_LIMIT_CONFIGS.ai)(
+  async (request: NextRequest) => {
+    return Sentry.startSpan(
+      {
+        op: 'http.server',
+        name: 'AI Rate Limit Test',
+      },
+      async span => {
+        span.setAttribute('endpoint', '/api/rate-limit-test');
+        span.setAttribute('method', 'POST');
 
-      const body = await request.json();
-      span.setAttribute('request.body_size', JSON.stringify(body).length);
+        const body = await request.json();
+        span.setAttribute('request.body_size', JSON.stringify(body).length);
 
-      // Simulate AI processing
-      await new Promise(resolve => setTimeout(resolve, 500));
+        // Simulate AI processing
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-      return Response.json({
-        message: 'AI rate limit test successful',
-        timestamp: new Date().toISOString(),
-        processedData: body,
-      });
-    }
-  );
-});
+        return Response.json({
+          message: 'AI rate limit test successful',
+          timestamp: new Date().toISOString(),
+          processedData: body,
+        });
+      }
+    );
+  }
+);

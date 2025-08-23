@@ -1,11 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* biome-ignore lint/suspicious/noExplicitAny: Supabase client types require any */
 import { createBrowserClient } from '@supabase/ssr';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const createSafeClient = () => {
-  const client = createBrowserClient(supabaseUrl!, supabaseKey!);
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing Supabase environment variables');
+  }
+  const client = createBrowserClient(supabaseUrl, supabaseKey);
 
   // Override the getUser method to handle auth errors gracefully
   const originalGetUser = client.auth.getUser.bind(client.auth);
@@ -22,6 +25,7 @@ export const createSafeClient = () => {
         return {
           data: { user: null },
           error: null,
+          // biome-ignore lint/suspicious/noExplicitAny: Supabase client types require any
         } as any;
       }
       throw error;
@@ -43,6 +47,7 @@ export const createSafeClient = () => {
         return {
           data: { session: null },
           error: null,
+          // biome-ignore lint/suspicious/noExplicitAny: Supabase client types require any
         } as any;
       }
       throw error;

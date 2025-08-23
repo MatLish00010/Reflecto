@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import {
   handleApiRequest,
-  withValidation,
+  ServiceFactory,
   VALIDATION_SCHEMAS,
   validateNumericId,
-  ServiceFactory,
+  withValidation,
 } from '@/shared/lib/api';
 
 export async function PUT(
@@ -15,7 +15,7 @@ export async function PUT(
     request,
     { operation: 'update_note' },
     withValidation(VALIDATION_SCHEMAS.updateNote)(
-      async (context, request: NextRequest, validatedData) => {
+      async (context, _request: NextRequest, validatedData) => {
         const { id } = await params;
         const noteId = validateNumericId(id, 'note');
 

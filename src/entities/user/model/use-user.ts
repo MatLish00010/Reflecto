@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { createBrowserClient } from '@/shared/lib/client';
 import type { User } from '@supabase/supabase-js';
-import { safeSentry } from '@/shared/lib/sentry';
+import { useQuery } from '@tanstack/react-query';
 import { useUserContext } from '@/shared/contexts/user-context';
 import { subscriptionsClientService } from '@/shared/lib/api/services/subscriptions.service';
+import { createBrowserClient } from '@/shared/lib/client';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export const userKeys = {
   all: ['user'] as const,
@@ -42,7 +42,9 @@ export function useUser() {
     useQuery({
       queryKey: userKeys.subscription(user?.id || ''),
       queryFn: async (): Promise<boolean> => {
-        if (!user) return false;
+        if (!user) {
+          return false;
+        }
         return subscriptionsClientService.checkUserSubscription();
       },
       enabled: !!user,

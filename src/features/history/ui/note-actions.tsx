@@ -1,15 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import { useDeleteNote, useUpdateNote } from '@/entities/note';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { Edit, MoreVertical, Trash2 } from '@/shared/icons';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import type { Note } from '@/shared/types/notes';
 import { Button } from '@/shared/ui/button';
-import { Textarea } from '@/shared/ui/textarea';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/shared/ui/dialog';
 import {
   DropdownMenu,
@@ -17,11 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { MoreVertical, Edit, Trash2 } from '@/shared/icons';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useUpdateNote, useDeleteNote } from '@/entities/note';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import type { Note } from '@/shared/types/notes';
+import { Textarea } from '@/shared/ui/textarea';
 
 interface NoteActionsProps {
   note: Note;

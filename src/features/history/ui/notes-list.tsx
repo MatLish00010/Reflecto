@@ -1,9 +1,9 @@
 'use client';
 
 import { useTranslation } from '@/shared/contexts/translation-context';
+import type { Note } from '@/shared/types/notes';
 import { NoteItem } from './note-item';
 import { ShowMoreButton } from './show-more-button';
-import type { Note } from '@/shared/types/notes';
 
 interface NotesListProps {
   notes: Note[];

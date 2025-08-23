@@ -1,10 +1,10 @@
+import { FeedbackButton } from '@/features/feedback';
 import { LanguageToggle } from '@/features/language-toggle';
 import { ThemeToggle } from '@/features/theme-toggle';
-import { UserInfoDropdown } from './user-info-dropdown';
-import { FeedbackButton } from '@/features/feedback';
-import { Navigation } from './navigation';
 import { MobileMenu } from './mobile-menu';
 import { MobileUserInfo } from './mobile-user-info';
+import { Navigation } from './navigation';
+import { UserInfoDropdown } from './user-info-dropdown';
 
 export function PageHeader() {
   return (

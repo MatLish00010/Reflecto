@@ -1,9 +1,9 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 import { useSignOutWithTracing } from '@/features/auth';
+import { useTranslation } from '@/shared/contexts/translation-context';
 import { LogOut } from '@/shared/icons';
+import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 
 export function LogoutButton() {
   const { t } = useTranslation();

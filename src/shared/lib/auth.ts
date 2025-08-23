@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import { createServerClient } from '@/shared/lib/server';
 import type { User } from '@supabase/supabase-js';
+import type { NextResponse } from 'next/server';
 import { createErrorResponse } from '@/shared/lib/api/utils/response-helpers';
 import { safeSentry } from '@/shared/lib/sentry';
+import { createServerClient } from '@/shared/lib/server';
 
 export async function authenticateUser(): Promise<{
   isAuthenticated: boolean;

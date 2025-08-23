@@ -2,10 +2,10 @@
 
 import {
   createContext,
+  type ReactNode,
+  useCallback,
   useContext,
   useState,
-  useCallback,
-  ReactNode,
 } from 'react';
 
 interface AuthModalContextType {

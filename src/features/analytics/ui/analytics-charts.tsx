@@ -1,6 +1,28 @@
 'use client';
 
 import * as Sentry from '@sentry/nextjs';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useFormatters } from '@/shared/hooks';
 import {
@@ -11,28 +33,6 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import {
-  BarChart,
-  LineChart,
-  PieChart,
-  AreaChart,
-  RadarChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Bar,
-  Line,
-  Pie,
-  Area,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  Cell,
-  Legend,
-} from 'recharts';
 
 const COLORS = [
   '#0088FE',
@@ -47,13 +47,13 @@ const COLORS = [
   '#96CEB4',
 ];
 
-import {
+import type {
   ActivityDataPoint,
-  WeeklyActivityDataPoint,
-  ContentAnalysisData,
-  TimeAnalysisDataPoint,
-  EmotionalData,
   ComparativeStats,
+  ContentAnalysisData,
+  EmotionalData,
+  TimeAnalysisDataPoint,
+  WeeklyActivityDataPoint,
 } from '../types/analytics';
 
 interface AnalyticsChartsProps {
@@ -193,7 +193,7 @@ export function AnalyticsCharts({
                   ))}
                   {contentAnalysisData.weekdayActivity.map((count, index) => (
                     <div
-                      key={index}
+                      key={`weekday-${index}`}
                       className="h-8 rounded flex items-center justify-center text-xs"
                       style={{
                         backgroundColor: `rgba(0, 136, 254, ${Math.min(count / 10, 1)})`,

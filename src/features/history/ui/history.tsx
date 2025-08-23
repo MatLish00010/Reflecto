@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
+import { useCallback, useMemo, useState } from 'react';
+import { useUser } from '@/entities';
 import { useNotesByDate } from '@/entities/note';
 import { AuthRequiredMessage } from '@/shared/components';
+import { useTranslation } from '@/shared/contexts/translation-context';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
 import { NotesList } from './notes-list';
 import { NotesSkeleton } from './notes-skeleton';
-import { useUser } from '@/entities';
 
 interface HistoryProps {
   selectedDate: Date;

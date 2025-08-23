@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
-import { shouldFilterError, getErrorFilter } from './sentry-error-config';
+import { getErrorFilter, shouldFilterError } from './sentry-error-config';
 
 // Check if Sentry is enabled (only in production)
 const isSentryEnabled = process.env.NODE_ENV === 'production';

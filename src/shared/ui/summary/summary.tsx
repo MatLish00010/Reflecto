@@ -1,6 +1,6 @@
-import { SummaryHeader } from './summary-header';
+import type { AISummaryData } from '@/shared/types';
 import { SummaryContent } from './summary-content';
-import { AISummaryData } from '@/shared/types';
+import { SummaryHeader } from './summary-header';
 
 interface SummaryProps {
   summary: AISummaryData;

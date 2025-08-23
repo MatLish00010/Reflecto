@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { useAlertContext } from '@/shared/providers/alert-provider';
 import { Button } from '@/shared/ui/button';
-import { Input } from '@/shared/ui/input';
-import { Textarea } from '@/shared/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog';
+import { Input } from '@/shared/ui/input';
+import { Textarea } from '@/shared/ui/textarea';
 import { useCreateFeedback } from '../model/use-feedback';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { useTranslation } from '@/shared/contexts/translation-context';
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -21,6 +21,10 @@ interface FeedbackModalProps {
 }
 
 export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
+  const typeId = useId();
+  const titleId = useId();
+  const descriptionId = useId();
+
   const [type, setType] = useState<'bug' | 'feature' | 'improvement'>('bug');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -69,10 +73,11 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">
+            <label htmlFor={typeId} className="text-sm font-medium">
               {t('feedback.typeLabel')}
             </label>
             <select
+              id={typeId}
               value={type}
               onChange={e =>
                 setType(e.target.value as 'bug' | 'feature' | 'improvement')
@@ -88,10 +93,11 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">
+            <label htmlFor={titleId} className="text-sm font-medium">
               {t('feedback.titleLabel')}
             </label>
             <Input
+              id={titleId}
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder={t('feedback.titlePlaceholder')}
@@ -100,10 +106,11 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">
+            <label htmlFor={descriptionId} className="text-sm font-medium">
               {t('feedback.descriptionLabel')}
             </label>
             <Textarea
+              id={descriptionId}
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder={t('feedback.descriptionPlaceholder')}

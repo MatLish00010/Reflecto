@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import type { NextResponse } from 'next/server';
 import { safeSentry } from '@/shared/lib/sentry';
 import { createErrorResponse } from './utils/response-helpers';
 

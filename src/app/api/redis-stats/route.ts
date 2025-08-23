@@ -1,5 +1,5 @@
-import { safeSentry } from '@/shared/lib/sentry';
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export async function GET() {
   return safeSentry.startSpan(

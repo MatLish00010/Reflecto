@@ -1,8 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
-import type { Note } from '@/shared/types/notes';
-import { useAlertContext } from '@/shared/providers/alert-provider';
 import { safeSentry } from '@/shared/lib/sentry';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import type { Note } from '@/shared/types/notes';
 
 export const noteKeys = {
   all: (userId: string) => ['notes', userId] as const,
@@ -29,8 +29,12 @@ export function useNotesByDate(from?: string, to?: string) {
       }
 
       const params = new URLSearchParams();
-      if (from) params.append('from', from);
-      if (to) params.append('to', to);
+      if (from) {
+        params.append('from', from);
+      }
+      if (to) {
+        params.append('to', to);
+      }
 
       const response = await fetch(`/api/notes?${params.toString()}`);
       if (!response.ok) {

@@ -1,6 +1,6 @@
-import { safeSentry } from '@/shared/lib/sentry';
 import type { Span } from '@sentry/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { safeSentry } from '@/shared/lib/sentry';
 import type { Database } from '@/shared/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;

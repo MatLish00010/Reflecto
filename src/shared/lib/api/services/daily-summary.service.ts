@@ -1,8 +1,8 @@
-import { safeSentry } from '@/shared/lib/sentry';
-import { encryptField, decryptField } from '@/shared/lib/crypto-field';
 import type { Span } from '@sentry/types';
-import type { AISummaryData } from '@/shared/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { decryptField, encryptField } from '@/shared/lib/crypto-field';
+import { safeSentry } from '@/shared/lib/sentry';
+import type { AISummaryData } from '@/shared/types';
 import type { Database } from '@/shared/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;
@@ -61,7 +61,9 @@ export class DailySummaryService {
         throw decryptError;
       }
 
-      decryptedSummaries.push(decryptedSummary!);
+      if (decryptedSummary) {
+        decryptedSummaries.push(decryptedSummary);
+      }
     }
 
     return decryptedSummaries;
@@ -118,7 +120,7 @@ export class DailySummaryService {
     }
 
     span?.setAttribute('summary.found', true);
-    return decryptedSummary!;
+    return decryptedSummary || null;
   }
 
   async saveSummary(

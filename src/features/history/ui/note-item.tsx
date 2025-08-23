@@ -1,12 +1,12 @@
 'use client';
 
-import { Card, CardContent, CardHeader } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
-import { Clock, ChevronDown, ChevronUp } from '@/shared/icons';
+import { useState } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useFormatters } from '@/shared/hooks';
-import { useState } from 'react';
+import { ChevronDown, ChevronUp, Clock } from '@/shared/icons';
 import type { Note } from '@/shared/types/notes';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { NoteActions } from './note-actions';
 
 interface NoteItemProps {
@@ -29,7 +29,9 @@ export function NoteItem({ note, searchQuery }: NoteItemProps) {
       (shouldShowExpandButton ? '...' : '');
 
   const highlightText = (text: string, query?: string) => {
-    if (!query || query.trim() === '') return text;
+    if (!query || query.trim() === '') {
+      return text;
+    }
 
     const regex = new RegExp(
       `(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
@@ -40,7 +42,7 @@ export function NoteItem({ note, searchQuery }: NoteItemProps) {
     return parts.map((part, index) =>
       regex.test(part) ? (
         <mark
-          key={index}
+          key={`highlight-${index}`}
           className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded"
         >
           {part}

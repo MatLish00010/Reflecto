@@ -1,18 +1,17 @@
 'use client';
 
-import { Suspense } from 'react';
-import { Calendar, Brain, Loader2 } from '@/shared/icons';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
-import { NewEntryForm } from '@/widgets/new-entry-form';
+import Link from 'next/link';
+import { Suspense, useMemo } from 'react';
+import { useNotesByDate } from '@/entities/note';
 import { AISummary } from '@/features/daily-summary-generation';
 import { NoteItem } from '@/features/history/ui/note-item';
-import { useTranslation } from '@/shared/contexts/translation-context';
 import { useLocale } from '@/shared/contexts/locale-context';
-import { useNotesByDate } from '@/entities/note';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { Brain, Calendar, Loader2 } from '@/shared/icons';
 import { getDateRangeForDay } from '@/shared/lib/date-utils';
-import { useMemo } from 'react';
-import Link from 'next/link';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { NewEntryForm } from '@/widgets/new-entry-form';
 
 export function HomeContent() {
   const { t } = useTranslation();

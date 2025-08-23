@@ -1,11 +1,11 @@
-export { AuthModal } from './ui/auth-modal';
 export {
+  useResetPassword,
   useSignIn,
-  useSignUp,
+  useSignInWithGoogle,
   useSignOut,
   useSignOutWithTracing,
-  useResetPassword,
+  useSignUp,
   useUpdatePassword,
-  useSignInWithGoogle,
 } from './model/use-auth';
 export { useAuthModal } from './model/use-auth-modal';
+export { AuthModal } from './ui/auth-modal';

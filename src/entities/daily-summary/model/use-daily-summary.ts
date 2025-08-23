@@ -32,8 +32,12 @@ export function useDailySummaryByDateRange(from?: string, to?: string) {
       }
 
       const params = new URLSearchParams();
-      if (from) params.append('from', from);
-      if (to) params.append('to', to);
+      if (from) {
+        params.append('from', from);
+      }
+      if (to) {
+        params.append('to', to);
+      }
 
       const res = await fetch(`/api/daily-summary?${params.toString()}`, {
         method: 'GET',
@@ -131,8 +135,12 @@ export function useDailySummaries(from?: string, to?: string) {
       }
 
       const params = new URLSearchParams();
-      if (from) params.append('from', from);
-      if (to) params.append('to', to);
+      if (from) {
+        params.append('from', from);
+      }
+      if (to) {
+        params.append('to', to);
+      }
 
       const res = await fetch(`/api/daily-summaries?${params.toString()}`, {
         method: 'GET',

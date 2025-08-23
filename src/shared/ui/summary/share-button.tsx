@@ -1,10 +1,9 @@
-import { Share2 } from '@/shared/icons';
-import { Button } from '@/shared/ui/button';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { useAlertContext } from '@/shared/providers/alert-provider';
+import { Share2 } from '@/shared/icons';
 import { safeSentry } from '@/shared/lib/sentry';
-
-import { AISummaryData } from '@/shared/types';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import type { AISummaryData } from '@/shared/types';
+import { Button } from '@/shared/ui/button';
 
 interface ShareButtonProps {
   summary: AISummaryData;
@@ -93,7 +92,7 @@ export function ShareButton({ summary }: ShareButtonProps) {
       );
     }
 
-    parts.push('\n' + '─'.repeat(40));
+    parts.push(`\n${'─'.repeat(40)}`);
     parts.push(`🔗 ${t('aiAnalysis.poweredBy')}: ${t('app.title')}`);
 
     if (currentUrl) {

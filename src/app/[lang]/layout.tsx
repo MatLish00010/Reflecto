@@ -1,20 +1,20 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
-import { ThemeProvider } from '@/shared/providers/theme-provider';
-import { AlertProvider } from '@/shared/providers/alert-provider';
-import { TranslationProvider } from '@/shared/contexts/translation-context';
-import { LocaleProvider } from '@/shared/contexts/locale-context';
-import { AuthModalProvider } from '@/shared/contexts/auth-modal-context';
-import { UserProvider } from '@/shared/contexts/user-context';
-import { QueryProvider } from '@/shared/providers/query-provider';
-import { PageHeader } from '@/widgets/page-header';
-import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
-import { getDictionary } from '@/shared/dictionaries';
+import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { AuthSync, QueryErrorHandler } from '@/shared/components';
+import { AuthModalProvider } from '@/shared/contexts/auth-modal-context';
+import { LocaleProvider } from '@/shared/contexts/locale-context';
+import { TranslationProvider } from '@/shared/contexts/translation-context';
+import { UserProvider } from '@/shared/contexts/user-context';
+import { getDictionary } from '@/shared/dictionaries';
 import { SUPPORTED_LOCALES } from '@/shared/lib/language-detector';
 import { getServerUser } from '@/shared/lib/server-auth';
-import { AuthSync, QueryErrorHandler } from '@/shared/components';
+import { AlertProvider } from '@/shared/providers/alert-provider';
+import { QueryProvider } from '@/shared/providers/query-provider';
+import { ThemeProvider } from '@/shared/providers/theme-provider';
+import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
+import { PageHeader } from '@/widgets/page-header';
 
 import '../globals.css';
 

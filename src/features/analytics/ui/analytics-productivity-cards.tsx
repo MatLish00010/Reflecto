@@ -1,11 +1,10 @@
 import * as Sentry from '@sentry/nextjs';
+import { memo, useMemo } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
-import { useMemo, memo } from 'react';
-import { Percent, Zap, Medal, AlignLeft } from '@/shared/icons';
-
-import { ProductivityStats } from '../types/analytics';
-import { AnalyticsStatCard } from './analytics-stat-card';
+import { AlignLeft, Medal, Percent, Zap } from '@/shared/icons';
 import { CARD_COLOR_SCHEMES } from '@/shared/ui/summary/color-schemes';
+import type { ProductivityStats } from '../types/analytics';
+import { AnalyticsStatCard } from './analytics-stat-card';
 
 interface AnalyticsProductivityCardsProps {
   productivityStats: ProductivityStats;
@@ -70,7 +69,7 @@ export const AnalyticsProductivityCards = memo(
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             {productivityCards.map((card, index) => (
               <AnalyticsStatCard
-                key={index}
+                key={`productivity-${card.title}-${index}`}
                 title={card.title}
                 value={card.value}
                 subtitle={card.subtitle}

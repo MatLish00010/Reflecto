@@ -1,8 +1,12 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import Stripe from 'stripe';
 import { safeSentry } from '@/shared/lib/sentry';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  throw new Error('STRIPE_SECRET_KEY environment variable is not set');
+}
+const stripe = new Stripe(stripeSecretKey);
 
 export async function POST(request: NextRequest) {
   return safeSentry.startSpanAsync(
@@ -24,7 +28,7 @@ export async function POST(request: NextRequest) {
         }
 
         let event: Stripe.Event;
-        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
         if (!webhookSecret) {
           span.setAttribute('error', true);
@@ -55,7 +59,7 @@ export async function POST(request: NextRequest) {
         span.setAttribute('stripe.event.id', event.id);
 
         switch (event.type) {
-          case 'checkout.session.completed':
+          case 'checkout.session.completed': {
             const session = event.data.object as Stripe.Checkout.Session;
 
             span.setAttribute('stripe.session.id', session.id);
@@ -120,8 +124,9 @@ export async function POST(request: NextRequest) {
 
             safeSentry.captureMessage('Checkout session completed', 'info');
             break;
+          }
 
-          case 'customer.subscription.deleted':
+          case 'customer.subscription.deleted': {
             const deletedSubscription = event.data
               .object as Stripe.Subscription;
             span.setAttribute('stripe.subscription.id', deletedSubscription.id);
@@ -197,8 +202,9 @@ export async function POST(request: NextRequest) {
               });
             }
             break;
+          }
 
-          case 'customer.subscription.updated':
+          case 'customer.subscription.updated': {
             const updatedSubscription = event.data
               .object as Stripe.Subscription;
             span.setAttribute('stripe.subscription.id', updatedSubscription.id);
@@ -279,8 +285,9 @@ export async function POST(request: NextRequest) {
               }
             }
             break;
+          }
 
-          case 'invoice.paid':
+          case 'invoice.paid': {
             console.log('invoice.paid');
             const invoice = event.data.object as Stripe.Invoice;
             span.setAttribute('stripe.invoice.id', invoice.id);
@@ -294,8 +301,9 @@ export async function POST(request: NextRequest) {
             // This approach helps you avoid hitting rate limits.
             safeSentry.captureMessage('Invoice paid', 'info');
             break;
+          }
 
-          case 'invoice.payment_failed':
+          case 'invoice.payment_failed': {
             console.log('invoice.payment_failed');
             const failedInvoice = event.data.object as Stripe.Invoice;
             span.setAttribute('stripe.invoice.id', failedInvoice.id);
@@ -388,6 +396,7 @@ export async function POST(request: NextRequest) {
             // customer portal to update their payment information.
             safeSentry.captureMessage('Invoice payment failed', 'warning');
             break;
+          }
 
           default:
             console.log('unhandled event type:', event.type);

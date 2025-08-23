@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Button } from '@/shared/ui/button';
-import { Mic, Square, RotateCcw, Clock } from '@/shared/icons';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { useEffect, useRef, useState } from 'react';
 import { useUser } from '@/entities';
+import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { Clock, Mic, RotateCcw, Square } from '@/shared/icons';
+import { safeSentry } from '@/shared/lib/sentry';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import { Button } from '@/shared/ui/button';
 
 interface EnhancedVoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
@@ -91,7 +91,9 @@ export function EnhancedVoiceRecorder({
           mediaRecorder.onstop = async () => {
             if (isResetRef.current) {
               isResetRef.current = false;
-              stream.getTracks().forEach(track => track.stop());
+              stream.getTracks().forEach(track => {
+                track.stop();
+              });
               return;
             }
 
@@ -146,7 +148,9 @@ export function EnhancedVoiceRecorder({
               setIsProcessing(false);
             }
 
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(track => {
+              track.stop();
+            });
           };
 
           mediaRecorder.start();

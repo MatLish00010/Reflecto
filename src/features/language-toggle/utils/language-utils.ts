@@ -1,4 +1,4 @@
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useLocale } from '@/shared/contexts/locale-context';
 import { languages } from '../config/languages';
 

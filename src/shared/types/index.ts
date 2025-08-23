@@ -1,5 +1,5 @@
-export * from './notes';
 export * from './feedback';
+export * from './notes';
 export * from './supabase';
 
 export interface AISummaryData {
@@ -16,4 +16,12 @@ export interface AISummaryData {
   recommendations: string[];
   copingStrategies: string[];
   conclusion: string[];
+}
+
+export interface WeeklySummaryWithMetadata extends AISummaryData {
+  id: string;
+  created_at: string | null;
+  user_id: string | null;
+  week_start_date: string;
+  week_end_date: string;
 }

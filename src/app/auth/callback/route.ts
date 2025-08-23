@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/shared/lib/supabase/server';
-import { safeSentry } from '@/shared/lib/sentry';
-import { detectUserLanguage } from '@/shared/lib/language-detector';
+import { type NextRequest, NextResponse } from 'next/server';
 import {
-  handleApiRequest,
   type ApiContext,
-  withRateLimit,
+  handleApiRequest,
   RATE_LIMIT_CONFIGS,
+  withRateLimit,
 } from '@/shared/lib/api';
+import { detectUserLanguage } from '@/shared/lib/language-detector';
+import { safeSentry } from '@/shared/lib/sentry';
+import { createClient } from '@/shared/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

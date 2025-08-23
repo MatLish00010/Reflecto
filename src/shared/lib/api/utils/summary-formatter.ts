@@ -49,7 +49,9 @@ export function formatSummaryForPrompt(
     const labelKey = field.label as keyof SummaryLabels;
     const label = labels[labelKey];
 
-    if (!value) continue;
+    if (!value) {
+      continue;
+    }
 
     if (field.isArray && Array.isArray(value) && value.length > 0) {
       parts.push(`${label}: ${value.join(', ')}`);

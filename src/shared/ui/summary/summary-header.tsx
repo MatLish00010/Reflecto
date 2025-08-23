@@ -1,6 +1,6 @@
-import { Button } from '@/shared/ui/button';
-import { RefreshCw } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { RefreshCw } from '@/shared/icons';
+import { Button } from '@/shared/ui/button';
 
 interface SummaryHeaderProps {
   onRefresh: () => void;

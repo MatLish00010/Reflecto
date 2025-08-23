@@ -1,5 +1,5 @@
-import { LucideIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import type { LucideIcon } from '@/shared/icons';
 import { cn } from '@/shared/lib/utils';
 
 interface SummaryCardProps {
@@ -43,7 +43,7 @@ export function SummaryCard({
 
       <ul className="space-y-1">
         {contentArray.map((item, index) => (
-          <li key={index} className="flex items-start gap-2">
+          <li key={`summary-item-${index}`} className="flex items-start gap-2">
             <div className="w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full mt-2 flex-shrink-0" />
             <span className="text-xs md:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
               {item}

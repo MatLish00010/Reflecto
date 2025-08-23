@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { LucideIcon } from '@/shared/icons';
+import type { LucideIcon } from '@/shared/icons';
 import { StatisticCard } from '@/shared/ui/statistic-card';
 
 interface AnalyticsStatCardProps {

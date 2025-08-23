@@ -1,6 +1,6 @@
+import type { Span } from '@sentry/types';
 import OpenAI from 'openai';
 import { safeSentry } from '@/shared/lib/sentry';
-import type { Span } from '@sentry/types';
 
 export interface SpeechToTextServiceOptions {
   span?: Span;
@@ -85,7 +85,7 @@ export class SpeechToTextService {
 
       // Handle HTTP status errors
       switch (errorData.status) {
-        case 400:
+        case 400: {
           const badRequestError = new Error(
             prompt
               ? 'Unsupported audio file format or invalid prompt'
@@ -97,16 +97,18 @@ export class SpeechToTextService {
           });
           span?.setAttribute('error.type', 'bad_request');
           throw badRequestError;
+        }
 
-        case 401:
+        case 401: {
           const unauthorizedError = new Error('Invalid OpenAI API key');
           safeSentry.captureException(unauthorizedError, {
             tags: { operation, error_type: 'unauthorized' },
           });
           span?.setAttribute('error.type', 'unauthorized');
           throw unauthorizedError;
+        }
 
-        case 413:
+        case 413: {
           const fileTooLargeError = new Error('File too large (maximum 25MB)');
           safeSentry.captureException(fileTooLargeError, {
             tags: { operation, error_type: 'file_too_large' },
@@ -114,8 +116,9 @@ export class SpeechToTextService {
           });
           span?.setAttribute('error.type', 'file_too_large');
           throw fileTooLargeError;
+        }
 
-        case 429:
+        case 429: {
           const rateLimitError = new Error('OpenAI rate limit exceeded');
           safeSentry.captureException(rateLimitError, {
             tags: { operation, error_type: 'rate_limited' },
@@ -123,8 +126,9 @@ export class SpeechToTextService {
           });
           span?.setAttribute('error.type', 'rate_limited');
           throw rateLimitError;
+        }
 
-        default:
+        default: {
           const openaiError = new Error(
             'Error processing audio through OpenAI'
           );
@@ -134,6 +138,7 @@ export class SpeechToTextService {
           });
           span?.setAttribute('error.type', 'openai_error');
           throw openaiError;
+        }
       }
     }
   }

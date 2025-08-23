@@ -1,13 +1,17 @@
-import { NextRequest } from 'next/server';
-import {
-  handleApiRequest,
-  type ApiContext,
-  withRateLimit,
-  RATE_LIMIT_CONFIGS,
-} from '@/shared/lib/api';
+import type { NextRequest } from 'next/server';
 import Stripe from 'stripe';
+import {
+  type ApiContext,
+  handleApiRequest,
+  RATE_LIMIT_CONFIGS,
+  withRateLimit,
+} from '@/shared/lib/api';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  throw new Error('STRIPE_SECRET_KEY environment variable is not set');
+}
+const stripe = new Stripe(stripeSecretKey);
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

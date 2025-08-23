@@ -1,13 +1,12 @@
 import * as Sentry from '@sentry/nextjs';
-import { useTranslation } from '@/shared/contexts/translation-context';
+import { Calculator, CalendarRange, FileCheck, StickyNote } from 'lucide-react';
 import { useMemo } from 'react';
-import { StickyNote, FileCheck, CalendarRange, Calculator } from 'lucide-react';
-
-import { Note, DailySummary, SummaryStats } from '../types/analytics';
-import { AnalyticsStatCard } from './analytics-stat-card';
-import { getSummariesCount } from '../utils/analytics-calculations';
-import { CARD_COLOR_SCHEMES } from '@/shared/ui/summary/color-schemes';
+import { useTranslation } from '@/shared/contexts/translation-context';
 import type { AISummaryData } from '@/shared/types';
+import { CARD_COLOR_SCHEMES } from '@/shared/ui/summary/color-schemes';
+import type { DailySummary, Note, SummaryStats } from '../types/analytics';
+import { getSummariesCount } from '../utils/analytics-calculations';
+import { AnalyticsStatCard } from './analytics-stat-card';
 
 interface AnalyticsStatsCardsProps {
   notes: Note[];
@@ -77,7 +76,7 @@ export function AnalyticsStatsCards({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           {statsCards.map((card, index) => (
             <AnalyticsStatCard
-              key={index}
+              key={`stats-${card.title}-${index}`}
               title={card.title}
               value={card.value}
               subtitle={card.subtitle}

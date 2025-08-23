@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '@/shared/lib/server';
-import { requireAuth } from '@/shared/lib/auth';
 import type { Span } from '@sentry/types';
+import type { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/shared/lib/auth';
+import { createServerClient } from '@/shared/lib/server';
 
 export interface ApiHandlerOptions {
   requireAuthentication?: boolean;
@@ -21,14 +21,17 @@ export interface ApiContext {
 }
 
 export async function withAuth(
-  request: NextRequest,
+  _request: NextRequest,
   options: ApiHandlerOptions
 ): Promise<{ context?: ApiContext; error?: NextResponse }> {
   const { requireAuthentication = true, span } = options;
 
   if (!requireAuthentication) {
     const supabase = await createServerClient();
-    return { context: { user: { id: 'anonymous' }, supabase, span: span! } };
+    if (!span) {
+      throw new Error('Span is required for API context');
+    }
+    return { context: { user: { id: 'anonymous' }, supabase, span } };
   }
 
   const authResult = await requireAuth();
@@ -38,10 +41,17 @@ export async function withAuth(
   }
 
   const supabase = await createServerClient();
+  if (!authResult.user) {
+    throw new Error('User is required for authenticated requests');
+  }
+  if (!span) {
+    throw new Error('Span is required for API context');
+  }
+
   const context: ApiContext = {
-    user: authResult.user!,
+    user: authResult.user,
     supabase,
-    span: span!,
+    span,
   };
 
   span?.setAttribute('user.id', context.user.id);

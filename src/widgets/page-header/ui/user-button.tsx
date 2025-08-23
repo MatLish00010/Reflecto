@@ -1,12 +1,10 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Button } from '@/shared/ui/button';
-import { Skeleton } from '@/shared/ui/skeleton';
 import { useUser } from '@/entities/user';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { User, LogIn } from '@/shared/icons';
-import { SubscriptionIcon } from './subscription-icon';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { LogIn, User } from '@/shared/icons';
+import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { UserInfo } from './user-info';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { LogoutButton } from './logout-button';
+import { SubscriptionIcon } from './subscription-icon';
+import { UserInfo } from './user-info';
 
 interface UserButtonProps {
   className?: string;
@@ -52,7 +52,7 @@ export function UserButton({ className, maxNameLength = 20 }: UserButtonProps) {
   const displayName = user.user_metadata?.name || user.email;
   const shortName =
     displayName.length > maxNameLength
-      ? displayName.substring(0, maxNameLength) + '...'
+      ? `${displayName.substring(0, maxNameLength)}...`
       : displayName;
 
   return (

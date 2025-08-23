@@ -1,7 +1,7 @@
 'use client';
 
-import { Crown } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { Crown } from '@/shared/icons';
 
 interface SubscriptionIconProps {
   isSubscribed: boolean;

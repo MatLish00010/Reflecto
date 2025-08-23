@@ -17,7 +17,7 @@ export function HistoryPageSkeleton() {
       {/* Notes list skeleton */}
       <div className="space-y-4">
         {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className="space-y-3">
+          <div key={`history-item-${index}`} className="space-y-3">
             <div className="flex items-center justify-between">
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-4 w-16" />

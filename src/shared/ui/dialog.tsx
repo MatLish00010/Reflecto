@@ -1,16 +1,16 @@
 'use client';
 
-import * as React from 'react';
 import {
-  Root as DialogRoot,
-  Trigger as DialogTrigger,
-  Portal as DialogPortal,
   Close as DialogClose,
-  Overlay as DialogOverlay,
   Content as DialogContent,
-  Title as DialogTitle,
   Description as DialogDescription,
+  Overlay as DialogOverlay,
+  Portal as DialogPortal,
+  Root as DialogRoot,
+  Title as DialogTitle,
+  Trigger as DialogTrigger,
 } from '@radix-ui/react-dialog';
+import type * as React from 'react';
 import { XIcon } from '@/shared/icons';
 
 import { cn } from '@/shared/lib/utils';

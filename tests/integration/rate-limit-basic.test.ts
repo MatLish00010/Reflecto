@@ -79,11 +79,18 @@ describe('Rate Limiting Basic Tests', () => {
       expect(response.headers.get('Retry-After') !== undefined).toBe(true);
 
       // Check value types
-      const limit = parseInt(response.headers.get('X-RateLimit-Limit') || '0');
-      const remaining = parseInt(
-        response.headers.get('X-RateLimit-Remaining') || '0'
+      const limit = parseInt(
+        response.headers.get('X-RateLimit-Limit') || '0',
+        10
       );
-      const reset = parseInt(response.headers.get('X-RateLimit-Reset') || '0');
+      const remaining = parseInt(
+        response.headers.get('X-RateLimit-Remaining') || '0',
+        10
+      );
+      const reset = parseInt(
+        response.headers.get('X-RateLimit-Reset') || '0',
+        10
+      );
 
       expect(limit).toBeGreaterThan(0);
       expect(remaining).toBeGreaterThanOrEqual(0);

@@ -1,1 +1,1 @@
-export { useUser, userKeys } from './model/use-user';
+export { userKeys, useUser } from './model/use-user';

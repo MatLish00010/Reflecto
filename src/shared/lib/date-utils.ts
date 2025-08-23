@@ -1,23 +1,23 @@
 import {
+  endOfWeek,
   format,
   parseISO,
-  startOfWeek,
-  endOfWeek,
-  subDays,
   startOfDay,
+  startOfWeek,
+  subDays,
 } from 'date-fns';
 import {
-  ru,
-  enUS,
   de,
-  fr,
+  enUS,
   es,
+  fr,
   it,
-  pt,
   ja,
   ko,
+  type Locale,
+  pt,
+  ru,
   zhCN,
-  Locale,
 } from 'date-fns/locale';
 import React from 'react'; // Added for useDateFromUrl hook
 
@@ -122,7 +122,7 @@ export function dateToUrlParam(date: Date): string {
 export function urlParamToDate(dateString: string): Date | null {
   try {
     const parsed = parseISO(dateString);
-    if (isNaN(parsed.getTime())) {
+    if (Number.isNaN(parsed.getTime())) {
       return null;
     }
     return parsed;
@@ -191,7 +191,7 @@ export function weekToUrlParam(date: Date): string {
 export function urlParamToWeek(dateString: string): Date | null {
   try {
     const parsed = parseISO(dateString);
-    if (isNaN(parsed.getTime())) {
+    if (Number.isNaN(parsed.getTime())) {
       return null;
     }
     return parsed;

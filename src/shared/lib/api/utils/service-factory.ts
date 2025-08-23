@@ -1,15 +1,16 @@
 import type { ApiContext } from '@/shared/lib/api';
 import {
-  NotesService,
-  FeedbackService,
   DailySummaryService,
-  WeeklySummaryService,
-  SpeechToTextService,
+  FeedbackService,
+  NotesService,
   OpenAIService,
   RedisService,
+  SpeechToTextService,
+  WeeklySummaryService,
 } from '@/shared/lib/api/services/server';
 import { SubscriptionsService } from '@/shared/lib/api/services/subscriptions.service';
 
+/* biome-ignore lint/complexity/noStaticOnlyClass: ServiceFactory pattern is used for dependency injection */
 export class ServiceFactory {
   static createNotesService(supabase: ApiContext['supabase']) {
     return new NotesService(supabase);

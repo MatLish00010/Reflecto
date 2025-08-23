@@ -1,12 +1,12 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createBrowserClient } from '@/shared/lib/client';
 import type { User } from '@supabase/supabase-js';
-import { userKeys } from '@/entities/user';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { noteKeys } from '@/entities/note';
-import { useAlertContext } from '@/shared/providers/alert-provider';
+import { userKeys } from '@/entities/user';
+import { createBrowserClient } from '@/shared/lib/client';
 import { safeSentry } from '@/shared/lib/sentry';
+import { useAlertContext } from '@/shared/providers/alert-provider';
 
 interface SignInRequest {
   email: string;

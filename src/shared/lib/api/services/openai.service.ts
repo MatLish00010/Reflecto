@@ -1,5 +1,5 @@
-import { safeSentry } from '@/shared/lib/sentry';
 import type { Span } from '@sentry/types';
+import { safeSentry } from '@/shared/lib/sentry';
 
 export interface OpenAIMessage {
   role: 'system' | 'user' | 'assistant';

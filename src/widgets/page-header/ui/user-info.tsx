@@ -1,7 +1,7 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
 import type { User } from '@supabase/supabase-js';
+import { useTranslation } from '@/shared/contexts/translation-context';
 import { Crown } from '@/shared/icons';
 
 interface UserInfoProps {

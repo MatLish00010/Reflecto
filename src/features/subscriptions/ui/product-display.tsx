@@ -1,9 +1,9 @@
-import React from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
-import { Badge } from '@/shared/ui/badge';
+import type React from 'react';
 import type { Stripe } from 'stripe';
+import { useTranslation } from '@/shared/contexts/translation-context';
+import { Badge } from '@/shared/ui/badge';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 
 interface ProductDisplayProps {
   products: Stripe.Price[];
@@ -55,12 +55,20 @@ export const ProductDisplay: React.FC<ProductDisplayProps> = ({
   const { t } = useTranslation();
 
   const getSubscriptionPeriod = (interval?: string, intervalCount?: number) => {
-    if (!interval) return t('subscriptions.month');
+    if (!interval) {
+      return t('subscriptions.month');
+    }
 
     if (interval === 'month') {
-      if (intervalCount === 1) return t('subscriptions.month');
-      if (intervalCount === 3) return t('subscriptions.three_month');
-      if (intervalCount === 6) return t('subscriptions.six_month');
+      if (intervalCount === 1) {
+        return t('subscriptions.month');
+      }
+      if (intervalCount === 3) {
+        return t('subscriptions.three_month');
+      }
+      if (intervalCount === 6) {
+        return t('subscriptions.six_month');
+      }
     }
 
     // Fallback for other intervals
@@ -82,7 +90,7 @@ export const ProductDisplay: React.FC<ProductDisplayProps> = ({
                   <div className="text-center">
                     <div className="relative">
                       <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                        ${(price.unit_amount! / 100).toFixed(2)}
+                        ${((price.unit_amount || 0) / 100).toFixed(2)}
                       </div>
                       {getSavingsBadge(price, products)}
                     </div>

@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import { AISummary } from '@/features/daily-summary-generation';
+import { History } from '@/features/history';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { getDateRangeForDay, useDateFromUrl } from '@/shared/lib/date-utils';
 import {
-  TabsWithURL,
+  TabsContent,
   TabsList,
   TabsTrigger,
-  TabsContent,
+  TabsWithURL,
 } from '@/shared/ui/tabs';
-import { getDateRangeForDay, useDateFromUrl } from '@/shared/lib/date-utils';
-import { History } from '@/features/history';
-import { AISummary } from '@/features/daily-summary-generation';
 import { DatePicker } from './date-picker';
 
 export function HistoryAndSummary() {

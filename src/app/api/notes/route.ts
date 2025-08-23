@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import {
   handleApiRequest,
-  withValidation,
+  RATE_LIMIT_CONFIGS,
   VALIDATION_SCHEMAS,
   withRateLimit,
-  RATE_LIMIT_CONFIGS,
+  withValidation,
 } from '@/shared/lib/api';
 import { NotesService } from '@/shared/lib/api/services/server';
 
@@ -34,22 +34,20 @@ export async function GET(request: NextRequest) {
 }
 
 // Handler with validation
-const createNoteHandler = withValidation(VALIDATION_SCHEMAS.createNote)(async (
-  context,
-  request: NextRequest,
-  validatedData
-) => {
-  context.span.setAttribute('note.length', validatedData.note.length);
+const createNoteHandler = withValidation(VALIDATION_SCHEMAS.createNote)(
+  async (context, _request: NextRequest, validatedData) => {
+    context.span.setAttribute('note.length', validatedData.note.length);
 
-  const notesService = new NotesService(context.supabase);
-  const newNote = await notesService.createNote({
-    note: validatedData.note,
-    userId: context.user.id,
-    options: { span: context.span, operation: 'create_note' },
-  });
+    const notesService = new NotesService(context.supabase);
+    const newNote = await notesService.createNote({
+      note: validatedData.note,
+      userId: context.user.id,
+      options: { span: context.span, operation: 'create_note' },
+    });
 
-  return { note: newNote };
-});
+    return { note: newNote };
+  }
+);
 
 export async function POST(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

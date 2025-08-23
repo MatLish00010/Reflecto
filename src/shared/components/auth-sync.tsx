@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { syncAuthSession } from '@/shared/lib/auth-sync';
+import { useEffect } from 'react';
 import { userKeys } from '@/entities/user/model/use-user';
+import { syncAuthSession } from '@/shared/lib/auth-sync';
 
 export function AuthSync() {
   const queryClient = useQueryClient();

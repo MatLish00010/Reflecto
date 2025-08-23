@@ -1,8 +1,7 @@
 'use client';
 
-import * as React from 'react';
-import { Moon, Sun } from '@/shared/icons';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { Moon, Sun } from '@/shared/icons';
 
 import { Button } from '@/shared/ui/button';
 import {

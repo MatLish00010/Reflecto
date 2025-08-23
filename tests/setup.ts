@@ -7,7 +7,7 @@ jest.setTimeout(30000);
 jest.mock('@sentry/nextjs', () => ({
   startSpan: jest.fn(
     (
-      config: unknown,
+      _config: unknown,
       callback: (span: { setAttribute: jest.Mock }) => unknown
     ) => callback({ setAttribute: jest.fn() })
   ),

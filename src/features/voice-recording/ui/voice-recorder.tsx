@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Button } from '@/shared/ui/button';
-import { Mic, Square, RotateCcw } from '@/shared/icons';
-import { useAlertContext } from '@/shared/providers/alert-provider';
+import { useRef, useState } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
+import { Mic, RotateCcw, Square } from '@/shared/icons';
 import { safeSentry } from '@/shared/lib/sentry';
+import { useAlertContext } from '@/shared/providers/alert-provider';
+import { Button } from '@/shared/ui/button';
 
 interface VoiceRecorderProps {
   onRecordingComplete: (text: string) => void;
@@ -94,7 +94,9 @@ export function VoiceRecorder({
               setIsProcessing(false);
             }
 
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(track => {
+              track.stop();
+            });
           };
 
           mediaRecorder.start();

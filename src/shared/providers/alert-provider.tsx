@@ -2,20 +2,20 @@
 
 import {
   createContext,
-  useContext,
-  ReactNode,
-  useState,
+  type ReactNode,
   useCallback,
+  useContext,
   useEffect,
+  useState,
 } from 'react';
-import { Alert, AlertDescription } from '@/shared/ui/alert';
 import {
   AlertCircle,
-  CheckCircle,
   AlertTriangle,
+  CheckCircle,
   Info,
   X,
 } from '@/shared/icons';
+import { Alert, AlertDescription } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
 
 interface AlertState {

@@ -1,8 +1,8 @@
-import { safeSentry } from '@/shared/lib/sentry';
-import { encryptField, decryptField } from '@/shared/lib/crypto-field';
 import type { Span } from '@sentry/types';
-import type { AISummaryData } from '@/shared/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { decryptField, encryptField } from '@/shared/lib/crypto-field';
+import { safeSentry } from '@/shared/lib/sentry';
+import type { AISummaryData, WeeklySummaryWithMetadata } from '@/shared/types';
 import type { Database } from '@/shared/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;
@@ -66,7 +66,7 @@ export class WeeklySummaryService {
     }
 
     span?.setAttribute('summary.found', true);
-    return decryptedSummary!;
+    return decryptedSummary || null;
   }
 
   async fetchSummaries(
@@ -74,7 +74,7 @@ export class WeeklySummaryService {
     from: string,
     to: string,
     options: WeeklySummaryServiceOptions = {}
-  ): Promise<AISummaryData[]> {
+  ): Promise<WeeklySummaryWithMetadata[]> {
     const { span, operation = 'fetch_weekly_summaries' } = options;
 
     const { data, error } = await this.supabase
@@ -98,7 +98,7 @@ export class WeeklySummaryService {
       return [];
     }
 
-    const summaries: AISummaryData[] = [];
+    const summaries: WeeklySummaryWithMetadata[] = [];
 
     for (const item of data) {
       const { value: decryptedSummary, error: decryptError } =
@@ -120,9 +120,21 @@ export class WeeklySummaryService {
         throw decryptError;
       }
 
-      // Merge database fields with decrypted summary data
-      const summaryWithMetadata = {
-        ...decryptedSummary!,
+      // Add metadata to the decrypted summary
+      const summaryWithMetadata: WeeklySummaryWithMetadata = {
+        mainStory: decryptedSummary?.mainStory || '',
+        keyEvents: decryptedSummary?.keyEvents || [],
+        emotionalMoments: decryptedSummary?.emotionalMoments || [],
+        ideas: decryptedSummary?.ideas || [],
+        cognitivePatterns: decryptedSummary?.cognitivePatterns || [],
+        behavioralPatterns: decryptedSummary?.behavioralPatterns || [],
+        triggers: decryptedSummary?.triggers || [],
+        resources: decryptedSummary?.resources || [],
+        progress: decryptedSummary?.progress || [],
+        observations: decryptedSummary?.observations || [],
+        recommendations: decryptedSummary?.recommendations || [],
+        copingStrategies: decryptedSummary?.copingStrategies || [],
+        conclusion: decryptedSummary?.conclusion || [],
         id: item.id,
         created_at: item.created_at,
         user_id: item.user_id,
