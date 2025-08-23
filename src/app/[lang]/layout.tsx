@@ -24,6 +24,7 @@ const geistSans = Geist({
   preload: true,
   display: 'swap',
   fallback: ['system-ui', 'arial'],
+  adjustFontFallback: true,
 });
 
 const geistMono = Geist_Mono({
@@ -32,6 +33,7 @@ const geistMono = Geist_Mono({
   preload: true,
   display: 'swap',
   fallback: ['monospace'],
+  adjustFontFallback: true,
 });
 
 const OnboardingGuide = dynamic(
@@ -97,6 +99,12 @@ export default async function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        {/* Performance optimizations */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+        {/* Preload critical CSS */}
+        <link rel="preload" href="/globals.css" as="style" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

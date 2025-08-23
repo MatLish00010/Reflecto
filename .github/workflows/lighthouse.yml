@@ -1,0 +1,102 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Запуск каждое воскресенье в 2:00 UTC
+    - cron: '0 2 * * 0'
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Deploy to Vercel (Preview)
+        if: github.event_name == 'pull_request'
+        id: vercel-deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+
+      - name: Run Lighthouse CI (Production)
+        if: github.event_name != 'pull_request'
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+
+      - name: Run Lighthouse CI (Preview)
+        if: github.event_name == 'pull_request'
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+          urls: |
+            ${{ steps.vercel-deploy.outputs.preview-url }}/
+            ${{ steps.vercel-deploy.outputs.preview-url }}/ru
+            ${{ steps.vercel-deploy.outputs.preview-url }}/en
+            ${{ steps.vercel-deploy.outputs.preview-url }}/analytics
+            ${{ steps.vercel-deploy.outputs.preview-url }}/history
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const resultsPath = path.join(process.env.GITHUB_WORKSPACE, '.lighthouseci');
+              const results = JSON.parse(fs.readFileSync(path.join(resultsPath, 'manifest.json'), 'utf8'));
+              
+              let comment = '## 🚀 Lighthouse Performance Results (Preview)\n\n';
+              
+              results.forEach(result => {
+                const scores = result.summary;
+                const performance = Math.round(scores.performance * 100);
+                const status = performance >= 90 ? '✅' : performance >= 70 ? '⚠️' : '❌';
+                
+                comment += `### ${result.url}\n`;
+                comment += `${status} **Performance**: ${performance}/100\n`;
+                comment += `- **Accessibility**: ${Math.round(scores.accessibility * 100)}/100\n`;
+                comment += `- **Best Practices**: ${Math.round(scores['best-practices'] * 100)}/100\n`;
+                comment += `- **SEO**: ${Math.round(scores.seo * 100)}/100\n\n`;
+              });
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('No Lighthouse results found');
+            }
