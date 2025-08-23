@@ -1,11 +1,15 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Suspense, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useUser } from '@/entities/user';
 import { AuthRequiredMessage } from '@/shared/components/auth-required-message';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useAnalyticsData } from '../model/use-analytics-data';
+import {
+  AnalyticsCardSkeleton,
+  AnalyticsChartSkeleton,
+} from './analytics-card-skeleton';
 import { AnalyticsDataLoadingSkeleton } from './analytics-data-loading-skeleton';
 import { AnalyticsEmptyState } from './analytics-empty-state';
 import { AnalyticsErrorState } from './analytics-error-state';
@@ -17,11 +21,7 @@ const AnalyticsCharts = dynamic(
       default: mod.AnalyticsCharts,
     })),
   {
-    loading: () => (
-      <div className="h-64 animate-pulse bg-gray-200 rounded-lg flex items-center justify-center">
-        <div className="text-gray-500">Loading charts...</div>
-      </div>
-    ),
+    loading: () => <AnalyticsChartSkeleton />,
     ssr: false,
   }
 );
@@ -33,14 +33,10 @@ const AnalyticsStatsCards = dynamic(
     })),
   {
     loading: () => (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div
-            key={`stats-loading-${i}`}
-            className="h-32 animate-pulse bg-gray-200 rounded-lg"
-          />
-        ))}
-      </div>
+      <AnalyticsCardSkeleton
+        count={4}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+      />
     ),
     ssr: true,
   }
@@ -53,14 +49,10 @@ const AnalyticsProductivityCards = dynamic(
     })),
   {
     loading: () => (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div
-            key={`productivity-loading-${i}`}
-            className="h-32 animate-pulse bg-gray-200 rounded-lg"
-          />
-        ))}
-      </div>
+      <AnalyticsCardSkeleton
+        count={4}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+      />
     ),
     ssr: true,
   }
@@ -146,69 +138,38 @@ export function Analytics() {
 
       <div className="space-y-8">
         <section>
-          <Suspense
-            fallback={
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div
-                    key={`fallback-stats-${i}`}
-                    className="h-32 animate-pulse bg-gray-200 rounded-lg"
-                  />
-                ))}
-              </div>
-            }
-          >
-            <AnalyticsStatsCards
-              notes={memoizedData.notes}
-              dailySummaries={memoizedData.dailySummaries}
-              weeklySummaries={memoizedData.weeklySummaries}
-              summaryStats={memoizedData.summaryStats}
-            />
-          </Suspense>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+            {t('analytics.overview')}
+          </h2>
+          <AnalyticsStatsCards
+            notes={memoizedData.notes}
+            dailySummaries={memoizedData.dailySummaries}
+            weeklySummaries={memoizedData.weeklySummaries}
+            summaryStats={memoizedData.summaryStats}
+          />
         </section>
 
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.productivity')}
           </h2>
-          <Suspense
-            fallback={
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div
-                    key={`fallback-productivity-${i}`}
-                    className="h-32 animate-pulse bg-gray-200 rounded-lg"
-                  />
-                ))}
-              </div>
-            }
-          >
-            <AnalyticsProductivityCards
-              productivityStats={memoizedData.productivityStats}
-            />
-          </Suspense>
+          <AnalyticsProductivityCards
+            productivityStats={memoizedData.productivityStats}
+          />
         </section>
 
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.chartsAndInsights')}
           </h2>
-          <Suspense
-            fallback={
-              <div className="h-64 animate-pulse bg-gray-200 rounded-lg flex items-center justify-center">
-                <div className="text-gray-500">Preparing charts...</div>
-              </div>
-            }
-          >
-            <AnalyticsCharts
-              activityData={memoizedData.activityData}
-              weeklyActivityData={memoizedData.weeklyActivityData}
-              contentAnalysisData={memoizedData.contentAnalysisData}
-              timeAnalysisData={memoizedData.timeAnalysisData}
-              emotionalData={memoizedData.emotionalData}
-              comparativeStats={memoizedData.comparativeStats}
-            />
-          </Suspense>
+          <AnalyticsCharts
+            activityData={memoizedData.activityData}
+            weeklyActivityData={memoizedData.weeklyActivityData}
+            contentAnalysisData={memoizedData.contentAnalysisData}
+            timeAnalysisData={memoizedData.timeAnalysisData}
+            emotionalData={memoizedData.emotionalData}
+            comparativeStats={memoizedData.comparativeStats}
+          />
         </section>
       </div>
     </div>

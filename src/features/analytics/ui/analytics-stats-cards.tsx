@@ -73,7 +73,7 @@ export function AnalyticsStatsCards({
       span.setAttribute('hasSummaryStats', !!summaryStats);
 
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {statsCards.map((card, index) => (
             <AnalyticsStatCard
               key={`stats-${card.title}-${index}`}
