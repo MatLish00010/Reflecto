@@ -8,14 +8,14 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-card text-card-foreground',
+        default: 'bg-card text-card-foreground border-border',
         destructive:
-          'bg-red-100 border-red-400 text-red-800 [&>svg]:text-red-600 *:data-[slot=alert-description]:text-red-900',
+          'bg-destructive/10 border-destructive/20 text-destructive [&>svg]:text-destructive *:data-[slot=alert-description]:text-destructive/80',
         success:
-          'bg-green-100 border-green-400 text-green-800 [&>svg]:text-green-600 *:data-[slot=alert-description]:text-green-900',
+          'bg-emerald-50/50 border-emerald-200/50 text-emerald-700 [&>svg]:text-emerald-600 *:data-[slot=alert-description]:text-emerald-600/80 dark:bg-emerald-950/20 dark:border-emerald-800/30 dark:text-emerald-300 dark:[&>svg]:text-emerald-400 dark:*:data-[slot=alert-description]:text-emerald-300/80',
         warning:
-          'bg-orange-100 border-orange-400 text-orange-800 [&>svg]:text-orange-600 *:data-[slot=alert-description]:text-orange-900',
-        info: 'bg-sky-100 border-sky-400 text-sky-800 [&>svg]:text-sky-600 *:data-[slot=alert-description]:text-sky-900',
+          'bg-amber-50/50 border-amber-200/50 text-amber-700 [&>svg]:text-amber-600 *:data-[slot=alert-description]:text-amber-600/80 dark:bg-amber-950/20 dark:border-amber-800/30 dark:text-amber-300 dark:[&>svg]:text-amber-400 dark:*:data-[slot=alert-description]:text-amber-300/80',
+        info: 'bg-blue-50/50 border-blue-200/50 text-blue-700 [&>svg]:text-blue-600 *:data-[slot=alert-description]:text-blue-600/80 dark:bg-blue-950/20 dark:border-blue-800/30 dark:text-blue-300 dark:[&>svg]:text-blue-400 dark:*:data-[slot=alert-description]:text-blue-300/80',
       },
     },
     defaultVariants: {
