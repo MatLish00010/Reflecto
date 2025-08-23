@@ -4,4 +4,5 @@ export * from './notes.service';
 export * from './openai.service';
 export * from './redis.service';
 export * from './speech-to-text.service';
+export * from './stripe.service';
 export * from './weekly-summary.service';

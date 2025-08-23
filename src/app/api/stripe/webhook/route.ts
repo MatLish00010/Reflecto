@@ -1,12 +1,7 @@
 import type { NextRequest } from 'next/server';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
+import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 import { safeSentry } from '@/shared/lib/sentry';
-
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-if (!stripeSecretKey) {
-  throw new Error('STRIPE_SECRET_KEY environment variable is not set');
-}
-const stripe = new Stripe(stripeSecretKey);
 
 export async function POST(request: NextRequest) {
   return safeSentry.startSpanAsync(
@@ -39,10 +34,14 @@ export async function POST(request: NextRequest) {
         }
 
         try {
-          event = stripe.webhooks.constructEvent(
+          const stripeService = ServiceFactory.createStripeService();
+          event = await stripeService.constructWebhookEvent(
             body,
             signature,
-            webhookSecret
+            webhookSecret,
+            {
+              operation: 'construct_webhook_event',
+            }
           );
         } catch (err) {
           span.setAttribute('error', true);
@@ -340,8 +339,13 @@ export async function POST(request: NextRequest) {
                   await getResponse.json();
 
                 if (existingSubscription) {
-                  const subscription =
-                    await stripe.subscriptions.retrieve(subscriptionId);
+                  const stripeService = ServiceFactory.createStripeService();
+                  const subscription = await stripeService.retrieveSubscription(
+                    subscriptionId,
+                    {
+                      operation: 'retrieve_subscription',
+                    }
+                  );
 
                   if (
                     ['canceled', 'unpaid', 'past_due'].includes(

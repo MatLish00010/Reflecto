@@ -141,7 +141,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
 
   const getAlertClassName = () => {
     const baseClasses =
-      'fixed top-4 right-4 z-[9999] max-w-sm transition-all duration-300 ease-in-out shadow-lg rounded-lg';
+      'fixed top-4 right-4 z-[9999] max-w-sm transition-all duration-300 ease-in-out shadow-xl rounded-lg backdrop-blur-sm';
 
     if (alert.isVisible) {
       return `${baseClasses} opacity-100 translate-y-0`;
@@ -181,9 +181,9 @@ export function AlertProvider({ children }: AlertProviderProps) {
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="absolute top-2 right-2 h-6 w-6 p-0 hover:bg-background/80"
+              className="absolute top-2 right-2 h-6 w-6 p-0 hover:bg-background/80 transition-colors"
             >
-              <X className="h-3 w-3" />
+              <X className="h-3 w-3 opacity-60 hover:opacity-100" />
             </Button>
           </Alert>
         )}

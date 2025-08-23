@@ -6,6 +6,7 @@ import {
   OpenAIService,
   RedisService,
   SpeechToTextService,
+  StripeService,
   WeeklySummaryService,
 } from '@/shared/lib/api/services/server';
 import { SubscriptionsService } from '@/shared/lib/api/services/subscriptions.service';
@@ -42,5 +43,9 @@ export class ServiceFactory {
 
   static createRedisService(): RedisService {
     return new RedisService();
+  }
+
+  static createStripeService(): StripeService {
+    return new StripeService();
   }
 }
