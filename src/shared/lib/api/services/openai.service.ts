@@ -74,7 +74,7 @@ export class OpenAIService {
           format: {
             type: 'json_object',
           },
-          // @ts-expect-error - OpenAI API types don't include verbosity property yet
+          // @ts-expect-error
           verbosity: 'medium',
         },
         reasoning: {
