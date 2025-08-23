@@ -2,6 +2,47 @@ import type { Span } from '@sentry/types';
 import OpenAI from 'openai';
 import { safeSentry } from '@/shared/lib/sentry';
 
+// Extended types for GPT-5 API
+interface GPT5TextConfig {
+  format: {
+    type: 'json_object';
+  };
+  verbosity: 'low' | 'medium' | 'high';
+}
+
+interface GPT5ReasoningConfig {
+  effort: 'low' | 'medium' | 'high';
+  summary: 'auto' | 'none';
+}
+
+interface GPT5ResponseCreateParams {
+  model: string;
+  input: Array<{
+    role: string;
+    content:
+      | string
+      | Array<{
+          type: string;
+          text: string;
+        }>;
+  }>;
+  text: GPT5TextConfig;
+  reasoning: GPT5ReasoningConfig;
+  tools: unknown[];
+  store: boolean;
+}
+
+interface GPT5Response {
+  output_text: string;
+}
+
+// Type assertion for GPT-5 API
+type OpenAIClientWithGPT5 = OpenAI & {
+  responses: {
+    create(params: GPT5ResponseCreateParams): Promise<GPT5Response>;
+  };
+};
+
 export interface OpenAIMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
@@ -32,7 +73,7 @@ export interface ValidateAISummaryStructureParams {
 }
 
 export class OpenAIService {
-  private openai: OpenAI;
+  private openai: OpenAIClientWithGPT5;
 
   constructor() {
     const apiKey = process.env.OPENAI_API_KEY;
@@ -42,7 +83,7 @@ export class OpenAIService {
 
     this.openai = new OpenAI({
       apiKey,
-    });
+    }) as OpenAIClientWithGPT5;
   }
 
   async callOpenAI({
@@ -74,7 +115,6 @@ export class OpenAIService {
           format: {
             type: 'json_object',
           },
-          // @ts-expect-error - GPT-5 API types not yet available in OpenAI SDK
           verbosity: 'medium',
         },
         reasoning: {
@@ -84,8 +124,6 @@ export class OpenAIService {
         tools: [],
         store: true,
       });
-
-      console.log('response', response);
 
       const content = response.output_text;
 
