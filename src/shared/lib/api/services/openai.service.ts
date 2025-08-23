@@ -156,10 +156,6 @@ export class OpenAIService {
       }
     }
 
-    if (typeof summary.mainStory !== 'string') {
-      summary.mainStory = String(summary.mainStory || '');
-    }
-
     return summary;
   }
 

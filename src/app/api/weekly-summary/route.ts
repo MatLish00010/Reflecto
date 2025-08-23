@@ -12,11 +12,7 @@ import {
   withValidation,
 } from '@/shared/lib/api';
 import type { AISummaryData } from '@/shared/types';
-import {
-  getSummaryLabels,
-  getWeeklySummaryPrompt,
-  type Locale,
-} from '../../../../prompts';
+import { getSummaryLabels, getWeeklySummaryPrompt } from '../../../../prompts';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

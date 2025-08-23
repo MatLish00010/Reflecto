@@ -10,7 +10,7 @@ const PROGRESS_CONFIG = {
   insights: { max: 100, increment: 15, color: 'green' as const },
 } as const;
 
-const UPDATE_INTERVAL = 300;
+const UPDATE_INTERVAL = 3000;
 
 const brainPulseAnimation = `
   @keyframes brainPulse {
@@ -125,7 +125,7 @@ export function AISummaryLoadingSkeleton() {
   const progressBars = useMemo(
     () => [
       {
-        label: t('aiAnalysis.emotionAnalysis'),
+        label: t('aiAnalysis.analysis'),
         color: PROGRESS_CONFIG.emotions.color,
         progress: progress.emotions,
       },

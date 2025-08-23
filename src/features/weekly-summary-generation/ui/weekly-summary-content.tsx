@@ -8,6 +8,7 @@ import { useCreateWeeklySummary } from '@/features/weekly-summary-generation';
 import type { AISummaryData } from '@/shared';
 import { AuthRequiredMessage } from '@/shared/components';
 import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
+import { Loader2 } from '@/shared/icons';
 import { getWeekRange, useWeekFromUrl } from '@/shared/lib/date-utils';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import {
@@ -108,24 +109,16 @@ export function WeeklySummaryContent({
   ]);
 
   const isLoading = useMemo(
-    () =>
-      weeklySummaryLoading ||
-      dailySummariesLoading ||
-      createWeeklySummaryMutation.isPending ||
-      isUserLoading,
-    [
-      weeklySummaryLoading,
-      dailySummariesLoading,
-      createWeeklySummaryMutation.isPending,
-      isUserLoading,
-    ]
+    () => weeklySummaryLoading || dailySummariesLoading || isUserLoading,
+    [weeklySummaryLoading, dailySummariesLoading, isUserLoading]
   );
 
   const hasData = useMemo(() => !!weeklySummary, [weeklySummary]);
 
   const hasEnoughDailySummaries = useMemo(() => {
-    return dailySummaries && dailySummaries.length > 3;
-  }, [dailySummaries]);
+    return true;
+    // return dailySummaries && dailySummaries.length > 3;
+  }, []);
 
   const error = useMemo(
     () =>
@@ -149,6 +142,10 @@ export function WeeklySummaryContent({
     return null;
   }
 
+  if (createWeeklySummaryMutation.isPending) {
+    return <AISummaryLoadingSkeleton />;
+  }
+
   return (
     <div className={className}>
       <div className="space-y-4">
@@ -160,9 +157,10 @@ export function WeeklySummaryContent({
             />
           </div>
         )}
-
         {isLoading ? (
-          <AISummaryLoadingSkeleton />
+          <div className="flex justify-center items-center p-8">
+            <Loader2 className="w-6 h-6 text-purple-500 animate-spin" />
+          </div>
         ) : hasData ? (
           <Summary
             summary={weeklySummary || ({} as AISummaryData)}
