@@ -27,6 +27,6 @@ export const CARD_COLOR_SCHEMES = {
     color: '#22C55E',
   },
   conclusion: {
-    color: '#6B7280',
+    color: '#8B5CF6',
   },
 } as const;
