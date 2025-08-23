@@ -206,6 +206,7 @@
     "updateError": "Error updating entry",
     "save": "Save",
     "saving": "Saving...",
+    "deleting": "Deleting...",
     "cancel": "Cancel",
     "editPlaceholder": "Edit your entry...",
     "showMore": "Show more",

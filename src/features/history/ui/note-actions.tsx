@@ -148,7 +148,7 @@ export function NoteActions({ note }: NoteActionsProps) {
               disabled={deleteNoteMutation.isPending}
             >
               {deleteNoteMutation.isPending
-                ? t('history.saving')
+                ? t('history.deleting')
                 : t('history.actions.delete')}
             </Button>
           </DialogFooter>
