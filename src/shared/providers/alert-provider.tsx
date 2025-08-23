@@ -170,7 +170,14 @@ export function AlertProvider({ children }: AlertProviderProps) {
       <div className={getAlertClassName()}>
         {alert.message && (
           <Alert
-            variant={getAlertVariant() as 'default' | 'destructive'}
+            variant={
+              getAlertVariant() as
+                | 'default'
+                | 'destructive'
+                | 'success'
+                | 'warning'
+                | 'info'
+            }
             className="relative"
           >
             {getAlertIcon()}
