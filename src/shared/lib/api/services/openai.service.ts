@@ -1,3 +1,4 @@
+import OpenAI from 'openai';
 import { safeSentry } from '@/shared/lib/sentry';
 import type { Span } from '@sentry/types';
 
@@ -12,18 +13,14 @@ export interface OpenAIServiceOptions {
 }
 
 export interface CallOpenAIParams {
-  messages: OpenAIMessage[];
-  model?: string;
-  temperature?: number;
-  maxTokens?: number;
+  messages: string;
+  prompt: string;
   options?: OpenAIServiceOptions;
 }
 
 export interface CallOpenAIAndParseJSONParams {
-  messages: OpenAIMessage[];
-  model?: string;
-  temperature?: number;
-  maxTokens?: number;
+  messages: string;
+  prompt: string;
   options?: OpenAIServiceOptions;
 }
 
@@ -35,62 +32,84 @@ export interface ValidateAISummaryStructureParams {
 }
 
 export class OpenAIService {
-  private apiKey: string;
+  private openai: OpenAI;
 
   constructor() {
-    this.apiKey = process.env.OPENAI_API_KEY || '';
-    if (!this.apiKey) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
       throw new Error('OpenAI API key is not configured');
     }
+
+    this.openai = new OpenAI({
+      apiKey,
+    });
   }
 
   async callOpenAI({
     messages,
-    model = 'gpt-4o',
-    temperature = 0.7,
-    maxTokens = 4000,
     options = {},
+    prompt,
   }: CallOpenAIParams): Promise<string> {
     const { span, operation = 'openai_call' } = options;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        messages,
-        temperature,
-        max_tokens: maxTokens,
-      }),
-    });
+    try {
+      const response = await this.openai.responses.create({
+        model: 'gpt-5-nano',
+        input: [
+          {
+            role: 'developer',
+            content: prompt,
+          },
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'input_text',
+                text: messages,
+              },
+            ],
+          },
+        ],
+        text: {
+          format: {
+            type: 'json_object',
+          },
+          // @ts-expect-error - OpenAI API types don't include verbosity property yet
+          verbosity: 'medium',
+        },
+        reasoning: {
+          effort: 'medium',
+          summary: 'auto',
+        },
+        tools: [],
+        store: true,
+      });
 
-    if (!response.ok) {
-      const error = new Error(`OpenAI API error: ${response.status}`);
-      safeSentry.captureException(error, {
+      console.log('response', response);
+
+      const content = response.output_text;
+
+      if (!content) {
+        const error = new Error('No content received from OpenAI');
+        safeSentry.captureException(error, {
+          tags: { operation },
+        });
+        span?.setAttribute('error', true);
+        throw error;
+      }
+
+      span?.setAttribute('openai.success', true);
+      return content;
+    } catch (error) {
+      const apiError =
+        error instanceof Error ? error : new Error('OpenAI API error');
+      safeSentry.captureException(apiError, {
         tags: { operation },
-        extra: { status: response.status },
+        extra: { error },
       });
       span?.setAttribute('error', true);
-      throw error;
+      throw apiError;
     }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
-
-    if (!content) {
-      const error = new Error('No content received from OpenAI');
-      safeSentry.captureException(error, {
-        tags: { operation },
-      });
-      span?.setAttribute('error', true);
-      throw error;
-    }
-
-    span?.setAttribute('openai.success', true);
-    return content;
   }
 
   private parseJSONResponse(
@@ -131,14 +150,12 @@ export class OpenAIService {
       throw error;
     }
 
-    // Ensure array fields are arrays
     for (const field of arrayFields) {
       if (!Array.isArray(summary[field])) {
         summary[field] = [];
       }
     }
 
-    // Ensure mainStory is a string
     if (typeof summary.mainStory !== 'string') {
       summary.mainStory = String(summary.mainStory || '');
     }
@@ -148,18 +165,14 @@ export class OpenAIService {
 
   async callOpenAIAndParseJSON({
     messages,
-    model,
-    temperature,
-    maxTokens,
+    prompt,
     options = {},
   }: CallOpenAIAndParseJSONParams): Promise<Record<string, unknown>> {
     const { operation = 'openai_call_and_parse' } = options;
 
     const content = await this.callOpenAI({
       messages,
-      model,
-      temperature,
-      maxTokens,
+      prompt,
       options: { ...options, operation },
     });
 

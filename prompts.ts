@@ -1,6 +1,8 @@
 export const aiSummaryPrompts = {
-  ru: `Записи вашего дневника за день:
-{notes}
+  ru: `
+Ты мудрый друг с опытом в психологии. Анализируй записи с поддержкой и пониманием, но прямо и без лишних слов. Выявляй паттерны мышления и поведения, давай конкретные, практичные советы. Обращайся на "ты", используй живой, дружеский тон. Пиши коротко, по делу, с конкретными примерами.
+
+ВАЖНО: Отвечай на том же языке, на котором написаны заметки. Если заметки на русском - отвечай на русском, если на английском - на английском.
 
 АНАЛИЗИРУЙТЕ КОНКРЕТНО:
 - Используйте конкретные цитаты и детали из записей
@@ -98,8 +100,10 @@ export const aiSummaryPrompts = {
 "resources": [] // if no resource records
 "emotionalMoments": [] // if no emotional moments`,
 
-  en: `Your diary entries for the day:
-{notes}
+  en: `
+You are a wise friend with psychology experience. Analyze entries with support and understanding, but directly and concisely. Identify thinking and behavioral patterns, give specific, practical advice. Address as "you", use lively, friendly tone. Write concisely, to the point, with specific examples.
+
+IMPORTANT: Respond in the same language as the notes. If the notes are in Russian - respond in Russian, if in English - respond in English.
 
 ANALYZE CONCRETELY:
 - Use specific quotes and details from the entries
@@ -198,31 +202,20 @@ Example of correct response:
 "emotionalMoments": [] // if there are no emotional moments`,
 };
 
-export const aiSummarySystemPrompts = {
-  ru: 'Ты мудрый друг с опытом в психологии. Анализируй записи с поддержкой и пониманием, но прямо и без лишних слов. Выявляй паттерны мышления и поведения, давай конкретные, практичные советы. Обращайся на "ты", используй живой, дружеский тон. Пиши коротко, по делу, с конкретными примерами.',
-  en: 'You are a wise friend with psychology experience. Analyze entries with support and understanding, but directly and concisely. Identify thinking and behavioral patterns, give specific, practical advice. Address as "you", use lively, friendly tone. Write concisely, to the point, with specific examples.',
-};
-
 export type Locale = 'ru' | 'en';
-
-export function getAISummaryPrompt(locale: Locale, notes: string[]): string {
-  const prompt = aiSummaryPrompts[locale] || aiSummaryPrompts.ru;
-  return prompt.replace(
-    '{notes}',
-    notes.map((n, i) => `${i + 1}. ${n}`).join('\n')
-  );
-}
-
-export function getAISummarySystemPrompt(locale: Locale): string {
-  return aiSummarySystemPrompts[locale] || aiSummarySystemPrompts.ru;
+export function getAISummaryPrompt(): string {
+  return aiSummaryPrompts.en;
+  // const prompt = aiSummaryPrompts[locale] || aiSummaryPrompts.ru;
+  // return prompt;
 }
 
 export const weeklySummaryPrompts = {
-  ru: `ВНИМАНИЕ: Проанализируйте ВСЕ дни недели без исключения. Каждый день содержит важную информацию.
+  ru: `
+Ты мудрый друг с опытом в психологии. Анализируй недельные саммари с поддержкой и пониманием, но прямо и без лишних слов. Выявляй долгосрочные паттерны мышления и поведения, давай конкретные, практичные советы. Обращайся на "ты", используй живой, дружеский тон. Пиши коротко, по делу, с конкретными примерами.
 
-Дневные саммари за неделю:
-{dailySummaries}
+ВАЖНО: Отвечай на том же языке, на котором написаны заметки. Если заметки на русском - отвечай на русском, если на английском - на английском.
 
+ВНИМАНИЕ: Проанализируйте ВСЕ дни недели без исключения. Каждый день содержит важную информацию.
 ВАЖНО: Убедитесь, что вы учли информацию из ВСЕХ дней при анализе. Не пропускайте ни одного дня.
 
 АНАЛИЗИРУЙТЕ КОНКРЕТНО:
@@ -309,11 +302,12 @@ export const weeklySummaryPrompts = {
 "resources": [] // if no resource records for the week
 "emotionalMoments": [] // if no emotional moments`,
 
-  en: `ATTENTION: Analyze ALL days of the week without exception. Each day contains important information.
+  en: `
+You are a wise friend with psychology experience. Analyze weekly summaries with support and understanding, but directly and concisely. Identify long-term thinking and behavioral patterns, give specific, practical advice. Address as "you", use lively, friendly tone. Write concisely, to the point, with specific examples.
 
-Daily summaries for the week:
-{dailySummaries}
+IMPORTANT: Respond in the same language as the notes. If the notes are in Russian - respond in Russian, if in English - respond in English.
 
+ATTENTION: Analyze ALL days of the week without exception. Each day contains important information.
 IMPORTANT: Make sure you include information from ALL days in your analysis. Do not skip any days.
 
 ANALYZE CONCRETELY:
@@ -400,22 +394,10 @@ Example of correct response:
 "resources": [] // if there are no resource-related entries for the week
 "emotionalMoments": [] // if there are no emotional moments`,
 };
-
-export const weeklySummarySystemPrompts = {
-  ru: 'Ты мудрый друг с опытом в психологии. Анализируй недельные саммари с поддержкой и пониманием, но прямо и без лишних слов. Выявляй долгосрочные паттерны мышления и поведения, давай конкретные, практичные советы. Обращайся на "ты", используй живой, дружеский тон. Пиши коротко, по делу, с конкретными примерами.',
-  en: 'You are a wise friend with psychology experience. Analyze weekly summaries with support and understanding, but directly and concisely. Identify long-term thinking and behavioral patterns, give specific, practical advice. Address as "you", use lively, friendly tone. Write concisely, to the point, with specific examples.',
-};
-
-export function getWeeklySummaryPrompt(
-  locale: Locale,
-  dailySummaries: string[]
-): string {
-  const prompt = weeklySummaryPrompts[locale] || weeklySummaryPrompts.ru;
-  return prompt.replace('{dailySummaries}', dailySummaries.join('\n\n'));
-}
-
-export function getWeeklySummarySystemPrompt(locale: Locale): string {
-  return weeklySummarySystemPrompts[locale] || weeklySummarySystemPrompts.ru;
+export function getWeeklySummaryPrompt(): string {
+  return weeklySummaryPrompts.en;
+  // const prompt = weeklySummaryPrompts[locale] || weeklySummaryPrompts.ru;
+  // return prompt;
 }
 
 export const summaryLabels = {
