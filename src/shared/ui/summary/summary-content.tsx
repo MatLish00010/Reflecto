@@ -1,15 +1,12 @@
 import {
-  Activity,
   Brain,
   Clock,
   Eye,
   Heart,
-  Lightbulb,
   LightbulbIcon,
   Shield,
   Sparkles,
   Star,
-  Target,
   TrendingUp,
   Zap,
 } from 'lucide-react';
@@ -26,6 +23,12 @@ export function SummaryContent({ summary }: SummaryContentProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <SummaryCard
+          icon={Sparkles}
+          titleKey="aiAnalysis.mainStory"
+          content={summary.mainStory}
+          color={CARD_COLOR_SCHEMES.mainStory.color}
+        />
         {summary.emotionalMoments && summary.emotionalMoments.length > 0 && (
           <SummaryCard
             icon={Heart}
@@ -34,12 +37,6 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             color={CARD_COLOR_SCHEMES.emotionalMoments.color}
           />
         )}
-        <SummaryCard
-          icon={Sparkles}
-          titleKey="aiAnalysis.mainStory"
-          content={summary.mainStory}
-          color={CARD_COLOR_SCHEMES.mainStory.color}
-        />
         {summary.keyEvents && summary.keyEvents.length > 0 && (
           <SummaryCard
             icon={Clock}
@@ -72,23 +69,7 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             color={CARD_COLOR_SCHEMES.recommendations.color}
           />
         )}
-        {summary.cognitivePatterns && summary.cognitivePatterns.length > 0 && (
-          <SummaryCard
-            icon={Target}
-            titleKey="aiAnalysis.cognitivePatterns"
-            content={summary.cognitivePatterns}
-            color={CARD_COLOR_SCHEMES.cognitivePatterns.color}
-          />
-        )}
-        {summary.behavioralPatterns &&
-          summary.behavioralPatterns.length > 0 && (
-            <SummaryCard
-              icon={Activity}
-              titleKey="aiAnalysis.behavioralPatterns"
-              content={summary.behavioralPatterns}
-              color={CARD_COLOR_SCHEMES.behavioralPatterns.color}
-            />
-          )}
+
         {summary.progress && summary.progress.length > 0 && (
           <SummaryCard
             icon={TrendingUp}
@@ -105,14 +86,7 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             color={CARD_COLOR_SCHEMES.resources.color}
           />
         )}
-        {summary.copingStrategies && summary.copingStrategies.length > 0 && (
-          <SummaryCard
-            icon={Lightbulb}
-            titleKey="aiAnalysis.copingStrategies"
-            content={summary.copingStrategies}
-            color={CARD_COLOR_SCHEMES.copingStrategies.color}
-          />
-        )}
+
         {summary.triggers && summary.triggers.length > 0 && (
           <SummaryCard
             icon={Zap}

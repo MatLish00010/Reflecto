@@ -53,13 +53,12 @@
     "recommendations": "Рекомендации",
     "keyThemes": "Ключевые темы",
     "ideas": "Идеи",
-    "cognitivePatterns": "Когнитивные паттерны",
-    "behavioralPatterns": "Паттерны поведения",
+
     "triggers": "Триггеры",
     "stressLevel": "Уровень стресса",
     "resources": "Ресурсы и сильные стороны",
     "progress": "Прогресс и изменения",
-    "copingStrategies": "Техники саморегуляции",
+
     "conclusion": "Вывод",
     "fetchError": "Ошибка генерации summary",
     "selectDate": "Выберите дату",

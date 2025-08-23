@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
           labels
         );
 
-        const prompt = getWeeklySummaryPrompt(validatedData.locale as Locale);
+        const prompt = getWeeklySummaryPrompt();
 
         const summary = await openAIService.callOpenAIAndParseJSON({
           messages: dailySummariesTexts.join('\n\n'),

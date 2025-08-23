@@ -7,14 +7,11 @@ export interface AISummaryData {
   keyEvents: string[];
   emotionalMoments: string[];
   ideas: string[];
-  cognitivePatterns: string[];
-  behavioralPatterns: string[];
   triggers: string[];
   resources: string[];
   progress: string[];
   observations: string[];
   recommendations: string[];
-  copingStrategies: string[];
   conclusion: string[];
 }
 

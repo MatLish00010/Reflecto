@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
         );
         const openAIService = ServiceFactory.createOpenAIService();
 
-        const prompt = getAISummaryPrompt(validatedData.locale as Locale);
+        const prompt = getAISummaryPrompt();
 
         const summary = await openAIService.callOpenAIAndParseJSON({
           messages: formatNotesForPrompt(validatedData.notes),

@@ -53,13 +53,12 @@
     "recommendations": "Recommendations",
     "keyThemes": "Key Themes",
     "ideas": "Ideas",
-    "cognitivePatterns": "Cognitive Patterns",
-    "behavioralPatterns": "Behavioral Patterns",
+
     "triggers": "Triggers",
     "stressLevel": "Stress Level",
     "resources": "Resources & Strengths",
     "progress": "Progress & Changes",
-    "copingStrategies": "Coping Strategies",
+
     "conclusion": "Conclusion",
     "fetchError": "Error generating summary",
     "selectDate": "Select date",

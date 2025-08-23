@@ -6,14 +6,11 @@ export interface SummaryLabels {
   keyEvents: string;
   emotionalMoments: string;
   ideas: string;
-  cognitivePatterns: string;
-  behavioralPatterns: string;
   triggers: string;
   resources: string;
   progress: string;
   observations: string;
   recommendations: string;
-  copingStrategies: string;
 }
 
 export interface SummaryField {
@@ -27,14 +24,11 @@ const SUMMARY_FIELDS: SummaryField[] = [
   { key: 'keyEvents', label: 'keyEvents', isArray: true },
   { key: 'emotionalMoments', label: 'emotionalMoments', isArray: true },
   { key: 'ideas', label: 'ideas', isArray: true },
-  { key: 'cognitivePatterns', label: 'cognitivePatterns', isArray: true },
-  { key: 'behavioralPatterns', label: 'behavioralPatterns', isArray: true },
   { key: 'triggers', label: 'triggers', isArray: true },
   { key: 'resources', label: 'resources', isArray: true },
   { key: 'progress', label: 'progress', isArray: true },
   { key: 'observations', label: 'observations', isArray: true },
   { key: 'recommendations', label: 'recommendations', isArray: true },
-  { key: 'copingStrategies', label: 'copingStrategies', isArray: true },
 ];
 
 export function formatNotesForPrompt(notes: string[]): string {

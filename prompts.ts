@@ -22,7 +22,7 @@ export const aiSummaryPrompts = {
 ✅ 'Вы упомянули, что "рабочие встречи были долгими и неэффективными", что вызвало разочарование'
 
 ПРИМЕР РАБОТЫ С ТОПИКАМИ:
-- Если есть записи о работе → заполняем keyEvents, triggers, cognitivePatterns
+- Если есть записи о работе → заполняем keyEvents, triggers
 - Если нет записей о здоровье → оставляем resources: [], progress: []
 - Если нет эмоциональных моментов → оставляем emotionalMoments: []
 
@@ -79,14 +79,11 @@ export const aiSummaryPrompts = {
 - keyEvents (массив строк) — ключевые события с деталями из записей
 - emotionalMoments (массив строк) — эмоциональные моменты с контекстом
 - ideas (массив строк) — идеи с конкретными деталями
-- cognitivePatterns (массив строк) — когнитивные искажения с примерами
-- behavioralPatterns (массив строк) — паттерны поведения с ситуациями
 - triggers (массив строк) — триггеры с конкретными событиями
 - resources (массив строк) — ресурсы и сильные стороны с примерами
 - progress (массив строк) — прогресс с конкретными изменениями
 - observations (массив строк) — профессиональные наблюдения с фактами
 - recommendations (массив строк) — рекомендации
-- copingStrategies (массив строк) — техники совладания
 - conclusion (массив строк) — глубокий анализ записей с живыми и естественными формулировками
 
 ВАЖНО: 
@@ -123,7 +120,7 @@ EXAMPLE OF CORRECT ANALYSIS:
 ✅ 'You mentioned that "work meetings were long and inefficient", which caused disappointment'
 
 EXAMPLE OF TOPIC HANDLING:
-- If there are work-related entries → fill keyEvents, triggers, cognitivePatterns
+- If there are work-related entries → fill keyEvents, triggers
 - If there are no health-related entries → leave resources: [], progress: []
 - If there are no emotional moments → leave emotionalMoments: []
 
@@ -159,7 +156,7 @@ Analyze entries as a wise friend:
 3. WHAT TO DO:
 - Give observations based on facts
 - Suggest specific steps
-- Include self-regulation techniques
+
 - Propose exercises
 - Give improvement advice
 
@@ -180,14 +177,11 @@ Answer in JSON format:
 - keyEvents (array of strings) - key events with details from entries
 - emotionalMoments (array of strings) - emotional moments with context
 - ideas (array of strings) - ideas with specific details
-- cognitivePatterns (array of strings) - cognitive distortions with examples
-- behavioralPatterns (array of strings) - behavioral patterns with situations
 - triggers (array of strings) - triggers with specific events
 - resources (array of strings) - resources and strengths with examples
 - progress (array of strings) - progress with specific changes
 - observations (array of strings) - professional observations with facts
 - recommendations (array of strings) - recommendations
-- copingStrategies (array of strings) - coping techniques
 - conclusion (array of strings) - deep analysis of entries with lively and natural formulations
 
 IMPORTANT: 
@@ -236,7 +230,7 @@ export const weeklySummaryPrompts = {
 ✅ 'В понедельник вы беспокоились о рабочих встречах, в среду - о показателях продуктивности, в пятницу - о подготовке к важному событию'
 
 ПРИМЕР РАБОТЫ С ТОПИКАМИ:
-- Если есть записи о работе из разных дней → заполняем keyEvents, triggers, cognitivePatterns
+- Если есть записи о работе из разных дней → заполняем keyEvents, triggers
 - Если нет записей о здоровье за неделю → оставляем resources: [], progress: []
 - Если нет эмоциональных моментов → оставляем emotionalMoments: []
 
@@ -282,14 +276,11 @@ export const weeklySummaryPrompts = {
 - keyEvents (массив строк) — ключевые события из всех дней с датами
 - emotionalMoments (массив строк) — эмоциональные моменты недели с контекстом
 - ideas (массив строк) — идеи и проекты с указанием дней развития
-- cognitivePatterns (массив строк) — когнитивные паттерны с примерами
-- behavioralPatterns (массив строк) — поведенческие паттерны с ситуациями
 - triggers (массив строк) — эмоциональные триггеры с конкретными событиями
 - resources (массив строк) — ресурсы и сильные стороны с примерами
 - progress (массив строк) — прогресс и изменения по дням
 - observations (массив строк) — профессиональные наблюдения с фактами
 - recommendations (массив строк) — рекомендации
-- copingStrategies (массив строк) — техники совладания
 
 ВАЖНО: 
 - Все массивы должны содержать только строки, а не объекты
@@ -328,7 +319,7 @@ EXAMPLE OF CORRECT ANALYSIS:
 ✅ 'On Monday you worried about work meetings, on Wednesday - about productivity indicators, on Friday - about preparing for an important event'
 
 EXAMPLE OF TOPIC HANDLING:
-- If there are work-related entries from different days → fill keyEvents, triggers, cognitivePatterns
+- If there are work-related entries from different days → fill keyEvents, triggers
 - If there are no health-related entries for the week → leave resources: [], progress: []
 - If there are no emotional moments → leave emotionalMoments: []
 
@@ -363,7 +354,7 @@ Analyze the week as a wise friend:
 - Successful strategies (when applied)
 
 4. WHAT TO DO:
-- Specific self-regulation techniques
+
 - Working with thinking distortions
 - Life improvement advice
 
@@ -374,14 +365,11 @@ Answer in JSON format:
 - keyEvents (array of strings) - key events from all days with dates
 - emotionalMoments (array of strings) - emotional moments of the week with context
 - ideas (array of strings) - ideas and projects with development days specified
-- cognitivePatterns (array of strings) - cognitive patterns with examples
-- behavioralPatterns (array of strings) - behavioral patterns with situations
 - triggers (array of strings) - emotional triggers with specific events
 - resources (array of strings) - resources and strengths with examples
 - progress (array of strings) - progress and changes by days
 - observations (array of strings) - professional observations with facts
 - recommendations (array of strings) - recommendations
-- copingStrategies (array of strings) - coping techniques
 
 IMPORTANT: 
 - All arrays must contain only strings, not objects
@@ -407,14 +395,11 @@ export const summaryLabels = {
     keyEvents: 'Ключевые события',
     emotionalMoments: 'Эмоциональные моменты',
     ideas: 'Идеи',
-    cognitivePatterns: 'Когнитивные паттерны',
-    behavioralPatterns: 'Поведенческие паттерны',
     triggers: 'Триггеры',
     resources: 'Ресурсы',
     progress: 'Прогресс',
     observations: 'Наблюдения',
     recommendations: 'Рекомендации',
-    copingStrategies: 'Стратегии совладания',
     thirdPersonPerspective: 'Мнение третьего лица',
   },
   en: {
@@ -423,14 +408,11 @@ export const summaryLabels = {
     keyEvents: 'Key Events',
     emotionalMoments: 'Emotional Moments',
     ideas: 'Ideas',
-    cognitivePatterns: 'Cognitive Patterns',
-    behavioralPatterns: 'Behavioral Patterns',
     triggers: 'Triggers',
     resources: 'Resources',
     progress: 'Progress',
     observations: 'Observations',
     recommendations: 'Recommendations',
-    copingStrategies: 'Coping Strategies',
     thirdPersonPerspective: 'Third Person Perspective',
   },
 } as const;

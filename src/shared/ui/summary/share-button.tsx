@@ -50,18 +50,6 @@ export function ShareButton({ summary }: ShareButtonProps) {
       );
     }
 
-    if (summary.cognitivePatterns && summary.cognitivePatterns.length > 0) {
-      parts.push(
-        `\n🧠 ${t('aiAnalysis.cognitivePatterns')}:\n${summary.cognitivePatterns.map(pattern => `• ${pattern}`).join('\n')}`
-      );
-    }
-
-    if (summary.behavioralPatterns && summary.behavioralPatterns.length > 0) {
-      parts.push(
-        `\n🎭 ${t('aiAnalysis.behavioralPatterns')}:\n${summary.behavioralPatterns.map(pattern => `• ${pattern}`).join('\n')}`
-      );
-    }
-
     if (summary.triggers && summary.triggers.length > 0) {
       parts.push(
         `\n⚡ ${t('aiAnalysis.triggers')}:\n${summary.triggers.map(trigger => `• ${trigger}`).join('\n')}`
@@ -77,12 +65,6 @@ export function ShareButton({ summary }: ShareButtonProps) {
     if (summary.progress && summary.progress.length > 0) {
       parts.push(
         `\n📈 ${t('aiAnalysis.progress')}:\n${summary.progress.map(prog => `• ${prog}`).join('\n')}`
-      );
-    }
-
-    if (summary.copingStrategies && summary.copingStrategies.length > 0) {
-      parts.push(
-        `\n⭐ ${t('aiAnalysis.copingStrategies')}:\n${summary.copingStrategies.map(strategy => `• ${strategy}`).join('\n')}`
       );
     }
 

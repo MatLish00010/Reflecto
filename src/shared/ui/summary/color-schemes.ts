@@ -11,12 +11,6 @@ export const CARD_COLOR_SCHEMES = {
   ideas: {
     color: '#06B6D4',
   },
-  cognitivePatterns: {
-    color: '#8B5CF6',
-  },
-  behavioralPatterns: {
-    color: '#6366F1',
-  },
   triggers: {
     color: '#EF4444',
   },
@@ -31,9 +25,6 @@ export const CARD_COLOR_SCHEMES = {
   },
   recommendations: {
     color: '#22C55E',
-  },
-  copingStrategies: {
-    color: '#F97316',
   },
   conclusion: {
     color: '#6B7280',
