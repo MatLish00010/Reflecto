@@ -10,12 +10,12 @@ const alertVariants = cva(
       variant: {
         default: 'bg-card text-card-foreground border-border',
         destructive:
-          'bg-destructive/10 border-destructive/20 text-destructive [&>svg]:text-destructive *:data-[slot=alert-description]:text-destructive/80',
+          'bg-white/90 border-red-200/30 text-red-700 [&>svg]:text-red-500 *:data-[slot=alert-description]:text-red-600/80 dark:bg-gray-900/90 dark:border-red-700/30 dark:text-red-300 dark:[&>svg]:text-red-400 dark:*:data-[slot=alert-description]:text-red-300/80',
         success:
-          'bg-emerald-50/50 border-emerald-200/50 text-emerald-700 [&>svg]:text-emerald-600 *:data-[slot=alert-description]:text-emerald-600/80 dark:bg-emerald-950/20 dark:border-emerald-800/30 dark:text-emerald-300 dark:[&>svg]:text-emerald-400 dark:*:data-[slot=alert-description]:text-emerald-300/80',
+          'bg-white/90 border-green-200/30 text-green-700 [&>svg]:text-green-500 *:data-[slot=alert-description]:text-green-600/80 dark:bg-gray-900/90 dark:border-green-700/30 dark:text-green-300 dark:[&>svg]:text-green-400 dark:*:data-[slot=alert-description]:text-green-300/80',
         warning:
-          'bg-amber-50/50 border-amber-200/50 text-amber-700 [&>svg]:text-amber-600 *:data-[slot=alert-description]:text-amber-600/80 dark:bg-amber-950/20 dark:border-amber-800/30 dark:text-amber-300 dark:[&>svg]:text-amber-400 dark:*:data-[slot=alert-description]:text-amber-300/80',
-        info: 'bg-blue-50/50 border-blue-200/50 text-blue-700 [&>svg]:text-blue-600 *:data-[slot=alert-description]:text-blue-600/80 dark:bg-blue-950/20 dark:border-blue-800/30 dark:text-blue-300 dark:[&>svg]:text-blue-400 dark:*:data-[slot=alert-description]:text-blue-300/80',
+          'bg-white/90 border-yellow-200/30 text-yellow-700 [&>svg]:text-yellow-500 *:data-[slot=alert-description]:text-yellow-600/80 dark:bg-gray-900/90 dark:border-yellow-700/30 dark:text-yellow-300 dark:[&>svg]:text-yellow-400 dark:*:data-[slot=alert-description]:text-yellow-300/80',
+        info: 'bg-white/90 border-blue-200/30 text-blue-700 [&>svg]:text-blue-500 *:data-[slot=alert-description]:text-blue-600/80 dark:bg-gray-900/90 dark:border-blue-700/30 dark:text-blue-300 dark:[&>svg]:text-blue-400 dark:*:data-[slot=alert-description]:text-blue-300/80',
       },
     },
     defaultVariants: {

@@ -188,7 +188,7 @@ export function AlertProvider({ children }: AlertProviderProps) {
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="absolute top-2 right-2 h-6 w-6 p-0 hover:bg-background/80 transition-colors"
+              className="absolute top-3 right-2 h-6 w-6 p-0 hover:bg-background/80 transition-colors"
             >
               <X className="h-3 w-3 opacity-60 hover:opacity-100" />
             </Button>
