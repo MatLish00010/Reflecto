@@ -37,6 +37,13 @@ const SUMMARY_FIELDS: SummaryField[] = [
   { key: 'copingStrategies', label: 'copingStrategies', isArray: true },
 ];
 
+export function formatNotesForPrompt(notes: string[]): string {
+  return notes
+    .reverse()
+    .map((n, i) => `${i + 1}. ${n}`)
+    .join('\n');
+}
+
 export function formatSummaryForPrompt(
   summary: AISummaryData,
   labels: SummaryLabels,

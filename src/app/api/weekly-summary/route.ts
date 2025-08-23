@@ -15,7 +15,6 @@ import type { AISummaryData } from '@/shared/types';
 import {
   getSummaryLabels,
   getWeeklySummaryPrompt,
-  getWeeklySummarySystemPrompt,
   type Locale,
 } from '../../../../prompts';
 
@@ -81,27 +80,17 @@ export async function POST(request: NextRequest) {
 
         context.span.setAttribute('summaries.count', dailySummaries.length);
 
-        // Format daily summaries for the prompt
         const labels = getSummaryLabels(validatedData.locale);
         const dailySummariesTexts = formatDailySummariesForPrompt(
           dailySummaries,
           labels
         );
 
-        const prompt = getWeeklySummaryPrompt(
-          validatedData.locale as Locale,
-          dailySummariesTexts
-        );
-        const systemPrompt = getWeeklySummarySystemPrompt(
-          validatedData.locale as Locale
-        );
+        const prompt = getWeeklySummaryPrompt(validatedData.locale as Locale);
 
         const summary = await openAIService.callOpenAIAndParseJSON({
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt },
-          ],
-          maxTokens: 8000,
+          messages: dailySummariesTexts.join('\n\n'),
+          prompt,
           options: {
             span: context.span,
             operation: 'create_weekly_summary',

@@ -3,6 +3,7 @@ import {
   AI_SUMMARY_ARRAY_FIELDS,
   AI_SUMMARY_REQUIRED_FIELDS,
   type ApiContext,
+  formatNotesForPrompt,
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
   ServiceFactory,
@@ -11,11 +12,7 @@ import {
   withValidation,
 } from '@/shared/lib/api';
 import type { AISummaryData } from '@/shared/types';
-import {
-  getAISummaryPrompt,
-  getAISummarySystemPrompt,
-  type Locale,
-} from '../../../../prompts';
+import { getAISummaryPrompt, type Locale } from '../../../../prompts';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
@@ -63,20 +60,11 @@ export async function POST(request: NextRequest) {
         );
         const openAIService = ServiceFactory.createOpenAIService();
 
-        const prompt = getAISummaryPrompt(
-          validatedData.locale as Locale,
-          validatedData.notes
-        );
-        const systemPrompt = getAISummarySystemPrompt(
-          validatedData.locale as Locale
-        );
+        const prompt = getAISummaryPrompt(validatedData.locale as Locale);
 
         const summary = await openAIService.callOpenAIAndParseJSON({
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt },
-          ],
-          maxTokens: 4000,
+          messages: formatNotesForPrompt(validatedData.notes),
+          prompt,
           options: {
             span: context.span,
             operation: 'create_daily_summary',
