@@ -74,7 +74,7 @@ export class OpenAIService {
           format: {
             type: 'json_object',
           },
-          // @ts-expect-error
+          // @ts-expect-error - GPT-5 API types not yet available in OpenAI SDK
           verbosity: 'medium',
         },
         reasoning: {
