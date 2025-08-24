@@ -66,7 +66,7 @@ export const AnalyticsProductivityCards = memo(
         span.setAttribute('longestNote', productivityStats.longestNote);
 
         return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
             {productivityCards.map((card, index) => (
               <AnalyticsStatCard
                 key={`productivity-${card.title}-${index}`}

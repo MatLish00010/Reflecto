@@ -105,7 +105,7 @@ export function AnalyticsCharts({
               </TabsTrigger>
               <TabsTrigger value="time">{t('analytics.time')}</TabsTrigger>
               <TabsTrigger value="productivity">
-                {t('analytics.productivity')}
+                {t('analytics.achievements')}
               </TabsTrigger>
             </TabsList>
           </div>
@@ -308,7 +308,7 @@ export function AnalyticsCharts({
                       />
                       <PolarRadiusAxis />
                       <Radar
-                        name={t('analytics.productivity')}
+                        name={t('analytics.achievements')}
                         dataKey="productivity"
                         stroke="#8884d8"
                         fill="#8884d8"

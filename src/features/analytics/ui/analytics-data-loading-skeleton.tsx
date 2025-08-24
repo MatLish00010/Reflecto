@@ -14,19 +14,16 @@ export function AnalyticsDataLoadingSkeleton() {
 
       <div className="space-y-8">
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-            {t('analytics.overview')}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {Array.from({ length: 4 }).map((_, index) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton items don't change order
                 key={`overview-card-${index}`}
-                className="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700"
+                className="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700"
               >
                 <div className="relative">
                   <div className="flex items-center space-x-3 mb-3">
-                    <div className="p-2 rounded-lg shadow-md bg-gray-300 dark:bg-gray-600">
+                    <div className="p-2 rounded-lg bg-gray-300 dark:bg-gray-600">
                       <Skeleton className="h-4 w-4" />
                     </div>
                     <div className="flex items-start justify-between w-full">
@@ -46,21 +43,20 @@ export function AnalyticsDataLoadingSkeleton() {
           </div>
         </section>
 
-        {/* Productivity Section */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-            {t('analytics.productivity')}
+          <h2 className="text-[21px] sm:text-3xl font-medium text-gray-900 dark:text-gray-100 mb-6">
+            {t('analytics.achievements')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {Array.from({ length: 4 }).map((_, index) => (
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton items don't change order
                 key={`productivity-card-${index}`}
-                className="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700"
+                className="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700"
               >
                 <div className="relative">
                   <div className="flex items-center space-x-3 mb-3">
-                    <div className="p-2 rounded-lg shadow-md bg-gray-300 dark:bg-gray-600">
+                    <div className="p-2 rounded-lg bg-gray-300 dark:bg-gray-600">
                       <Skeleton className="h-4 w-4" />
                     </div>
                     <div className="flex items-start justify-between w-full">
@@ -80,13 +76,11 @@ export function AnalyticsDataLoadingSkeleton() {
           </div>
         </section>
 
-        {/* Charts and Insights Section */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+          <h2 className="text-[21px] sm:text-3xl font-medium text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.chartsAndInsights')}
           </h2>
           <div className="space-y-4">
-            {/* Tabs skeleton */}
             <div className="flex space-x-2">
               {Array.from({ length: 5 }).map((_, index) => (
                 <Skeleton

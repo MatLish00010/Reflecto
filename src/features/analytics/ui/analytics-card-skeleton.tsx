@@ -7,7 +7,7 @@ interface AnalyticsCardSkeletonProps {
 
 export function AnalyticsCardSkeleton({
   count = 4,
-  className = 'grid grid-cols-1 md:grid-cols-2 gap-4',
+  className = 'grid grid-cols-1 md:grid-cols-2 gap-3.5',
 }: AnalyticsCardSkeletonProps) {
   return (
     <div className={className}>
@@ -15,7 +15,7 @@ export function AnalyticsCardSkeleton({
         <div
           // biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton items don't change order
           key={`card-skeleton-${index}`}
-          className="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700"
+          className="group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700"
         >
           <div className="relative">
             <div className="flex items-center space-x-3 mb-3">
@@ -42,7 +42,7 @@ export function AnalyticsCardSkeleton({
 
 export function AnalyticsChartSkeleton() {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
       <Skeleton className="h-6 w-32 mb-4" />
       <Skeleton className="h-4 w-64 mb-6" />
       <Skeleton className="h-80 w-full rounded-lg" />

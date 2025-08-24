@@ -35,7 +35,7 @@ const AnalyticsStatsCards = dynamic(
     loading: () => (
       <AnalyticsCardSkeleton
         count={4}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+        className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-8"
       />
     ),
     ssr: true,
@@ -51,7 +51,7 @@ const AnalyticsProductivityCards = dynamic(
     loading: () => (
       <AnalyticsCardSkeleton
         count={4}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+        className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-8"
       />
     ),
     ssr: true,
@@ -138,9 +138,6 @@ export function Analytics() {
 
       <div className="space-y-8">
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-            {t('analytics.overview')}
-          </h2>
           <AnalyticsStatsCards
             notes={memoizedData.notes}
             dailySummaries={memoizedData.dailySummaries}
@@ -150,8 +147,8 @@ export function Analytics() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-            {t('analytics.productivity')}
+          <h2 className="text-[21px] sm:text-3xl font-medium text-gray-900 dark:text-gray-100 mb-6">
+            {t('analytics.achievements')}
           </h2>
           <AnalyticsProductivityCards
             productivityStats={memoizedData.productivityStats}
@@ -159,7 +156,7 @@ export function Analytics() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+          <h2 className="text-[21px] sm:text-3xl font-medium text-gray-900 dark:text-gray-100 mb-6">
             {t('analytics.chartsAndInsights')}
           </h2>
           <AnalyticsCharts

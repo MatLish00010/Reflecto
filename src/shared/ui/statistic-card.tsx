@@ -106,7 +106,7 @@ export function StatisticCard({
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700',
+        'group relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700',
         className
       )}
     >
