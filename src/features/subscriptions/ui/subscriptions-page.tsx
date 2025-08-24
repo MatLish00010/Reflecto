@@ -1,5 +1,6 @@
 'use client';
 
+import { Crown } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from '@/shared/contexts/translation-context';
@@ -39,36 +40,66 @@ export const SubscriptionsPage: React.FC = () => {
     }
   }, [t]);
 
-  if (loadingProducts) {
-    return <ProductDisplaySkeleton />;
-  }
-
-  if (!success && message === '') {
-    return (
-      <ProductDisplay
-        products={products}
-        isLoading={isLoading}
-        onCheckout={handleCheckout}
-      />
-    );
-  }
-
-  if (success && sessionId !== '') {
-    if (isLoading) {
-      return <SuccessDisplaySkeleton />;
+  const renderContent = () => {
+    if (loadingProducts) {
+      return <ProductDisplaySkeleton />;
     }
-    return (
-      <SuccessDisplay
-        sessionId={sessionId}
-        isLoading={isLoading}
-        onManageBilling={handleManageBilling}
-      />
-    );
-  }
 
-  if (isLoading) {
-    return <MessageDisplaySkeleton />;
-  }
+    if (!success && message === '') {
+      return (
+        <>
+          <ProductDisplay
+            products={products}
+            isLoading={isLoading}
+            onCheckout={handleCheckout}
+          />
 
-  return <MessageDisplay message={message} />;
+          <div className="text-center mt-8">
+            <p className="text-xs text-gray-500">
+              {t('subscriptions.cancel_anytime')}
+            </p>
+          </div>
+        </>
+      );
+    }
+
+    if (success && sessionId !== '') {
+      if (isLoading) {
+        return <SuccessDisplaySkeleton />;
+      }
+      return (
+        <SuccessDisplay
+          sessionId={sessionId}
+          isLoading={isLoading}
+          onManageBilling={handleManageBilling}
+        />
+      );
+    }
+
+    if (isLoading) {
+      return <MessageDisplaySkeleton />;
+    }
+
+    return <MessageDisplay message={message} />;
+  };
+
+  return (
+    <div className=" bg-white">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+            <Crown className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            {t('subscriptions.title')}
+          </h1>
+          <p className="text-gray-600 text-sm leading-relaxed">
+            {t('subscriptions.description')}
+          </p>
+        </div>
+
+        {renderContent()}
+      </div>
+    </div>
+  );
 };

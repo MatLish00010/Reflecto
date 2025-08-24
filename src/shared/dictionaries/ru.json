@@ -353,7 +353,7 @@
     "three_month": "3 месяца",
     "six_month": "6 месяцев",
     "year": "Год",
-    "save_20": "Экономия 20%",
+    "save_20": "Экономия $%s",
     "save_30": "Экономия 30%",
     "processing": "Обработка...",
     "checkout": "Подписаться",
@@ -366,6 +366,16 @@
     "pro": "Pro",
     "subscription": "Подписка",
     "active": "Активна",
-    "premium": "Премиум"
+    "premium": "Премиум",
+    "title": "Reflecto Premium",
+    "description": "Откройте все возможности AI-анализа ваших мыслей",
+    "monthly": "Месячный",
+    "quarterly": "Квартальный",
+    "semi_annual": "Полугодовой",
+    "popular_choice": "Популярный выбор",
+    "choose_plan": "Выбрать план",
+    "cancel_anytime": "Отменить можно в любое время. Безопасная оплата.",
+    "month_short": "мес",
+    "months_short": "мес"
   }
 }

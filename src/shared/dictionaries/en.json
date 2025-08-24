@@ -353,7 +353,7 @@
     "three_month": "3 Months",
     "six_month": "6 Months",
     "year": "Year",
-    "save_20": "Save 20%",
+    "save_20": "Save $%s",
     "save_30": "Save 30%",
     "processing": "Processing...",
     "checkout": "Subscribe Now",
@@ -366,6 +366,16 @@
     "pro": "Pro",
     "subscription": "Subscription",
     "active": "Active",
-    "premium": "Premium"
+    "premium": "Premium",
+    "title": "Reflecto Premium",
+    "description": "Unlock all possibilities of AI analysis of your thoughts",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "semi_annual": "Semi-annual",
+    "popular_choice": "Popular Choice",
+    "choose_plan": "Choose Plan",
+    "cancel_anytime": "Cancel anytime. Secure payment.",
+    "month_short": "mo",
+    "months_short": "mo"
   }
 }
