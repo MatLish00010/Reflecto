@@ -1,21 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
+import { createDateBasedEntityKeys } from '@/shared/lib/query-keys';
 import { safeSentry } from '@/shared/lib/sentry';
 
-export const dailySummaryKeys = {
-  all: (userId: string) => ['daily-summary', userId] as const,
-  lists: (userId: string) => [...dailySummaryKeys.all(userId), 'list'] as const,
-  list: (userId: string, date?: string) =>
-    [...dailySummaryKeys.lists(userId), date] as const,
-  details: (userId: string) =>
-    [...dailySummaryKeys.all(userId), 'detail'] as const,
-  detail: (userId: string, date: string) =>
-    [...dailySummaryKeys.details(userId), date] as const,
-  summaries: (userId: string) =>
-    [...dailySummaryKeys.all(userId), 'summaries'] as const,
-  summariesList: (userId: string, date?: string) =>
-    [...dailySummaryKeys.summaries(userId), date] as const,
-};
+export const dailySummaryKeys = createDateBasedEntityKeys('daily-summary');
 
 export function useDailySummaryByDateRange(from?: string, to?: string) {
   const { user } = useUser();
@@ -61,7 +49,7 @@ export function useDailySummaryByDateRange(from?: string, to?: string) {
 export function useTodayAISummary() {
   const { user } = useUser();
   return useQuery({
-    queryKey: dailySummaryKeys.detail(user?.id || '', 'today'),
+    queryKey: dailySummaryKeys.today(user?.id || ''),
     queryFn: async () => {
       if (!user) {
         const error = new Error('User not found');
@@ -91,7 +79,7 @@ export function useDailySummary(from: string, to: string) {
   const { user, isAuthenticated } = useUser();
 
   return useQuery({
-    queryKey: dailySummaryKeys.detail(user?.id || '', `${from}-${to}`),
+    queryKey: dailySummaryKeys.detail(user?.id || '', from, to),
     queryFn: async () => {
       if (!isAuthenticated || !user) {
         return null;
@@ -125,10 +113,7 @@ export function useDailySummaries(from?: string, to?: string) {
   const { user, isAuthenticated } = useUser();
 
   return useQuery({
-    queryKey: dailySummaryKeys.summariesList(
-      user?.id || '',
-      `daily-summaries-${from}-${to}`
-    ),
+    queryKey: dailySummaryKeys.summariesList(user?.id || '', from, to),
     queryFn: async () => {
       if (!isAuthenticated || !user) {
         return [];

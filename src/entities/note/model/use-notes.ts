@@ -1,18 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
+import { createEntityKeys } from '@/shared/lib/query-keys';
 import { safeSentry } from '@/shared/lib/sentry';
 import { useAlertContext } from '@/shared/providers/alert-provider';
 import type { Note } from '@/shared/types/notes';
 
-export const noteKeys = {
-  all: (userId: string) => ['notes', userId] as const,
-  lists: (userId: string) => [...noteKeys.all(userId), 'list'] as const,
-  list: (userId: string, filters: { from?: string; to?: string }) =>
-    [...noteKeys.lists(userId), filters] as const,
-  details: (userId: string) => [...noteKeys.all(userId), 'detail'] as const,
-  detail: (userId: string, noteId: number) =>
-    [...noteKeys.details(userId), noteId] as const,
-};
+export const noteKeys = createEntityKeys('notes');
 
 export function useNotesByDate(from?: string, to?: string) {
   const { user } = useUser();

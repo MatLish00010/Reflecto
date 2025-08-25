@@ -60,15 +60,13 @@ export function useCreateWeeklySummary() {
       queryClient.invalidateQueries({
         queryKey: weeklySummaryKeys.detail(
           user?.id || '',
-          `${variables.from}-${variables.to}`
+          variables.from,
+          variables.to
         ),
       });
 
       queryClient.setQueryData(
-        weeklySummaryKeys.detail(
-          user?.id || '',
-          `${variables.from}-${variables.to}`
-        ),
+        weeklySummaryKeys.detail(user?.id || '', variables.from, variables.to),
         data
       );
     },

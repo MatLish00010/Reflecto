@@ -1,29 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
+import { createDateBasedEntityKeys } from '@/shared/lib/query-keys';
 import { safeSentry } from '@/shared/lib/sentry';
 import type { AISummaryData } from '@/shared/types';
 
-export const weeklySummaryKeys = {
-  all: (userId: string) => ['weekly-summary', userId] as const,
-  lists: (userId: string) =>
-    [...weeklySummaryKeys.all(userId), 'list'] as const,
-  list: (userId: string, date?: string) =>
-    [...weeklySummaryKeys.lists(userId), date] as const,
-  details: (userId: string) =>
-    [...weeklySummaryKeys.all(userId), 'detail'] as const,
-  detail: (userId: string, date: string) =>
-    [...weeklySummaryKeys.details(userId), date] as const,
-  summaries: (userId: string) =>
-    [...weeklySummaryKeys.all(userId), 'summaries'] as const,
-  summariesList: (userId: string, date?: string) =>
-    [...weeklySummaryKeys.summaries(userId), date] as const,
-};
+export const weeklySummaryKeys = createDateBasedEntityKeys('weekly-summary');
 
 export function useWeeklySummary(from: string, to: string) {
   const { user, isAuthenticated } = useUser();
 
   return useQuery({
-    queryKey: weeklySummaryKeys.detail(user?.id || '', `${from}-${to}`),
+    queryKey: weeklySummaryKeys.detail(user?.id || '', from, to),
     queryFn: async (): Promise<AISummaryData | null> => {
       if (!isAuthenticated || !user) {
         return null;
@@ -56,7 +43,7 @@ export function useWeeklySummaries(from: string, to: string) {
   const { user, isAuthenticated } = useUser();
 
   return useQuery({
-    queryKey: weeklySummaryKeys.summariesList(user?.id || '', `${from}-${to}`),
+    queryKey: weeklySummaryKeys.summariesList(user?.id || '', from, to),
     queryFn: async (): Promise<AISummaryData[]> => {
       if (!isAuthenticated || !user) {
         return [];

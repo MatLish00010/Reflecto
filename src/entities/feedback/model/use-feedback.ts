@@ -1,13 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
+import { createSimpleEntityKeys } from '@/shared/lib/query-keys';
 import { safeSentry } from '@/shared/lib/sentry';
 import type { Feedback } from '@/shared/types';
 
-export const feedbackKeys = {
-  all: (userId: string) => ['feedback', userId] as const,
-  lists: (userId: string) => [...feedbackKeys.all(userId), 'list'] as const,
-  list: (userId: string) => [...feedbackKeys.lists(userId)] as const,
-};
+export const feedbackKeys = createSimpleEntityKeys('feedback');
 
 export function useFeedback() {
   const { user } = useUser();
