@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import {
   RATE_LIMIT_CONFIGS,
   withRateLimit,
-} from '@/shared/lib/api/middleware/rate-limit';
+} from '@/shared/common/lib/api/middleware/rate-limit';
 
 // Test endpoint with very strict rate limit for demonstration
 const strictConfig = {

@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import { useDeleteNote, useUpdateNote } from '@/entities/note';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Edit, MoreVertical, Trash2 } from '@/shared/icons';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import type { Note } from '@/shared/types/notes';
-import { Button } from '@/shared/ui/button';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Edit, MoreVertical, Trash2 } from '@/shared/client/icons';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { Button } from '@/shared/client/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -14,14 +13,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/shared/ui/dialog';
+} from '@/shared/client/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/shared/ui/dropdown-menu';
-import { Textarea } from '@/shared/ui/textarea';
+} from '@/shared/client/ui/dropdown-menu';
+import { Textarea } from '@/shared/client/ui/textarea';
+import type { Note } from '@/shared/common/types/notes';
 
 interface NoteActionsProps {
   note: Note;

@@ -4,8 +4,8 @@ import {
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
   withRateLimit,
-} from '@/shared/lib/api';
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
+} from '@/shared/common/lib/api';
+import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

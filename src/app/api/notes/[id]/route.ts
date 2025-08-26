@@ -5,7 +5,7 @@ import {
   VALIDATION_SCHEMAS,
   validateNumericId,
   withValidation,
-} from '@/shared/lib/api';
+} from '@/shared/common/lib/api';
 
 export async function PUT(
   request: NextRequest,

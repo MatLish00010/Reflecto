@@ -1,4 +1,4 @@
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
+import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
 
 /**
  * Cleans up rate limiting state for tests

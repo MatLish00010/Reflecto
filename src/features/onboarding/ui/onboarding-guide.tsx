@@ -1,15 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { BookOpen, Brain, PenTool, Shield, Sparkles } from '@/shared/icons';
-import { Button } from '@/shared/ui/button';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import {
+  BookOpen,
+  Brain,
+  PenTool,
+  Shield,
+  Sparkles,
+} from '@/shared/client/icons';
+import { Button } from '@/shared/client/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/shared/ui/dialog';
+} from '@/shared/client/ui/dialog';
 import { useOnboarding } from '../model/use-onboarding';
 
 const STEPS = [

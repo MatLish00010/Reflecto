@@ -4,19 +4,22 @@ import { useMemo, useState } from 'react';
 import { useNotesByDate } from '@/entities/note';
 import { AISummary } from '@/features/daily-summary-generation';
 import { WeeklySummaryContent } from '@/features/weekly-summary-generation';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Search } from '@/shared/icons';
-import { getDateRangeForDay, getWeekRange } from '@/shared/lib/date-utils';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent } from '@/shared/ui/card';
-import { Input } from '@/shared/ui/input';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Search } from '@/shared/client/icons';
+import { Button } from '@/shared/client/ui/button';
+import { Card, CardContent } from '@/shared/client/ui/card';
+import { Input } from '@/shared/client/ui/input';
 import {
   TabsContent,
   TabsList,
   TabsTrigger,
   TabsWithURL,
-} from '@/shared/ui/tabs';
-import { WeekPicker } from '@/shared/ui/week-picker';
+} from '@/shared/client/ui/tabs';
+import { WeekPicker } from '@/shared/client/ui/week-picker';
+import {
+  getDateRangeForDay,
+  getWeekRange,
+} from '@/shared/common/lib/date-utils';
 import { DatePicker } from '@/widgets/history-and-summary/ui/date-picker';
 import { History } from './history';
 import { HistoryHeader } from './history-header';

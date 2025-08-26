@@ -3,14 +3,17 @@
 import { useMemo } from 'react';
 import { AISummary } from '@/features/daily-summary-generation';
 import { History } from '@/features/history';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { getDateRangeForDay, useDateFromUrl } from '@/shared/lib/date-utils';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
 import {
   TabsContent,
   TabsList,
   TabsTrigger,
   TabsWithURL,
-} from '@/shared/ui/tabs';
+} from '@/shared/client/ui/tabs';
+import {
+  getDateRangeForDay,
+  useDateFromUrl,
+} from '@/shared/common/lib/date-utils';
 import { DatePicker } from './date-picker';
 
 export function HistoryAndSummary() {

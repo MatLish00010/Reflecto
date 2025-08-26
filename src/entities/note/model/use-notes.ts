@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
-import { createEntityKeys } from '@/shared/lib/query-keys';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import type { Note } from '@/shared/types/notes';
+import { createEntityKeys } from '@/shared/client/lib/query-keys';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { safeSentry } from '@/shared/common/lib/sentry';
+import type { Note } from '@/shared/common/types/notes';
 
 export const noteKeys = createEntityKeys('notes');
 

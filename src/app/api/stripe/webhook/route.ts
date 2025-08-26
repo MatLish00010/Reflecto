@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import type Stripe from 'stripe';
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
-import { safeSentry } from '@/shared/lib/sentry';
+import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 export async function POST(request: NextRequest) {
   return safeSentry.startSpanAsync(

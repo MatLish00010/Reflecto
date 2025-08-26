@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { feedbackKeys } from '@/entities/feedback';
 import { useUser } from '@/entities/user';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import type { CreateFeedbackRequest, Feedback } from '@/shared/types';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { safeSentry } from '@/shared/common/lib/sentry';
+import type { CreateFeedbackRequest, Feedback } from '@/shared/common/types';
 
 export function useCreateFeedback() {
   const queryClient = useQueryClient();

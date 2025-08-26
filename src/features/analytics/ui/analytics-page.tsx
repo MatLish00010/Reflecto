@@ -3,8 +3,8 @@
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
 import { useUser } from '@/entities/user';
-import { AuthRequiredMessage } from '@/shared/components/auth-required-message';
-import { useTranslation } from '@/shared/contexts/translation-context';
+import { AuthRequiredMessage } from '@/shared/client/components/auth-required-message';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
 import { useAnalyticsData } from '../model/use-analytics-data';
 import {
   AnalyticsCardSkeleton,

@@ -8,11 +8,11 @@ import { useId, useState } from 'react';
 import { FeedbackButton } from '@/features/feedback';
 import { MobileLanguageToggle } from '@/features/language-toggle';
 import { MobileThemeToggle } from '@/features/theme-toggle';
-import { useLocale } from '@/shared/contexts/locale-context';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Menu, X } from '@/shared/icons';
-import { safeSentry } from '@/shared/lib/sentry';
-import { Button } from '@/shared/ui/button';
+import { useLocale } from '@/shared/client/contexts/locale-context';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Menu, X } from '@/shared/client/icons';
+import { Button } from '@/shared/client/ui/button';
+import { safeSentry } from '@/shared/common/lib/sentry';
 import { useNavigation } from '../model/use-navigation';
 
 export function MobileMenu() {

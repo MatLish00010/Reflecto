@@ -1,6 +1,6 @@
 import type React from 'react';
-import { Card, CardContent } from '@/shared/ui/card';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { Card, CardContent } from '@/shared/client/ui/card';
+import { Skeleton } from '@/shared/client/ui/skeleton';
 
 export const ProductDisplaySkeleton: React.FC = () => {
   return (

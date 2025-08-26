@@ -1,10 +1,10 @@
 import type { User } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
-import { useUserContext } from '@/shared/contexts/user-context';
-import { subscriptionsClientService } from '@/shared/lib/api/services/subscriptions.service';
-import { createBrowserClient } from '@/shared/lib/client';
-import { safeSentry } from '@/shared/lib/sentry';
-import type { UserSubscription } from '@/shared/types/subscriptions';
+import { useUserContext } from '@/shared/client/contexts/user-context';
+import { createBrowserClient } from '@/shared/client/lib/client';
+import { safeSentry } from '@/shared/common/lib/sentry';
+import type { UserSubscription } from '@/shared/common/types/subscriptions';
+import { subscriptionsClientService } from '@/shared/server/lib/api/services/subscriptions.service';
 
 export const userKeys = {
   all: ['user'] as const,

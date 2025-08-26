@@ -1,6 +1,6 @@
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { PageHeader } from '@/shared/ui';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { PageHeader } from '@/shared/client/ui';
+import { Skeleton } from '@/shared/client/ui/skeleton';
 
 export function AnalyticsDataLoadingSkeleton() {
   const { t } = useTranslation();

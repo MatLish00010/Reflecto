@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/nextjs';
 import { memo, useMemo } from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { AlignLeft, Medal, Percent, Zap } from '@/shared/icons';
-import { CARD_COLOR_SCHEMES } from '@/shared/ui/summary/color-schemes';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { AlignLeft, Medal, Percent, Zap } from '@/shared/client/icons';
+import { CARD_COLOR_SCHEMES } from '@/shared/client/ui/summary/color-schemes';
 import type { ProductivityStats } from '../types/analytics';
 import { AnalyticsStatCard } from './analytics-stat-card';
 

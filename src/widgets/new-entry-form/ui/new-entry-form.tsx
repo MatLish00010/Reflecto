@@ -4,12 +4,12 @@ import { useEffect, useId, useState } from 'react';
 import { useCreateNote } from '@/entities/note';
 import { useUser } from '@/entities/user';
 import { AudioInputTabs } from '@/features/voice-recording';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { Button } from '@/shared/ui/button';
-import { Textarea } from '@/shared/ui/textarea';
+import { useAuthModalContext } from '@/shared/client/contexts/auth-modal-context';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { Button } from '@/shared/client/ui/button';
+import { Textarea } from '@/shared/client/ui/textarea';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 export function NewEntryForm() {
   const formId = useId();

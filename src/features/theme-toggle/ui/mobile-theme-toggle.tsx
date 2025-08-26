@@ -1,15 +1,15 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Moon, Sun } from '@/shared/icons';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Moon, Sun } from '@/shared/client/icons';
 
-import { Button } from '@/shared/ui/button';
+import { Button } from '@/shared/client/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/shared/ui/dropdown-menu';
+} from '@/shared/client/ui/dropdown-menu';
 import { useThemeUtils } from '../utils/theme-utils';
 
 export function MobileThemeToggle() {

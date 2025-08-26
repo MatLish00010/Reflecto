@@ -1,6 +1,11 @@
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { BarChart3 } from '@/shared/icons';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { BarChart3 } from '@/shared/client/icons';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/client/ui/card';
 
 export function AnalyticsEmptyState() {
   const { t } = useTranslation();

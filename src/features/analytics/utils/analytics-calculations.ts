@@ -1,4 +1,4 @@
-import type { AISummaryData } from '@/shared/types';
+import type { AISummaryData } from '@/shared/common/types';
 import type { DailySummary, Note, WeeklySummary } from '../types/analytics';
 
 export function calculateAverageNoteLength(notes: Note[]): number {

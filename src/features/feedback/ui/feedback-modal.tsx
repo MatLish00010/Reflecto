@@ -1,18 +1,18 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { Button } from '@/shared/ui/button';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { Button } from '@/shared/client/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/shared/ui/dialog';
-import { Input } from '@/shared/ui/input';
-import { Textarea } from '@/shared/ui/textarea';
+} from '@/shared/client/ui/dialog';
+import { Input } from '@/shared/client/ui/input';
+import { Textarea } from '@/shared/client/ui/textarea';
 import { useCreateFeedback } from '../model/use-feedback';
 
 interface FeedbackModalProps {

@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import type { LucideIcon } from '@/shared/icons';
-import { StatisticCard } from '@/shared/ui/statistic-card';
+import type { LucideIcon } from '@/shared/client/icons';
+import { StatisticCard } from '@/shared/client/ui/statistic-card';
 
 interface AnalyticsStatCardProps {
   title: string;

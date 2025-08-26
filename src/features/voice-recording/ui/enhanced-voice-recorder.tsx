@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useUser } from '@/entities';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Clock, Mic, RotateCcw, Square } from '@/shared/icons';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { Button } from '@/shared/ui/button';
+import { useAuthModalContext } from '@/shared/client/contexts/auth-modal-context';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Clock, Mic, RotateCcw, Square } from '@/shared/client/icons';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { Button } from '@/shared/client/ui/button';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 interface EnhancedVoiceRecorderProps {
   onRecordingComplete: (text: string) => void;

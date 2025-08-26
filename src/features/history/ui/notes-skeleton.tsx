@@ -1,7 +1,7 @@
 'use client';
 
-import { Card, CardContent, CardHeader } from '@/shared/ui/card';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { Card, CardContent, CardHeader } from '@/shared/client/ui/card';
+import { Skeleton } from '@/shared/client/ui/skeleton';
 
 export function NotesSkeleton() {
   return (

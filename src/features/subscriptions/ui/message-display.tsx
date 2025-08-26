@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Card, CardContent } from '@/shared/ui/card';
+import { Card, CardContent } from '@/shared/client/ui/card';
 
 interface MessageDisplayProps {
   message: string;

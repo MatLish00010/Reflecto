@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
-import { createSimpleEntityKeys } from '@/shared/lib/query-keys';
-import { safeSentry } from '@/shared/lib/sentry';
-import type { Feedback } from '@/shared/types';
+import { createSimpleEntityKeys } from '@/shared/client/lib/query-keys';
+import { safeSentry } from '@/shared/common/lib/sentry';
+import type { Feedback } from '@/shared/common/types';
 
 export const feedbackKeys = createSimpleEntityKeys('feedback');
 

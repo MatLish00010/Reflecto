@@ -5,12 +5,16 @@ import { useUser } from '@/entities';
 import { useDailySummaryByDateRange } from '@/entities/daily-summary';
 import { useNotesByDate } from '@/entities/note';
 import { useCreateSummary } from '@/features/daily-summary-generation';
-import { AuthRequiredMessage } from '@/shared/components';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { Loader2 } from '@/shared/icons';
-import { getDateRangeForDay } from '@/shared/lib/date-utils';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { AISummaryLoadingSkeleton, GeneratePrompt, Summary } from '@/shared/ui';
+import { AuthRequiredMessage } from '@/shared/client/components';
+import { useAuthModalContext } from '@/shared/client/contexts/auth-modal-context';
+import { Loader2 } from '@/shared/client/icons';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import {
+  AISummaryLoadingSkeleton,
+  GeneratePrompt,
+  Summary,
+} from '@/shared/client/ui';
+import { getDateRangeForDay } from '@/shared/common/lib/date-utils';
 
 interface AISummaryProps {
   selectedDate?: Date;

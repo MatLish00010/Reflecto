@@ -10,8 +10,8 @@ import {
   VALIDATION_SCHEMAS,
   withRateLimit,
   withValidation,
-} from '@/shared/lib/api';
-import type { AISummaryData } from '@/shared/types';
+} from '@/shared/common/lib/api';
+import type { AISummaryData } from '@/shared/common/types';
 import { getAISummaryPrompt, type Locale } from '../../../../prompts';
 
 export async function GET(request: NextRequest) {

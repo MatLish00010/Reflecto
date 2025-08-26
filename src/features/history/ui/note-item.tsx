@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useFormatters } from '@/shared/hooks';
-import { ChevronDown, ChevronUp, Clock } from '@/shared/icons';
-import type { Note } from '@/shared/types/notes';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardHeader } from '@/shared/ui/card';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { useFormatters } from '@/shared/client/hooks';
+import { ChevronDown, ChevronUp, Clock } from '@/shared/client/icons';
+import { Button } from '@/shared/client/ui/button';
+import { Card, CardContent, CardHeader } from '@/shared/client/ui/card';
+import type { Note } from '@/shared/common/types/notes';
 import { NoteActions } from './note-actions';
 
 interface NoteItemProps {

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import {
   DEFAULT_LOCALE,
   supportedLocales,
-} from '@/shared/lib/language-detector';
+} from '@/shared/common/lib/language-detector';
 
 const locales = supportedLocales;
 

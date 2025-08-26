@@ -5,7 +5,7 @@ import {
   ServiceFactory,
   validateRequiredFields,
   withRateLimit,
-} from '@/shared/lib/api';
+} from '@/shared/common/lib/api';
 
 export async function POST(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.upload)(handleApiRequest)(

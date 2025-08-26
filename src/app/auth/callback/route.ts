@@ -4,10 +4,10 @@ import {
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
   withRateLimit,
-} from '@/shared/lib/api';
-import { detectUserLanguage } from '@/shared/lib/language-detector';
-import { safeSentry } from '@/shared/lib/sentry';
-import { createClient } from '@/shared/lib/supabase/server';
+} from '@/shared/common/lib/api';
+import { detectUserLanguage } from '@/shared/common/lib/language-detector';
+import { safeSentry } from '@/shared/common/lib/sentry';
+import { createClient } from '@/shared/server/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useUser } from '@/entities/user';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Bug } from '@/shared/icons';
-import { Button } from '@/shared/ui/button';
+import { useAuthModalContext } from '@/shared/client/contexts/auth-modal-context';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Bug } from '@/shared/client/icons';
+import { Button } from '@/shared/client/ui/button';
 import { FeedbackModal } from './feedback-modal';
 
 interface FeedbackButtonProps {

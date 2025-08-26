@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { weeklySummaryKeys } from '@/entities/weekly-summary';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import type { AISummaryData } from '@/shared/types';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { safeSentry } from '@/shared/common/lib/sentry';
+import type { AISummaryData } from '@/shared/common/types';
 
 interface CreateWeeklySummaryRequest {
   from: string;

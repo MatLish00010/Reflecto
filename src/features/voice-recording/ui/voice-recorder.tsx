@@ -1,11 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Mic, RotateCcw, Square } from '@/shared/icons';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { Button } from '@/shared/ui/button';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Mic, RotateCcw, Square } from '@/shared/client/icons';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { Button } from '@/shared/client/ui/button';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 interface VoiceRecorderProps {
   onRecordingComplete: (text: string) => void;

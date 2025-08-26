@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
-import { createDateBasedEntityKeys } from '@/shared/lib/query-keys';
-import { safeSentry } from '@/shared/lib/sentry';
+import { createDateBasedEntityKeys } from '@/shared/client/lib/query-keys';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 export const dailySummaryKeys = createDateBasedEntityKeys('daily-summary');
 

@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { ChevronDown, ChevronUp } from '@/shared/icons';
-import { Button } from '@/shared/ui/button';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { ChevronDown, ChevronUp } from '@/shared/client/icons';
+import { Button } from '@/shared/client/ui/button';
 
 interface ShowMoreButtonProps {
   showAll: boolean;

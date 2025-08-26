@@ -1,7 +1,7 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { PageHeader } from '@/shared/ui';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { PageHeader } from '@/shared/client/ui';
 
 export function HomeHeader() {
   const { t } = useTranslation();

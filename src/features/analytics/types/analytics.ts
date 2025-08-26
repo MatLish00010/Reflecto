@@ -1,4 +1,4 @@
-import type { AISummaryData } from '@/shared/types';
+import type { AISummaryData } from '@/shared/common/types';
 
 export interface Note {
   id: number;

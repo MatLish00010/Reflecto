@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Crown } from '@/shared/icons';
-import { Badge } from '@/shared/ui/badge';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Crown } from '@/shared/client/icons';
+import { Badge } from '@/shared/client/ui/badge';
 
 interface SubscriptionBadgeProps {
   isSubscribed: boolean;

@@ -6,8 +6,8 @@ import {
   RATE_LIMIT_CONFIGS,
   withRateLimit,
   withValidation,
-} from '@/shared/lib/api';
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
+} from '@/shared/common/lib/api';
+import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
 
 const YOUR_DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 

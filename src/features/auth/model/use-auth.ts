@@ -4,9 +4,9 @@ import type { User } from '@supabase/supabase-js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { noteKeys } from '@/entities/note';
 import { userKeys } from '@/entities/user';
-import { createBrowserClient } from '@/shared/lib/client';
-import { safeSentry } from '@/shared/lib/sentry';
-import { useAlertContext } from '@/shared/providers/alert-provider';
+import { createBrowserClient } from '@/shared/client/lib/client';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 interface SignInRequest {
   email: string;

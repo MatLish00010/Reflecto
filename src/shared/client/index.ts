@@ -1,0 +1,63 @@
+export * from './components';
+export * from './contexts';
+export * from './hooks';
+// Re-export icons with specific names to avoid conflicts
+export {
+  // Lucide icons
+  AlertCircle,
+  AlertTriangle,
+  AlignLeft,
+  BarChart3,
+  BookOpen,
+  Brain,
+  // Custom icons
+  BrainIcon,
+  Bug,
+  CalendarIcon,
+  CheckCircle,
+  CheckIcon,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronRightIcon,
+  ChevronUp,
+  CircleIcon,
+  Clock,
+  CreditCard,
+  Crown,
+  Edit,
+  Globe,
+  GoogleIcon,
+  HelpCircle,
+  History,
+  Home,
+  Info,
+  Loader2,
+  LogIn,
+  LogOut,
+  type LucideIcon,
+  Medal,
+  Menu,
+  Mic,
+  MinusIcon,
+  Moon,
+  MoreVertical,
+  PenTool,
+  Percent,
+  RefreshCw,
+  RotateCcw,
+  Search,
+  Share2,
+  Shield,
+  Sparkles,
+  Square,
+  Sun,
+  Trash2,
+  User,
+  X,
+  XIcon,
+  Zap,
+} from './icons';
+export * from './lib';
+export * from './providers';
+export * from './ui';

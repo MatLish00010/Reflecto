@@ -2,18 +2,18 @@
 
 import { useId, useState } from 'react';
 import { useSignIn, useSignInWithGoogle, useSignUp } from '@/features/auth';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { GoogleIcon } from '@/shared/icons/google-icon';
-import { useAlertContext } from '@/shared/providers/alert-provider';
-import { Button } from '@/shared/ui/button';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { GoogleIcon } from '@/shared/client/icons/google-icon';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { Button } from '@/shared/client/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/shared/ui/dialog';
-import { Input } from '@/shared/ui/input';
+} from '@/shared/client/ui/dialog';
+import { Input } from '@/shared/client/ui/input';
 
 interface AuthModalProps {
   isOpen: boolean;

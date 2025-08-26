@@ -1,5 +1,5 @@
 import { usePathname, useRouter } from 'next/navigation';
-import { useLocale } from '@/shared/contexts/locale-context';
+import { useLocale } from '@/shared/client/contexts/locale-context';
 import { languages } from '../config/languages';
 
 export function useLanguageSwitch() {

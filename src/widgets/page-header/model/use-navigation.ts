@@ -1,6 +1,6 @@
-import { useLocale } from '@/shared/contexts/locale-context';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { BarChart3, CreditCard, History, Home } from '@/shared/icons';
+import { useLocale } from '@/shared/client/contexts/locale-context';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { BarChart3, CreditCard, History, Home } from '@/shared/client/icons';
 
 export function useNavigation() {
   const { t } = useTranslation();

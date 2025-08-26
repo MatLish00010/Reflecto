@@ -1,10 +1,10 @@
 import { Crown, Flame, Star, Zap } from 'lucide-react';
 import type React from 'react';
 import type { Stripe } from 'stripe';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Badge } from '@/shared/ui/badge';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent } from '@/shared/ui/card';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Badge } from '@/shared/client/ui/badge';
+import { Button } from '@/shared/client/ui/button';
+import { Card, CardContent } from '@/shared/client/ui/card';
 
 interface ProductDisplayProps {
   products: Stripe.Price[];

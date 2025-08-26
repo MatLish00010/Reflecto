@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import type { Stripe } from 'stripe';
-import { stripeService } from '@/shared/lib/api/services/client';
-import { createGlobalEntityKeys } from '@/shared/lib/query-keys';
-import { safeSentry } from '@/shared/lib/sentry';
+import { stripeService } from '@/shared/client/lib/api/services/client';
+import { createGlobalEntityKeys } from '@/shared/client/lib/query-keys';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 export const subscriptionKeys = {
   ...createGlobalEntityKeys('subscriptions'),

@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/nextjs';
 import { Calculator, CalendarRange, FileCheck, StickyNote } from 'lucide-react';
 import { useMemo } from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import type { AISummaryData } from '@/shared/types';
-import { CARD_COLOR_SCHEMES } from '@/shared/ui/summary/color-schemes';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { CARD_COLOR_SCHEMES } from '@/shared/client/ui/summary/color-schemes';
+import type { AISummaryData } from '@/shared/common/types';
 import type { DailySummary, Note, SummaryStats } from '../types/analytics';
 import { getSummariesCount } from '../utils/analytics-calculations';
 import { AnalyticsStatCard } from './analytics-stat-card';

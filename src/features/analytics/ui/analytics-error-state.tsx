@@ -1,6 +1,11 @@
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { AlertCircle } from '@/shared/icons';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { AlertCircle } from '@/shared/client/icons';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/client/ui/card';
 
 interface AnalyticsErrorStateProps {
   message?: string;

@@ -6,8 +6,8 @@ import {
   RATE_LIMIT_CONFIGS,
   withRateLimit,
   withValidation,
-} from '@/shared/lib/api';
-import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
+} from '@/shared/common/lib/api';
+import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
 
 const createSubscriptionSchema = z.object({
   stripeCustomerId: z.string().min(1, 'Stripe customer ID is required'),

@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslation } from '@/shared/contexts/translation-context';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
 
 interface InsufficientSummariesMessageProps {
   dailySummariesCount: number;

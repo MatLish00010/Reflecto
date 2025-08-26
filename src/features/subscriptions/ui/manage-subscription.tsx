@@ -1,13 +1,13 @@
 import { Settings } from 'lucide-react';
 import type React from 'react';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Button } from '@/shared/ui/button';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Button } from '@/shared/client/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
-} from '@/shared/ui/card';
+} from '@/shared/client/ui/card';
 
 interface ManageSubscriptionProps {
   stripeCustomerId: string;

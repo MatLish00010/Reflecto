@@ -5,12 +5,17 @@ import { Suspense, useMemo } from 'react';
 import { useNotesByDate } from '@/entities/note';
 import { AISummary } from '@/features/daily-summary-generation';
 import { NoteItem } from '@/features/history/ui/note-item';
-import { useLocale } from '@/shared/contexts/locale-context';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { Brain, Calendar, Loader2 } from '@/shared/icons';
-import { getDateRangeForDay } from '@/shared/lib/date-utils';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { useLocale } from '@/shared/client/contexts/locale-context';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { Brain, Calendar, Loader2 } from '@/shared/client/icons';
+import { Button } from '@/shared/client/ui/button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/client/ui/card';
+import { getDateRangeForDay } from '@/shared/common/lib/date-utils';
 import { NewEntryForm } from '@/widgets/new-entry-form';
 
 export function HomeContent() {

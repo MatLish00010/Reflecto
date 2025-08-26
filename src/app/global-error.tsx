@@ -2,7 +2,7 @@
 
 import NextError from 'next/error';
 import { useEffect } from 'react';
-import { safeSentry } from '@/shared/lib/sentry';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 export default function GlobalError({
   error,

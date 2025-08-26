@@ -5,18 +5,18 @@ import { useUser } from '@/entities';
 import { useDailySummaries } from '@/entities/daily-summary';
 import { useWeeklySummary } from '@/entities/weekly-summary';
 import { useCreateWeeklySummary } from '@/features/weekly-summary-generation';
-import type { AISummaryData } from '@/shared';
-import { AuthRequiredMessage } from '@/shared/components';
-import { useAuthModalContext } from '@/shared/contexts/auth-modal-context';
-import { Loader2 } from '@/shared/icons';
-import { getWeekRange, useWeekFromUrl } from '@/shared/lib/date-utils';
-import { useAlertContext } from '@/shared/providers/alert-provider';
+import { AuthRequiredMessage } from '@/shared/client/components';
+import { useAuthModalContext } from '@/shared/client/contexts/auth-modal-context';
+import { Loader2 } from '@/shared/client/icons';
+import { useAlertContext } from '@/shared/client/providers/alert-provider';
 import {
   AISummaryLoadingSkeleton,
   GeneratePrompt,
   Summary,
   WeekPicker,
-} from '@/shared/ui';
+} from '@/shared/client/ui';
+import { getWeekRange, useWeekFromUrl } from '@/shared/common/lib/date-utils';
+import type { AISummaryData } from '@/shared/common/types';
 import { InsufficientSummariesMessage } from './insufficient-summaries-message';
 
 interface WeeklySummaryContentProps {

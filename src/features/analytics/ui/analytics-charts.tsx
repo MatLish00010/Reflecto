@@ -23,16 +23,21 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { useFormatters } from '@/shared/hooks';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { useFormatters } from '@/shared/client/hooks';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/shared/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+} from '@/shared/client/ui/card';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/client/ui/tabs';
 
 const COLORS = [
   '#0088FE',

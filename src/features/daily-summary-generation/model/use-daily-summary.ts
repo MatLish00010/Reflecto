@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { dailySummaryKeys } from '@/entities/daily-summary';
 import { useUser } from '@/entities/user';
-import { useTranslation } from '@/shared/contexts/translation-context';
-import { safeSentry } from '@/shared/lib/sentry';
+import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { safeSentry } from '@/shared/common/lib/sentry';
 
 export function useCreateSummary() {
   const queryClient = useQueryClient();
