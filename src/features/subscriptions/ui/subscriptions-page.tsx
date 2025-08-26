@@ -3,20 +3,24 @@
 import { Crown } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
+import { useUser } from '@/entities';
+import { AuthRequiredMessage } from '@/shared/components/auth-required-message';
 import { useTranslation } from '@/shared/contexts/translation-context';
 import { useSubscriptions } from '../model/use-subscriptions';
+import { ManageSubscription } from './manage-subscription';
 import { MessageDisplay } from './message-display';
 import { MessageDisplaySkeleton } from './message-display-skeleton';
 import { ProductDisplay } from './product-display';
 import { ProductDisplaySkeleton } from './product-display-skeleton';
-import { SuccessDisplay } from './success-display';
-import { SuccessDisplaySkeleton } from './success-display-skeleton';
 
 export const SubscriptionsPage: React.FC = () => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
-  const [sessionId, setSessionId] = useState('');
+
+  const { subscription, isAuthenticated } = useUser();
+
+  console.log('subscription11:', subscription);
 
   const {
     products,
@@ -29,11 +33,6 @@ export const SubscriptionsPage: React.FC = () => {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
 
-    if (query.get('success')) {
-      setSuccess(true);
-      setSessionId(query.get('session_id') || '');
-    }
-
     if (query.get('canceled')) {
       setSuccess(false);
       setMessage(t('subscriptions.order_canceled'));
@@ -41,6 +40,22 @@ export const SubscriptionsPage: React.FC = () => {
   }, [t]);
 
   const renderContent = () => {
+    if (!isAuthenticated) {
+      return (
+        <AuthRequiredMessage messageKey="auth.signInToViewSubscriptions" />
+      );
+    }
+
+    if (subscription?.isActive && subscription.stripeCustomerId) {
+      return (
+        <ManageSubscription
+          stripeCustomerId={subscription.stripeCustomerId}
+          isLoading={isLoading}
+          onManageBilling={handleManageBilling}
+        />
+      );
+    }
+
     if (loadingProducts) {
       return <ProductDisplaySkeleton />;
     }
@@ -60,19 +75,6 @@ export const SubscriptionsPage: React.FC = () => {
             </p>
           </div>
         </>
-      );
-    }
-
-    if (success && sessionId !== '') {
-      if (isLoading) {
-        return <SuccessDisplaySkeleton />;
-      }
-      return (
-        <SuccessDisplay
-          sessionId={sessionId}
-          isLoading={isLoading}
-          onManageBilling={handleManageBilling}
-        />
       );
     }
 

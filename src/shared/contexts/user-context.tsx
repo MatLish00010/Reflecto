@@ -2,10 +2,11 @@
 
 import type { User } from '@supabase/supabase-js';
 import { createContext, type ReactNode, useContext } from 'react';
+import type { UserSubscription } from '../types/subscriptions';
 
 interface UserContextType {
   user: User | null;
-  isSubscribed: boolean;
+  subscription: UserSubscription | null;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -13,16 +14,16 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 interface UserProviderProps {
   children: ReactNode;
   initialUser: User | null;
-  isSubscribed: boolean;
+  subscription: UserSubscription | null;
 }
 
 export function UserProvider({
   children,
   initialUser,
-  isSubscribed,
+  subscription,
 }: UserProviderProps) {
   return (
-    <UserContext.Provider value={{ user: initialUser, isSubscribed }}>
+    <UserContext.Provider value={{ user: initialUser, subscription }}>
       {children}
     </UserContext.Provider>
   );

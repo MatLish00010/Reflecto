@@ -291,6 +291,7 @@
     "authRequired": "Authentication required to continue",
     "signInToViewHistory": "Sign in to view your diary history",
     "signInToViewAnalysis": "Sign in to view AI analysis of your entries",
+    "signInToViewSubscriptions": "Sign in to view your subscriptions",
     "signInToContinue": "Sign in to continue",
     "signInWithGoogle": "Sign in with Google",
     "signUpWithGoogle": "Sign up with Google",
@@ -376,6 +377,8 @@
     "choose_plan": "Choose Plan",
     "cancel_anytime": "Cancel anytime. Secure payment.",
     "month_short": "mo",
-    "months_short": "mo"
+    "months_short": "mo",
+    "manage_subscription": "Manage Subscription",
+    "manage_description": "Manage your subscription and payment information"
   }
 }

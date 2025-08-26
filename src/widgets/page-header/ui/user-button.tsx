@@ -24,7 +24,7 @@ interface UserButtonProps {
 
 export function UserButton({ className, maxNameLength = 20 }: UserButtonProps) {
   const { t } = useTranslation();
-  const { user, isAuthenticated, isLoading, error, isSubscribed } = useUser();
+  const { user, isAuthenticated, isLoading, error, subscription } = useUser();
   const { openModal } = useAuthModalContext();
 
   if (isLoading) {
@@ -61,10 +61,12 @@ export function UserButton({ className, maxNameLength = 20 }: UserButtonProps) {
         <Button
           variant="outline"
           size="sm"
-          className={`flex items-center gap-2 min-w-0 max-w-[200px] ${className || ''}`}
+          className={`flex items-center gap-2 min-w-0 max-w-[200px] ${
+            className || ''
+          }`}
         >
           <SubscriptionIcon
-            isSubscribed={isSubscribed}
+            isSubscribed={!!subscription?.isActive}
             className="flex-shrink-0"
           />
           <User className="h-4 w-4 flex-shrink-0" />
@@ -74,7 +76,7 @@ export function UserButton({ className, maxNameLength = 20 }: UserButtonProps) {
       <DropdownMenuContent align="end" className="w-[300px]">
         <DropdownMenuLabel>{t('user.info')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <UserInfo user={user} isSubscribed={isSubscribed} />
+        <UserInfo user={user} isSubscribed={!!subscription?.isActive} />
         <DropdownMenuSeparator />
         <LogoutButton />
       </DropdownMenuContent>

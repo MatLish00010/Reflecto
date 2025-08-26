@@ -32,14 +32,14 @@ export const stripeService = {
     return data;
   },
 
-  async createPortalSession(sessionId: string): Promise<{ url: string }> {
+  async createPortalSession(customerId: string): Promise<{ url: string }> {
     const response = await fetch('/api/stripe/create-portal-session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        session_id: sessionId,
+        customer: customerId,
       }),
     });
 

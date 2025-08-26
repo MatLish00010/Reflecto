@@ -42,8 +42,8 @@ export const useCheckout = () => {
 
 export const useManageBilling = () => {
   return useMutation({
-    mutationFn: async (sessionId: string) => {
-      const { url } = await stripeService.createPortalSession(sessionId);
+    mutationFn: async (stripeCustomerId: string) => {
+      const { url } = await stripeService.createPortalSession(stripeCustomerId);
       if (url) {
         window.location.href = url;
       }
@@ -70,8 +70,8 @@ export const useSubscriptions = () => {
     checkoutMutation.mutate(lookupKey);
   };
 
-  const handleManageBilling = (sessionId: string) => {
-    manageBillingMutation.mutate(sessionId);
+  const handleManageBilling = (stripeCustomerId: string) => {
+    manageBillingMutation.mutate(stripeCustomerId);
   };
 
   return {

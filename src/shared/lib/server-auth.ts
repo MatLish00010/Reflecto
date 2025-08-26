@@ -2,10 +2,11 @@ import type { User } from '@supabase/supabase-js';
 import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 import { safeSentry } from '@/shared/lib/sentry';
 import { createClient } from '@/shared/lib/supabase/server';
+import type { UserSubscription } from '../types/subscriptions';
 
 export async function getServerUser(): Promise<{
   user: User | null;
-  isSubscribed: boolean;
+  subscription: UserSubscription | null;
 }> {
   return safeSentry.startSpanAsync(
     {
@@ -26,7 +27,7 @@ export async function getServerUser(): Promise<{
           });
           span.setAttribute('error', true);
           span.setAttribute('error.type', 'get_user_failed');
-          return { user: null, isSubscribed: false };
+          return { user: null, isSubscribed: false, subscription: null };
         }
 
         span.setAttribute('auth.user_present', !!user);
@@ -43,36 +44,34 @@ export async function getServerUser(): Promise<{
                 operation: 'get_user_subscriptions_for_auth',
               });
 
-            const isSubscribed = subscriptions.length > 0;
-            span.setAttribute('auth.has_subscription', isSubscribed);
-            span.setAttribute('auth.subscriptions_count', subscriptions.length);
+            const subscription = subscriptions?.[0];
 
-            if (isSubscribed) {
-              span.setAttribute(
-                'auth.subscription_ids',
-                subscriptions.map(s => s.id).join(',')
-              );
-            }
-
-            return { user, isSubscribed };
+            return {
+              user,
+              subscription: {
+                isActive: !!subscription,
+                stripeCustomerId: subscription?.stripe_customer_id,
+                stripeSubscriptionId: subscription?.stripe_subscription_id,
+              },
+            };
           } catch (subscriptionError) {
             safeSentry.captureException(subscriptionError as Error, {
               tags: { operation: 'get_user_subscriptions_for_auth' },
             });
             span.setAttribute('subscription_check_error', true);
             span.setAttribute('error.type', 'subscription_check_failed');
-            return { user, isSubscribed: false };
+            return { user, isSubscribed: false, subscription: null };
           }
         }
 
-        return { user: null, isSubscribed: false };
+        return { user: null, isSubscribed: false, subscription: null };
       } catch (error) {
         safeSentry.captureException(error as Error, {
           tags: { operation: 'get_server_user' },
         });
         span.setAttribute('error', true);
         span.setAttribute('error.type', 'server_auth_error');
-        return { user: null, isSubscribed: false };
+        return { user: null, isSubscribed: false, subscription: null };
       }
     }
   );

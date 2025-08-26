@@ -124,7 +124,7 @@ export class StripeService {
   }
 
   async createPortalSession(
-    sessionId: string,
+    customerId: string,
     domain: string,
     options: StripeServiceOptions = {}
   ): Promise<StripePortalSessionResult> {
@@ -132,20 +132,12 @@ export class StripeService {
     const stripe = this.getStripe();
 
     try {
-      span?.setAttribute('stripe.session_id', sessionId);
-
-      const checkoutSession =
-        await stripe.checkout.sessions.retrieve(sessionId);
-
-      span?.setAttribute(
-        'stripe.customer_id',
-        checkoutSession.customer as string
-      );
+      span?.setAttribute('stripe.customer_id', customerId);
 
       const returnUrl = `${domain}/subscriptions`;
 
       const portalSession = await stripe.billingPortal.sessions.create({
-        customer: checkoutSession.customer as string,
+        customer: customerId,
         return_url: returnUrl,
       });
 
@@ -158,7 +150,7 @@ export class StripeService {
     } catch (error) {
       safeSentry.captureException(error as Error, {
         tags: { operation },
-        extra: { sessionId },
+        extra: { customerId },
       });
       throw error;
     }

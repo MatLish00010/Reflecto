@@ -89,7 +89,7 @@ export default async function RootLayout({
   const { lang } = await params;
   const dict = await getDictionary(lang);
 
-  const { user, isSubscribed } = await getServerUser();
+  const { user, subscription } = await getServerUser();
 
   return (
     <html lang={lang} suppressHydrationWarning>
@@ -123,7 +123,7 @@ export default async function RootLayout({
                   <AuthModalProvider>
                     <UserProvider
                       initialUser={user}
-                      isSubscribed={isSubscribed}
+                      subscription={subscription}
                     >
                       <QueryErrorHandler />
                       <AuthSync />

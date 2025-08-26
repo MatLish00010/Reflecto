@@ -291,6 +291,7 @@
     "authRequired": "Требуется аутентификация для продолжения",
     "signInToViewHistory": "Войдите в систему, чтобы просмотреть историю ваших записей",
     "signInToViewAnalysis": "Войдите в систему, чтобы просмотреть AI-анализ ваших записей",
+    "signInToViewSubscriptions": "Войдите в систему, чтобы просмотреть ваши подписки",
     "signInToContinue": "Войдите в систему для продолжения",
     "signInWithGoogle": "Войти через Google",
     "signUpWithGoogle": "Зарегистрироваться через Google",
@@ -376,6 +377,8 @@
     "choose_plan": "Выбрать план",
     "cancel_anytime": "Отменить можно в любое время. Безопасная оплата.",
     "month_short": "мес",
-    "months_short": "мес"
+    "months_short": "мес",
+    "manage_subscription": "Управление подпиской",
+    "manage_description": "Управляйте своей подпиской и платежной информацией"
   }
 }

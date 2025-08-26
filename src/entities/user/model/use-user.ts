@@ -4,6 +4,7 @@ import { useUserContext } from '@/shared/contexts/user-context';
 import { subscriptionsClientService } from '@/shared/lib/api/services/subscriptions.service';
 import { createBrowserClient } from '@/shared/lib/client';
 import { safeSentry } from '@/shared/lib/sentry';
+import type { UserSubscription } from '@/shared/types/subscriptions';
 
 export const userKeys = {
   all: ['user'] as const,
@@ -11,7 +12,7 @@ export const userKeys = {
 };
 
 export function useUser() {
-  const { user: initialUser, isSubscribed: initialIsSubscribed } =
+  const { user: initialUser, subscription: initialSubscription } =
     useUserContext();
 
   const { data: user, ...userQuery } = useQuery({
@@ -38,26 +39,34 @@ export function useUser() {
     refetchOnWindowFocus: true,
   });
 
-  const { data: isSubscribed = initialIsSubscribed, ...subscriptionQuery } =
-    useQuery({
-      queryKey: userKeys.subscription(user?.id || ''),
-      queryFn: async (): Promise<boolean> => {
-        if (!user) {
-          return false;
-        }
-        return subscriptionsClientService.checkUserSubscription();
-      },
-      enabled: !!user,
-      initialData: initialIsSubscribed,
-      retry: false,
-      staleTime: 2 * 60 * 1000, // 2 minutes
-      refetchOnWindowFocus: true,
-    });
+  const { data: subscription = initialSubscription } = useQuery({
+    queryKey: userKeys.subscription(user?.id || ''),
+    queryFn: async (): Promise<UserSubscription | null> => {
+      if (!user) {
+        return null;
+      }
+
+      const response = await subscriptionsClientService.getUserSubscriptions();
+
+      const subscription = response.subscriptions?.[0];
+
+      return {
+        isActive: true,
+        stripeCustomerId: subscription.stripe_customer_id,
+        stripeSubscriptionId: subscription.stripe_subscription_id,
+      };
+    },
+    enabled: !!user,
+    initialData: initialSubscription,
+    retry: false,
+    staleTime: 2 * 60 * 1000,
+    refetchOnWindowFocus: true,
+  });
+
   return {
     user: user || null,
     isAuthenticated: !!user,
-    isSubscribed,
+    subscription,
     ...userQuery,
-    subscriptionQuery,
   };
 }

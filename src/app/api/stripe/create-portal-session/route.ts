@@ -12,7 +12,7 @@ import { ServiceFactory } from '@/shared/lib/api/utils/service-factory';
 const YOUR_DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 const portalSessionSchema = z.object({
-  session_id: z.string().min(1, 'Session ID is required'),
+  customer: z.string().min(1, 'Customer ID is required'),
 });
 
 export async function POST(request: NextRequest) {
@@ -22,14 +22,11 @@ export async function POST(request: NextRequest) {
     withValidation(portalSessionSchema, { validateBody: true })(
       async (context: ApiContext, _request: NextRequest, validatedData) => {
         context.span.setAttribute('stripe.operation', 'create_portal_session');
-        context.span.setAttribute(
-          'stripe.session_id',
-          validatedData.session_id
-        );
+        context.span.setAttribute('stripe.customer_id', validatedData.customer);
 
         const stripeService = ServiceFactory.createStripeService();
         const result = await stripeService.createPortalSession(
-          validatedData.session_id,
+          validatedData.customer,
           YOUR_DOMAIN,
           {
             span: context.span,
