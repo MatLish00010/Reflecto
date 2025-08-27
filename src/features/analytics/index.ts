@@ -1,4 +1,14 @@
+// Model
+
+// Charts submodule
+export * from './charts';
 export { useAnalyticsData } from './model/use-analytics-data';
+// Shared submodule
+export * from './shared';
+
+// Stats submodule
+export * from './stats';
+// Types
 export type {
   ActivityDataPoint,
   AnalyticsData,
@@ -13,14 +23,9 @@ export type {
   WeeklyActivityDataPoint,
   WeeklySummary,
 } from './types/analytics';
-export { AnalyticsChartWrapper } from './ui/analytics-chart-wrapper';
-export { AnalyticsCharts } from './ui/analytics-charts';
-export { AnalyticsDataLoadingSkeleton } from './ui/analytics-data-loading-skeleton';
+
+// UI components (remaining)
 export { AnalyticsEmptyState } from './ui/analytics-empty-state';
 export { AnalyticsErrorState } from './ui/analytics-error-state';
 export { AnalyticsHeader } from './ui/analytics-header';
 export { Analytics as AnalyticsPage } from './ui/analytics-page';
-export { AnalyticsPageSkeleton } from './ui/analytics-page-skeleton';
-export { AnalyticsProductivityCards } from './ui/analytics-productivity-cards';
-export { AnalyticsStatCard } from './ui/analytics-stat-card';
-export { AnalyticsStatsCards } from './ui/analytics-stats-cards';
