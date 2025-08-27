@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
+import { ENV } from '@/shared/common/config';
 import {
   type ApiContext,
   handleApiRequest,
@@ -9,7 +10,7 @@ import {
 } from '@/shared/common/lib/api';
 import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
 
-const YOUR_DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+const YOUR_DOMAIN = ENV.APP_URL;
 
 const checkoutSessionSchema = z.object({
   lookup_key: z.string().min(1, 'Lookup key is required'),

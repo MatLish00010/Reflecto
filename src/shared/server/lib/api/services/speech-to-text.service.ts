@@ -1,5 +1,6 @@
 import type { Span } from '@sentry/types';
 import OpenAI from 'openai';
+import { ENV } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
 export interface SpeechToTextServiceOptions {
@@ -24,7 +25,7 @@ export class SpeechToTextService {
 
   constructor() {
     this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: ENV.OPENAI_API_KEY,
     });
   }
 

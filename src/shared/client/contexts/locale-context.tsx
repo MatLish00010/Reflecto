@@ -8,7 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { SUPPORTED_LOCALES } from '@/shared/common/lib/language-detector';
+import { APP_CONSTANTS } from '@/shared/common/config';
 
 interface LocaleContextType {
   currentLocale: string;
@@ -42,8 +42,8 @@ export function LocaleProvider({
     const localeFromPath = pathname?.split('/')[1];
     if (
       localeFromPath &&
-      SUPPORTED_LOCALES.includes(
-        localeFromPath as (typeof SUPPORTED_LOCALES)[number]
+      APP_CONSTANTS.SUPPORTED_LOCALES.includes(
+        localeFromPath as (typeof APP_CONSTANTS.SUPPORTED_LOCALES)[number]
       )
     ) {
       setCurrentLocale(localeFromPath);

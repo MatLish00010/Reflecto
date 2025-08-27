@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { createEntityKeys } from '@/shared/client/lib/query-keys';
 import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 import type { Note } from '@/shared/common/types/notes';
 
@@ -29,7 +30,9 @@ export function useNotesByDate(from?: string, to?: string) {
         params.append('to', to);
       }
 
-      const response = await fetch(`/api/notes?${params.toString()}`);
+      const response = await fetch(
+        `${API_CONFIG.ENDPOINTS.NOTES}?${params.toString()}`
+      );
       if (!response.ok) {
         if (response.status === 401) {
           return [];
@@ -74,7 +77,7 @@ export function useCreateNote() {
         throw error;
       }
 
-      const response = await fetch('/api/notes', {
+      const response = await fetch(API_CONFIG.ENDPOINTS.NOTES, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +124,7 @@ export function useUpdateNote() {
 
   return useMutation({
     mutationFn: async ({ noteId, note }: { noteId: number; note: string }) => {
-      const response = await fetch(`/api/notes/${noteId}`, {
+      const response = await fetch(`${API_CONFIG.ENDPOINTS.NOTES}/${noteId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -169,7 +172,7 @@ export function useDeleteNote() {
 
   return useMutation({
     mutationFn: async (noteId: number) => {
-      const response = await fetch(`/api/notes/${noteId}`, {
+      const response = await fetch(`${API_CONFIG.ENDPOINTS.NOTES}/${noteId}`, {
         method: 'DELETE',
         credentials: 'include',
       });

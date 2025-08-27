@@ -88,7 +88,7 @@ Examples:
 ✅ "You wrote that 'meetings were long and inefficient', which caused frustration"`,
 };
 
-export type Locale = 'ru' | 'en';
+export type PromptLocale = 'ru' | 'en';
 export function getAISummaryPrompt(): string {
   return aiSummaryPrompts.en;
   // const prompt = aiSummaryPrompts[locale] || aiSummaryPrompts.ru;
@@ -241,10 +241,10 @@ export const summaryLabels = {
   },
 } as const;
 
-export type SupportedLocale = keyof typeof summaryLabels;
+export type SummaryLocale = keyof typeof summaryLabels;
 
 export function getSummaryLabels(
   locale: string
-): (typeof summaryLabels)[SupportedLocale] {
-  return summaryLabels[locale as SupportedLocale] || summaryLabels.ru;
+): (typeof summaryLabels)[SummaryLocale] {
+  return summaryLabels[locale as SummaryLocale] || summaryLabels.ru;
 }

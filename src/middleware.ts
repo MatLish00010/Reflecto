@@ -1,12 +1,9 @@
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 import { NextResponse } from 'next/server';
-import {
-  DEFAULT_LOCALE,
-  supportedLocales,
-} from '@/shared/common/lib/language-detector';
+import { APP_CONSTANTS } from '@/shared/common/config';
 
-const locales = supportedLocales;
+const locales = APP_CONSTANTS.SUPPORTED_LOCALES;
 
 // Get the preferred locale
 function getLocale(request: Request): string {
@@ -17,7 +14,7 @@ function getLocale(request: Request): string {
 
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
 
-  return match(languages, locales, DEFAULT_LOCALE);
+  return match(languages, locales, APP_CONSTANTS.DEFAULT_LOCALE);
 }
 
 export async function middleware(request: Request) {

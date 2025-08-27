@@ -1,8 +1,9 @@
 import type { Stripe } from 'stripe';
+import { API_CONFIG } from '@/shared/common/config';
 
 export const stripeService = {
   async getProducts(): Promise<Stripe.Price[]> {
-    const response = await fetch('/api/stripe/products');
+    const response = await fetch(API_CONFIG.ENDPOINTS.STRIPE.PRODUCTS);
     const data = await response.json();
 
     if (!response.ok) {
@@ -13,7 +14,7 @@ export const stripeService = {
   },
 
   async createCheckoutSession(lookupKey: string): Promise<{ url: string }> {
-    const response = await fetch('/api/stripe/create-checkout-session', {
+    const response = await fetch(API_CONFIG.ENDPOINTS.STRIPE.CHECKOUT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ export const stripeService = {
   },
 
   async createPortalSession(customerId: string): Promise<{ url: string }> {
-    const response = await fetch('/api/stripe/create-portal-session', {
+    const response = await fetch(API_CONFIG.ENDPOINTS.STRIPE.PORTAL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

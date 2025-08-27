@@ -1,5 +1,6 @@
 import type { Span } from '@sentry/types';
 import type { NextResponse } from 'next/server';
+import { API_CONFIG } from '@/shared/common/config';
 import { createErrorResponse } from '@/shared/common/lib/api/utils/response-helpers';
 import { safeDecrypt, safeEncrypt } from './crypto';
 
@@ -49,8 +50,8 @@ export function decryptField<T = string>({
       if (!value) {
         return {
           error: createErrorResponse(
-            'Decrypted value is empty',
-            500,
+            API_CONFIG.ERROR_MESSAGES.DECRYPTION_FAILED,
+            API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
             operation
           ),
         };
@@ -59,8 +60,8 @@ export function decryptField<T = string>({
     } catch {
       return {
         error: createErrorResponse(
-          'Failed to parse decrypted data',
-          500,
+          API_CONFIG.ERROR_MESSAGES.DECRYPTION_FAILED,
+          API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
           operation
         ),
       };

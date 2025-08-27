@@ -1,5 +1,6 @@
 import type { User } from '@supabase/supabase-js';
 import type { NextResponse } from 'next/server';
+import { API_CONFIG } from '@/shared/common/config';
 import { createErrorResponse } from '@/shared/common/lib/api/utils/response-helpers';
 import { safeSentry } from '@/shared/common/lib/sentry';
 import { createServerClient } from '@/shared/server/lib/server';
@@ -55,7 +56,10 @@ export async function requireAuth(): Promise<{
   if (!authResult.isAuthenticated) {
     return {
       isAuthenticated: false,
-      response: createErrorResponse('Unauthorized', 401),
+      response: createErrorResponse(
+        API_CONFIG.ERROR_MESSAGES.UNAUTHORIZED,
+        API_CONFIG.STATUS_CODES.UNAUTHORIZED
+      ),
     };
   }
 

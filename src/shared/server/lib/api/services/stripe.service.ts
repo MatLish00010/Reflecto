@@ -1,5 +1,6 @@
 import type { Span } from '@sentry/types';
 import Stripe from 'stripe';
+import { ENV } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
 export interface StripeServiceOptions {
@@ -25,7 +26,7 @@ export class StripeService {
 
   private getStripe(): Stripe {
     if (!this.stripe) {
-      const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+      const stripeSecretKey = ENV.STRIPE_SECRET_KEY;
       if (!stripeSecretKey) {
         throw new Error('STRIPE_SECRET_KEY environment variable is not set');
       }

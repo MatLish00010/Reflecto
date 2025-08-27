@@ -1,8 +1,10 @@
 /* biome-ignore lint/suspicious/noExplicitAny: Supabase client types require any */
 import { createBrowserClient } from '@supabase/ssr';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { ENV } from '@/shared/common/config';
+
+const supabaseUrl = ENV.SUPABASE_URL;
+const supabaseKey = ENV.SUPABASE_ANON_KEY;
 
 export const createSafeClient = () => {
   if (!supabaseUrl || !supabaseKey) {

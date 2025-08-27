@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import type Stripe from 'stripe';
+import { API_CONFIG } from '@/shared/common/config';
 import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
@@ -7,7 +8,7 @@ export async function POST(request: NextRequest) {
   return safeSentry.startSpanAsync(
     {
       op: 'http.server',
-      name: 'POST /api/stripe/webhook',
+      name: `POST ${API_CONFIG.ENDPOINTS.STRIPE.WEBHOOK}`,
     },
     async span => {
       try {
@@ -413,13 +414,17 @@ export async function POST(request: NextRequest) {
         }
 
         span.setAttribute('success', true);
-        return new Response('Webhook processed successfully', { status: 200 });
+        return new Response('Webhook processed successfully', {
+          status: API_CONFIG.STATUS_CODES.OK,
+        });
       } catch (error) {
         span.setAttribute('error', true);
         safeSentry.captureException(error as Error, {
           tags: { operation: 'stripe_webhook_processing' },
         });
-        return new Response('Internal server error', { status: 500 });
+        return new Response(API_CONFIG.ERROR_MESSAGES.INTERNAL_SERVER_ERROR, {
+          status: API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
+        });
       }
     }
   );

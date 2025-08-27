@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { weeklySummaryKeys } from '@/entities/weekly-summary';
 import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 import type { AISummaryData } from '@/shared/common/types';
 
@@ -24,7 +25,7 @@ export function useCreateWeeklySummary() {
         throw new Error('Not authenticated');
       }
 
-      const response = await fetch('/api/weekly-summary', {
+      const response = await fetch(API_CONFIG.ENDPOINTS.WEEKLY_SUMMARY, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

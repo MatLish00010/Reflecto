@@ -1,5 +1,6 @@
 import type { Span } from '@sentry/types';
 import type { NextRequest } from 'next/server';
+import { ENV } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 import { createErrorResponse } from '../utils/response-helpers';
 import { ServiceFactory } from '../utils/service-factory';
@@ -106,8 +107,8 @@ let rateLimitStore: RateLimitStore | null = null;
 function getRateLimitStore(): RateLimitStore {
   if (!rateLimitStore) {
     // Use Redis in production, in-memory in development
-    if (process.env.NODE_ENV === 'production') {
-      if (process.env.REDIS_URL) {
+    if (ENV.NODE_ENV === 'production') {
+      if (ENV.REDIS_URL) {
         console.log('Using Redis for rate limiting');
         rateLimitStore = new RedisRateLimitStore();
       } else {
@@ -187,7 +188,9 @@ export function withRateLimit(config: RateLimitConfig) {
 
         if (process.env.NODE_ENV === 'development') {
           console.log(
-            `[Rate Limit] Count: ${count}/${config.maxRequests}, Reset: ${new Date(resetTime).toISOString()}`
+            `[Rate Limit] Count: ${count}/${
+              config.maxRequests
+            }, Reset: ${new Date(resetTime).toISOString()}`
           );
         }
 

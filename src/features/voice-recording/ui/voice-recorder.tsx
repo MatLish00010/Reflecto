@@ -5,6 +5,7 @@ import { useTranslation } from '@/shared/client/contexts/translation-context';
 import { Mic, RotateCcw, Square } from '@/shared/client/icons';
 import { useAlertContext } from '@/shared/client/providers/alert-provider';
 import { Button } from '@/shared/client/ui/button';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
 interface VoiceRecorderProps {
@@ -60,10 +61,13 @@ export function VoiceRecorder({
               const formData = new FormData();
               formData.append('audio', audioBlob);
 
-              const response = await fetch('/api/speech-to-text', {
-                method: 'POST',
-                body: formData,
-              });
+              const response = await fetch(
+                API_CONFIG.ENDPOINTS.SPEECH_TO_TEXT,
+                {
+                  method: 'POST',
+                  body: formData,
+                }
+              );
 
               if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));

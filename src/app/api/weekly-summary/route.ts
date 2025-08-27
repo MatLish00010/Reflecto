@@ -11,8 +11,11 @@ import {
   withRateLimit,
   withValidation,
 } from '@/shared/common/lib/api';
+import {
+  getSummaryLabels,
+  getWeeklySummaryPrompt,
+} from '@/shared/common/lib/prompts';
 import type { AISummaryData } from '@/shared/common/types';
-import { getSummaryLabels, getWeeklySummaryPrompt } from '../../../../prompts';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

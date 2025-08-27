@@ -1,29 +1,26 @@
 import crypto from 'node:crypto';
 import type { Span } from '@sentry/types';
 import type { NextResponse } from 'next/server';
+import { API_CONFIG, APP_CONSTANTS, ENV } from '@/shared/common/config';
 import { createErrorResponse } from '@/shared/common/lib/api/utils/response-helpers';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
-const ALGORITHM = 'aes-256-gcm';
-const IV_LENGTH = 12; // Recommended for GCM
-const KEY_LENGTH = 32; // 256 bits
-
 function getKey(): Buffer {
-  const key = process.env.NOTE_SECRET_KEY;
+  const key = ENV.NOTE_SECRET_KEY;
   if (!key) {
     throw new Error('NOTE_SECRET_KEY is not set in environment variables');
   }
   const buf = Buffer.from(key, 'base64');
-  if (buf.length !== KEY_LENGTH) {
+  if (buf.length !== APP_CONSTANTS.CRYPTO.KEY_LENGTH) {
     throw new Error('NOTE_SECRET_KEY must be 32 bytes (base64-encoded)');
   }
   return buf;
 }
 
 function encryptText(plainText: string): string {
-  const iv = crypto.randomBytes(IV_LENGTH);
+  const iv = crypto.randomBytes(APP_CONSTANTS.CRYPTO.IV_LENGTH);
   const key = getKey();
-  const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
+  const cipher = crypto.createCipheriv(APP_CONSTANTS.CRYPTO.ALGORITHM, key, iv);
   const encrypted = Buffer.concat([
     cipher.update(plainText, 'utf8'),
     cipher.final(),
@@ -35,11 +32,18 @@ function encryptText(plainText: string): string {
 
 function decryptText(encryptedBase64: string): string {
   const data = Buffer.from(encryptedBase64, 'base64');
-  const iv = data.slice(0, IV_LENGTH);
-  const authTag = data.slice(IV_LENGTH, IV_LENGTH + 16);
-  const encrypted = data.slice(IV_LENGTH + 16);
+  const iv = data.slice(0, APP_CONSTANTS.CRYPTO.IV_LENGTH);
+  const authTag = data.slice(
+    APP_CONSTANTS.CRYPTO.IV_LENGTH,
+    APP_CONSTANTS.CRYPTO.IV_LENGTH + 16
+  );
+  const encrypted = data.slice(APP_CONSTANTS.CRYPTO.IV_LENGTH + 16);
   const key = getKey();
-  const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
+  const decipher = crypto.createDecipheriv(
+    APP_CONSTANTS.CRYPTO.ALGORITHM,
+    key,
+    iv
+  );
   decipher.setAuthTag(authTag);
   const decrypted = Buffer.concat([
     decipher.update(encrypted),
@@ -70,7 +74,11 @@ export function safeEncrypt({
     }
     safeSentry.captureException(e as Error, { tags: { operation } });
     return {
-      error: createErrorResponse('Failed to encrypt data', 500, operation),
+      error: createErrorResponse(
+        API_CONFIG.ERROR_MESSAGES.ENCRYPTION_FAILED,
+        API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
+        operation
+      ),
     };
   }
 }
@@ -97,7 +105,11 @@ export function safeDecrypt({
     }
     safeSentry.captureException(e as Error, { tags: { operation } });
     return {
-      error: createErrorResponse('Failed to decrypt data', 500, operation),
+      error: createErrorResponse(
+        API_CONFIG.ERROR_MESSAGES.DECRYPTION_FAILED,
+        API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
+        operation
+      ),
     };
   }
 }

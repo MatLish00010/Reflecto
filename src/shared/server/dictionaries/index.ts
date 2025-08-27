@@ -1,5 +1,5 @@
 import 'server-only';
-import { SUPPORTED_LOCALES } from '@/shared/common/lib/language-detector';
+import { APP_CONSTANTS } from '@/shared/common/config';
 
 const dictionaries = {
   en: () => import('./en.json').then(module => module.default),
@@ -16,7 +16,9 @@ const dictionaries = {
 
 export const getDictionary = async (locale: string) => {
   if (
-    SUPPORTED_LOCALES.includes(locale as (typeof SUPPORTED_LOCALES)[number])
+    APP_CONSTANTS.SUPPORTED_LOCALES.includes(
+      locale as (typeof APP_CONSTANTS.SUPPORTED_LOCALES)[number]
+    )
   ) {
     const dictionary = dictionaries[locale as keyof typeof dictionaries];
     if (dictionary) {

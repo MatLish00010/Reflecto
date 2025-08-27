@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { createDateBasedEntityKeys } from '@/shared/client/lib/query-keys';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
 export const dailySummaryKeys = createDateBasedEntityKeys('daily-summary');
@@ -27,9 +28,12 @@ export function useDailySummaryByDateRange(from?: string, to?: string) {
         params.append('to', to);
       }
 
-      const res = await fetch(`/api/daily-summary?${params.toString()}`, {
-        method: 'GET',
-      });
+      const res = await fetch(
+        `${API_CONFIG.ENDPOINTS.DAILY_SUMMARY}?${params.toString()}`,
+        {
+          method: 'GET',
+        }
+      );
       if (!res.ok) {
         const error = new Error('Failed to fetch summary');
         safeSentry.captureException(error, {
@@ -58,7 +62,9 @@ export function useTodayAISummary() {
         });
         throw error;
       }
-      const res = await fetch('/api/daily-summary', { method: 'GET' });
+      const res = await fetch(API_CONFIG.ENDPOINTS.DAILY_SUMMARY, {
+        method: 'GET',
+      });
       if (!res.ok) {
         const error = new Error('Failed to fetch summary');
         safeSentry.captureException(error, {
@@ -89,9 +95,12 @@ export function useDailySummary(from: string, to: string) {
       params.append('from', from);
       params.append('to', to);
 
-      const res = await fetch(`/api/daily-summary?${params.toString()}`, {
-        method: 'GET',
-      });
+      const res = await fetch(
+        `${API_CONFIG.ENDPOINTS.DAILY_SUMMARY}?${params.toString()}`,
+        {
+          method: 'GET',
+        }
+      );
       if (!res.ok) {
         const error = new Error('Failed to fetch daily summary');
         safeSentry.captureException(error, {
@@ -127,9 +136,12 @@ export function useDailySummaries(from?: string, to?: string) {
         params.append('to', to);
       }
 
-      const res = await fetch(`/api/daily-summaries?${params.toString()}`, {
-        method: 'GET',
-      });
+      const res = await fetch(
+        `${API_CONFIG.ENDPOINTS.DAILY_SUMMARIES}?${params.toString()}`,
+        {
+          method: 'GET',
+        }
+      );
       if (!res.ok) {
         const error = new Error('Failed to fetch daily summaries');
         safeSentry.captureException(error, {

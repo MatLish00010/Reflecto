@@ -11,8 +11,8 @@ import {
   withRateLimit,
   withValidation,
 } from '@/shared/common/lib/api';
+import { getAISummaryPrompt } from '@/shared/common/lib/prompts';
 import type { AISummaryData } from '@/shared/common/types';
-import { getAISummaryPrompt, type Locale } from '../../../../prompts';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(
