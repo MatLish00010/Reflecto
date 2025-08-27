@@ -6,5 +6,4 @@ export * from './language-detector';
 export * from './prompts';
 export * from './sentry';
 export * from './sentry-error-config';
-export * from './supabase';
 export * from './utils';

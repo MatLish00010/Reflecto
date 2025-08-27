@@ -8,21 +8,6 @@ export * from './shared';
 
 // Stats submodule
 export * from './stats';
-// Types
-export type {
-  ActivityDataPoint,
-  AnalyticsData,
-  ComparativeStats,
-  ContentAnalysisData,
-  DailySummary,
-  EmotionalData,
-  Note,
-  ProductivityStats,
-  SummaryStats,
-  TimeAnalysisDataPoint,
-  WeeklyActivityDataPoint,
-  WeeklySummary,
-} from './types/analytics';
 
 // UI components (remaining)
 export { AnalyticsEmptyState } from './ui/analytics-empty-state';

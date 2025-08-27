@@ -1,4 +1,3 @@
-import type { Span } from '@sentry/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { decryptField, encryptField } from '@/shared/common/lib/crypto-field';
 import { getCurrentDateUTC } from '@/shared/common/lib/date-utils';
@@ -7,43 +6,13 @@ import type { Database } from '@/shared/common/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;
 
-export interface NotesServiceOptions {
-  span?: Span;
-  operation?: string;
-}
-
-export interface Note {
-  id: number;
-  note: string | null;
-  user_id: string | null;
-  created_at: string;
-}
-
-export interface CreateNoteParams {
-  note: string;
-  userId: string;
-  options?: NotesServiceOptions;
-}
-
-export interface UpdateNoteParams {
-  noteId: number;
-  note: string;
-  userId: string;
-  options?: NotesServiceOptions;
-}
-
-export interface DeleteNoteParams {
-  noteId: number;
-  userId: string;
-  options?: NotesServiceOptions;
-}
-
-export interface FetchNotesParams {
-  userId: string;
-  from?: string;
-  to?: string;
-  options?: NotesServiceOptions;
-}
+import type {
+  CreateNoteParams,
+  DeleteNoteParams,
+  FetchNotesParams,
+  Note,
+  UpdateNoteParams,
+} from '@/shared/common/types';
 
 export class NotesService {
   constructor(private supabase: SupabaseClientType) {}

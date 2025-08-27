@@ -2,27 +2,9 @@ import type { Span } from '@sentry/types';
 import type { NextRequest } from 'next/server';
 import { ENV } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
+import type { RateLimitConfig, RateLimitStore } from '@/shared/common/types';
 import { createErrorResponse } from '../utils/response-helpers';
 import { ServiceFactory } from '../utils/service-factory';
-
-export interface RateLimitConfig {
-  windowMs: number; // Time window in milliseconds
-  maxRequests: number; // Maximum requests per window
-  keyGenerator?: (request: NextRequest) => string; // Custom key generator
-  skipSuccessfulRequests?: boolean; // Skip rate limiting for successful requests
-  skipFailedRequests?: boolean; // Skip rate limiting for failed requests
-}
-
-export interface RateLimitStore {
-  increment(
-    key: string,
-    windowMs: number
-  ): Promise<{ count: number; resetTime: number }>;
-  get(
-    key: string,
-    windowMs: number
-  ): Promise<{ count: number; resetTime: number } | undefined>;
-}
 
 // Redis-based rate limit store using RedisService
 class RedisRateLimitStore implements RateLimitStore {

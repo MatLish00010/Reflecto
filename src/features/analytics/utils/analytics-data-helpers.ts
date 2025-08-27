@@ -5,6 +5,7 @@ import { startOfWeek } from 'date-fns/startOfWeek';
 import { subDays } from 'date-fns/subDays';
 import type {
   ActivityDataPoint,
+  AnalyticsNote,
   ComparativeStats,
   ContentAnalysisData,
   EmotionalData,
@@ -13,7 +14,7 @@ import type {
   SummaryStats,
   TimeAnalysisDataPoint,
   WeeklyActivityDataPoint,
-} from '../types/analytics';
+} from '@/shared/common/types';
 
 export function prepareActivityData(notes: Note[]): ActivityDataPoint[] {
   const activityMap = new Map<string, number>();
@@ -56,7 +57,7 @@ export function prepareWeeklyActivityData(
 }
 
 export function prepareContentAnalysisData(
-  notes: Note[],
+  notes: AnalyticsNote[],
   t: (key: string) => string
 ): ContentAnalysisData {
   const lengthDistribution = [
@@ -93,14 +94,20 @@ export function prepareContentAnalysisData(
     weekdayActivity[dayOfWeek === 0 ? 6 : dayOfWeek - 1]++;
   });
 
+  // Convert to objects with count property for the component
+  const weekdayActivityObjects = weekdayActivity.map((count, index) => ({
+    count,
+    date: index.toString(), // Using index as date for ActivityDataPoint compatibility
+  }));
+
   return {
     lengthDistribution,
-    weekdayActivity,
+    weekdayActivity: weekdayActivityObjects,
   };
 }
 
 export function prepareTimeAnalysisData(
-  notes: Note[]
+  notes: AnalyticsNote[]
 ): TimeAnalysisDataPoint[] {
   const hourMap = new Map<number, number>();
 
@@ -121,7 +128,7 @@ export function prepareTimeAnalysisData(
   return result;
 }
 
-export function prepareSummaryStats(notes: Note[]): SummaryStats {
+export function prepareSummaryStats(notes: AnalyticsNote[]): SummaryStats {
   const dayMap = new Map<string, number>();
   notes.forEach(note => {
     const date = format(parseISO(note.created_at), 'yyyy-MM-dd');
@@ -155,7 +162,9 @@ export function prepareSummaryStats(notes: Note[]): SummaryStats {
   };
 }
 
-export function prepareProductivityStats(notes: Note[]): ProductivityStats {
+export function prepareProductivityStats(
+  notes: AnalyticsNote[]
+): ProductivityStats {
   const daysWithEntries = new Set();
   notes.forEach(note => {
     const date = format(parseISO(note.created_at), 'yyyy-MM-dd');

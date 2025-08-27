@@ -1,19 +1,12 @@
-import type { Span } from '@sentry/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { decryptField, encryptField } from '@/shared/common/lib/crypto-field';
 import { safeSentry } from '@/shared/common/lib/sentry';
-import type {
-  AISummaryData,
-  WeeklySummaryWithMetadata,
-} from '@/shared/common/types';
+import type { AISummaryData, WeeklySummary } from '@/shared/common/types';
 import type { Database } from '@/shared/common/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;
 
-export interface WeeklySummaryServiceOptions {
-  span?: Span;
-  operation?: string;
-}
+import type { WeeklySummaryServiceOptions } from '@/shared/common/types';
 
 export class WeeklySummaryService {
   constructor(private supabase: SupabaseClientType) {}
@@ -77,7 +70,7 @@ export class WeeklySummaryService {
     from: string,
     to: string,
     options: WeeklySummaryServiceOptions = {}
-  ): Promise<WeeklySummaryWithMetadata[]> {
+  ): Promise<WeeklySummary[]> {
     const { span, operation = 'fetch_weekly_summaries' } = options;
 
     const { data, error } = await this.supabase
@@ -101,7 +94,7 @@ export class WeeklySummaryService {
       return [];
     }
 
-    const summaries: WeeklySummaryWithMetadata[] = [];
+    const summaries: WeeklySummary[] = [];
 
     for (const item of data) {
       const { value: decryptedSummary, error: decryptError } =
@@ -124,7 +117,7 @@ export class WeeklySummaryService {
       }
 
       // Add metadata to the decrypted summary
-      const summaryWithMetadata: WeeklySummaryWithMetadata = {
+      const summaryWithMetadata: WeeklySummary = {
         mainStory: decryptedSummary?.mainStory || '',
         keyEvents: decryptedSummary?.keyEvents || [],
         emotionalMoments: decryptedSummary?.emotionalMoments || [],
@@ -136,8 +129,8 @@ export class WeeklySummaryService {
         recommendations: decryptedSummary?.recommendations || [],
         conclusion: decryptedSummary?.conclusion || [],
         id: item.id,
-        created_at: item.created_at,
-        user_id: item.user_id,
+        created_at: item.created_at || '',
+        user_id: item.user_id || '',
         week_start_date: item.week_start_date,
         week_end_date: item.week_end_date,
       };

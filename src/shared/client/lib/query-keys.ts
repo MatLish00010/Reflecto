@@ -3,7 +3,7 @@
  * Provides common patterns for entity-based query keys
  */
 
-export type QueryKey = readonly unknown[];
+import type { QueryKey } from '@/shared/common/types';
 
 /**
  * Base entity keys factory

@@ -2,7 +2,6 @@ import type { NextRequest } from 'next/server';
 import {
   AI_SUMMARY_ARRAY_FIELDS,
   AI_SUMMARY_REQUIRED_FIELDS,
-  type ApiContext,
   formatNotesForPrompt,
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
@@ -12,7 +11,7 @@ import {
   withValidation,
 } from '@/shared/common/lib/api';
 import { getAISummaryPrompt } from '@/shared/common/lib/prompts';
-import type { AISummaryData } from '@/shared/common/types';
+import type { AISummaryData, ApiContext } from '@/shared/common/types';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

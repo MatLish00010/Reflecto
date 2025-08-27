@@ -5,19 +5,7 @@ import { useTranslation } from '@/shared/client/contexts/translation-context';
 import { APP_CONSTANTS } from '@/shared/common/config';
 import { getLocaleByLang } from '@/shared/common/lib/date-utils';
 
-export type DateFormatType =
-  | 'SHORT'
-  | 'LONG'
-  | 'FULL'
-  | 'TIME'
-  | 'DATETIME'
-  | 'WEEK'
-  | 'MONTH'
-  | 'YEAR'
-  | 'DAY'
-  | 'MONTH_SHORT';
-
-export type NumberFormatType = 'DEFAULT' | 'CURRENCY' | 'PERCENT' | 'FILE_SIZE';
+import type { DateFormatType, NumberFormatType } from '@/shared/common/types';
 
 const DATE_FORMAT_CONFIG: Record<DateFormatType, string> =
   APP_CONSTANTS.DATE_FORMATS;

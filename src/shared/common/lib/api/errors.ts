@@ -1,14 +1,8 @@
 import type { NextResponse } from 'next/server';
 import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
+import type { ApiErrorInterface } from '@/shared/common/types';
 import { createErrorResponse } from './utils/response-helpers';
-
-export interface ApiErrorInterface {
-  message: string;
-  status: number;
-  code?: string;
-  details?: Record<string, unknown>;
-}
 
 export class ApiError extends Error implements ApiErrorInterface {
   public status: number;

@@ -1,13 +1,13 @@
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
 import {
-  type ApiContext,
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
   withRateLimit,
   withValidation,
 } from '@/shared/common/lib/api';
 import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
+import type { ApiContext } from '@/shared/common/types';
 
 const createSubscriptionSchema = z.object({
   stripeCustomerId: z.string().min(1, 'Stripe customer ID is required'),

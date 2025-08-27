@@ -1,10 +1,11 @@
 import type { NextRequest } from 'next/server';
 import { safeSentry } from '@/shared/common/lib/sentry';
+import type { ApiContext, ApiHandlerOptions } from '@/shared/common/types';
 import {
   createErrorResponse,
   createSuccessResponse,
 } from '../utils/response-helpers';
-import { type ApiContext, type ApiHandlerOptions, withAuth } from './auth';
+import { withAuth } from './auth';
 
 export async function handleApiRequest<T>(
   request: NextRequest,

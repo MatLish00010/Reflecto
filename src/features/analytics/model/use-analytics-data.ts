@@ -4,7 +4,7 @@ import { useNotesByDate } from '@/entities/note';
 import { useWeeklySummaries } from '@/entities/weekly-summary';
 import { useTranslation } from '@/shared/client/contexts/translation-context';
 import { getAnalyticsDateRange } from '@/shared/common/lib/date-utils';
-import type { AnalyticsData } from '../types/analytics';
+import type { AnalyticsData, WeeklySummary } from '@/shared/common/types';
 import {
   prepareActivityData,
   prepareComparativeStats,
@@ -96,7 +96,7 @@ export function useAnalyticsData() {
     return {
       notes: notesArray,
       dailySummaries: dailySummariesArray,
-      weeklySummaries: weeklySummariesArray,
+      weeklySummaries: weeklySummariesArray as WeeklySummary[],
       activityData: prepareActivityData(notesArray),
       weeklyActivityData: prepareWeeklyActivityData(notesArray),
       contentAnalysisData: prepareContentAnalysisData(notesArray, t),

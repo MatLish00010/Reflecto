@@ -88,7 +88,6 @@ Examples:
 ✅ "You wrote that 'meetings were long and inefficient', which caused frustration"`,
 };
 
-export type PromptLocale = 'ru' | 'en';
 export function getAISummaryPrompt(): string {
   return aiSummaryPrompts.en;
   // const prompt = aiSummaryPrompts[locale] || aiSummaryPrompts.ru;
@@ -241,7 +240,7 @@ export const summaryLabels = {
   },
 } as const;
 
-export type SummaryLocale = keyof typeof summaryLabels;
+import type { SummaryLocale } from '@/shared/common/types';
 
 export function getSummaryLabels(
   locale: string

@@ -1,24 +1,7 @@
-import type { Span } from '@sentry/types';
 import type { NextRequest, NextResponse } from 'next/server';
+import type { ApiContext, ApiHandlerOptions } from '@/shared/common/types';
 import { requireAuth } from '@/shared/server/lib/auth';
 import { createServerClient } from '@/shared/server/lib/server';
-
-export interface ApiHandlerOptions {
-  requireAuthentication?: boolean;
-  operation: string;
-  span?: Span;
-}
-
-export interface AuthenticatedUser {
-  id: string;
-  email?: string;
-}
-
-export interface ApiContext {
-  user: AuthenticatedUser;
-  supabase: Awaited<ReturnType<typeof createServerClient>>;
-  span: Span;
-}
 
 export async function withAuth(
   _request: NextRequest,

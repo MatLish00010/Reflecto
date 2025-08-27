@@ -1,11 +1,11 @@
 import type { NextRequest } from 'next/server';
 import {
-  type ApiContext,
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
   withRateLimit,
 } from '@/shared/common/lib/api';
 import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
+import type { ApiContext } from '@/shared/common/types';
 
 export async function GET(request: NextRequest) {
   return withRateLimit(RATE_LIMIT_CONFIGS.standard)(handleApiRequest)(

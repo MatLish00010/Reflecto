@@ -1,4 +1,3 @@
-import type { Span } from '@sentry/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { decryptField, encryptField } from '@/shared/common/lib/crypto-field';
 import { safeSentry } from '@/shared/common/lib/sentry';
@@ -7,10 +6,7 @@ import type { Database } from '@/shared/common/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;
 
-export interface DailySummaryServiceOptions {
-  span?: Span;
-  operation?: string;
-}
+import type { DailySummaryServiceOptions } from '@/shared/common/types';
 
 export class DailySummaryService {
   constructor(private supabase: SupabaseClientType) {}

@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/client/ui/dropdown-menu';
 import { Textarea } from '@/shared/client/ui/textarea';
-import type { Note } from '@/shared/common/types/notes';
+import type { Note } from '@/shared/common/types';
 
 interface NoteActionsProps {
   note: Note;

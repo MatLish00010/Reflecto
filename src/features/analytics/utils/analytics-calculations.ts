@@ -1,7 +1,11 @@
-import type { AISummaryData } from '@/shared/common/types';
-import type { DailySummary, Note, WeeklySummary } from '../types/analytics';
+import type {
+  AISummaryData,
+  AnalyticsNote,
+  DailySummary,
+  WeeklySummary,
+} from '@/shared/common/types';
 
-export function calculateAverageNoteLength(notes: Note[]): number {
+export function calculateAverageNoteLength(notes: AnalyticsNote[]): number {
   if (!notes || notes.length === 0) {
     return 0;
   }
@@ -14,7 +18,7 @@ export function calculateAverageNoteLength(notes: Note[]): number {
   return Math.round(totalLength / notes.length);
 }
 
-export function calculateTotalCharacters(notes: Note[]): number {
+export function calculateTotalCharacters(notes: AnalyticsNote[]): number {
   return notes.reduce((acc, note) => acc + (note.note?.length || 0), 0);
 }
 
@@ -28,7 +32,7 @@ export function formatNumber(value: number): string {
   return value.toLocaleString();
 }
 
-export function calculateCompletionRate(notes: Note[]): number {
+export function calculateCompletionRate(notes: AnalyticsNote[]): number {
   if (!notes || notes.length === 0) {
     return 0;
   }

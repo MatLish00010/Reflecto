@@ -1,31 +1,12 @@
-import type { Span } from '@sentry/types';
 import { createClient, type RedisClientType } from 'redis';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
-export interface RedisServiceOptions {
-  span?: Span;
-  operation?: string;
-}
-
-export interface RateLimitData {
-  count: number;
-  resetTime: number;
-}
-
-export interface RedisMemoryInfo {
-  usedMemory: number;
-  peakMemory: number;
-  totalKeys: number;
-  rateLimitKeys: number;
-  estimatedCapacity: number;
-  memoryUsagePercent: number;
-}
-
-export interface RedisStats {
-  memory: RedisMemoryInfo;
-  rateLimitKeys: number;
-  isHealthy: boolean;
-}
+import type {
+  RateLimitData,
+  RedisMemoryInfo,
+  RedisServiceOptions,
+  RedisStats,
+} from '@/shared/common/types';
 
 export class RedisService {
   private client: RedisClientType | null = null;

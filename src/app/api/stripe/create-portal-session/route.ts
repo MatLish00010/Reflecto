@@ -2,13 +2,13 @@ import type { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { ENV } from '@/shared/common/config';
 import {
-  type ApiContext,
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
   withRateLimit,
   withValidation,
 } from '@/shared/common/lib/api';
 import { ServiceFactory } from '@/shared/common/lib/api/utils/service-factory';
+import type { ApiContext } from '@/shared/common/types';
 
 const YOUR_DOMAIN = ENV.APP_URL;
 

@@ -3,7 +3,7 @@ import { memo, useMemo } from 'react';
 import { useTranslation } from '@/shared/client/contexts/translation-context';
 import { AlignLeft, Medal, Percent, Zap } from '@/shared/client/icons';
 import { CARD_COLOR_SCHEMES } from '@/shared/client/ui/summary/color-schemes';
-import type { ProductivityStats } from '../types/analytics';
+import type { ProductivityStats } from '@/shared/common/types';
 import { AnalyticsStatCard } from './analytics-stat-card';
 
 interface AnalyticsProductivityCardsProps {

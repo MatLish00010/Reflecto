@@ -1,6 +1,18 @@
-import type { AISummaryData } from '@/shared/common/types';
+// Analytics Types
+export interface AISummaryData {
+  mainStory: string;
+  keyEvents: string[];
+  emotionalMoments: string[];
+  ideas: string[];
+  triggers: string[];
+  resources: string[];
+  progress: string[];
+  observations: string[];
+  recommendations: string[];
+  conclusion: string[];
+}
 
-export interface Note {
+export interface AnalyticsNote {
   id: number;
   note: string | null;
   created_at: string;
@@ -9,15 +21,16 @@ export interface Note {
 
 export interface DailySummary {
   id: string;
-  summary: string;
-  created_at: string | null;
+  content: string;
+  created_at: string;
   user_id: string;
+  date: string;
 }
 
 export interface WeeklySummary extends AISummaryData {
   id: string;
-  created_at: string | null;
-  user_id: string | null;
+  created_at: string;
+  user_id: string;
   week_start_date: string;
   week_end_date: string;
 }
@@ -40,7 +53,7 @@ export interface LengthDistributionItem {
 
 export interface ContentAnalysisData {
   lengthDistribution: LengthDistributionItem[];
-  weekdayActivity: number[];
+  weekdayActivity: ActivityDataPoint[];
 }
 
 export interface TimeAnalysisDataPoint {
@@ -78,15 +91,15 @@ export interface ComparativeStats {
 }
 
 export interface AnalyticsData {
-  notes: Note[];
+  notes: AnalyticsNote[];
   dailySummaries: DailySummary[];
-  weeklySummaries: AISummaryData[];
+  weeklySummaries: WeeklySummary[];
+  summaryStats: SummaryStats;
+  productivityStats: ProductivityStats;
   activityData: ActivityDataPoint[];
   weeklyActivityData: WeeklyActivityDataPoint[];
   contentAnalysisData: ContentAnalysisData;
   timeAnalysisData: TimeAnalysisDataPoint[];
-  summaryStats: SummaryStats;
-  productivityStats: ProductivityStats;
   emotionalData: EmotionalData;
   comparativeStats: ComparativeStats;
 }

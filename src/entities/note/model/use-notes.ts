@@ -4,7 +4,7 @@ import { createEntityKeys } from '@/shared/client/lib/query-keys';
 import { useAlertContext } from '@/shared/client/providers/alert-provider';
 import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
-import type { Note } from '@/shared/common/types/notes';
+import type { Note } from '@/shared/common/types';
 
 export const noteKeys = createEntityKeys('notes');
 

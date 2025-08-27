@@ -6,7 +6,7 @@ import { useFormatters } from '@/shared/client/hooks';
 import { ChevronDown, ChevronUp, Clock } from '@/shared/client/icons';
 import { Button } from '@/shared/client/ui/button';
 import { Card, CardContent, CardHeader } from '@/shared/client/ui/card';
-import type { Note } from '@/shared/common/types/notes';
+import type { Note } from '@/shared/common/types';
 import { NoteActions } from './note-actions';
 
 interface NoteItemProps {

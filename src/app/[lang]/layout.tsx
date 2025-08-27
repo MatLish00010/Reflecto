@@ -101,8 +101,8 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
         {/* Performance optimizations */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
 
         {/* Preload critical CSS */}
         <link rel="preload" href="/globals.css" as="style" />

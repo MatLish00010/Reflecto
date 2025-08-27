@@ -2,7 +2,7 @@ import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 import { APP_CONSTANTS } from '@/shared/common/config';
 
-export type SupportedLocale = (typeof APP_CONSTANTS.SUPPORTED_LOCALES)[number];
+import type { SupportedLocale } from '@/shared/common/types';
 
 export function detectUserLanguage(request: Request): SupportedLocale {
   const negotiatorHeaders: Record<string, string> = {};

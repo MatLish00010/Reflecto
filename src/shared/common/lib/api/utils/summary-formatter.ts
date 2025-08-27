@@ -1,23 +1,8 @@
-import type { AISummaryData } from '@/shared/common/types';
-
-export interface SummaryLabels {
-  day: string;
-  mainStory: string;
-  keyEvents: string;
-  emotionalMoments: string;
-  ideas: string;
-  triggers: string;
-  resources: string;
-  progress: string;
-  observations: string;
-  recommendations: string;
-}
-
-export interface SummaryField {
-  key: keyof AISummaryData;
-  label: string;
-  isArray: boolean;
-}
+import type {
+  AISummaryData,
+  SummaryField,
+  SummaryLabels,
+} from '@/shared/common/types';
 
 const SUMMARY_FIELDS: SummaryField[] = [
   { key: 'mainStory', label: 'mainStory', isArray: false },
