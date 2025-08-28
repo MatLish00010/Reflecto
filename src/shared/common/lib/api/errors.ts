@@ -1,13 +1,8 @@
 import type { NextResponse } from 'next/server';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
+import type { ApiErrorInterface } from '@/shared/common/types';
 import { createErrorResponse } from './utils/response-helpers';
-
-export interface ApiErrorInterface {
-  message: string;
-  status: number;
-  code?: string;
-  details?: Record<string, unknown>;
-}
 
 export class ApiError extends Error implements ApiErrorInterface {
   public status: number;
@@ -59,8 +54,8 @@ export function handleApiError(
 
     if (errorMessage.includes('quota exceeded')) {
       return createErrorResponse(
-        'OpenAI quota exceeded. Please try again later or upgrade your plan.',
-        429,
+        API_CONFIG.ERROR_MESSAGES.OPENAI_QUOTA_EXCEEDED,
+        API_CONFIG.STATUS_CODES.TOO_MANY_REQUESTS,
         operation
       );
     }
@@ -82,7 +77,11 @@ export function handleApiError(
     }
 
     if (errorMessage.includes('Invalid OpenAI API key')) {
-      return createErrorResponse('Invalid OpenAI API key', 401, operation);
+      return createErrorResponse(
+        API_CONFIG.ERROR_MESSAGES.OPENAI_INVALID_KEY,
+        API_CONFIG.STATUS_CODES.UNAUTHORIZED,
+        operation
+      );
     }
 
     if (errorMessage.includes('rate limit exceeded')) {
@@ -98,7 +97,11 @@ export function handleApiError(
       tags: { operation },
     });
 
-    return createErrorResponse('Internal server error', 500, operation);
+    return createErrorResponse(
+      API_CONFIG.ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
+      operation
+    );
   }
 
   // Fallback for unknown errors
@@ -107,38 +110,94 @@ export function handleApiError(
     extra: { originalError: error },
   });
 
-  return createErrorResponse('Internal server error', 500, operation);
+  return createErrorResponse(
+    API_CONFIG.ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+    API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
+    operation
+  );
 }
 
 // Common error creators
 export const Errors = {
   BadRequest: (message: string, details?: Record<string, unknown>) =>
-    createApiError(message, 400, 'BAD_REQUEST', details),
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.BAD_REQUEST,
+      'BAD_REQUEST',
+      details
+    ),
 
-  Unauthorized: (message = 'Unauthorized', details?: Record<string, unknown>) =>
-    createApiError(message, 401, 'UNAUTHORIZED', details),
+  Unauthorized: (
+    message = API_CONFIG.ERROR_MESSAGES.UNAUTHORIZED,
+    details?: Record<string, unknown>
+  ) =>
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.UNAUTHORIZED,
+      'UNAUTHORIZED',
+      details
+    ),
 
-  Forbidden: (message = 'Forbidden', details?: Record<string, unknown>) =>
-    createApiError(message, 403, 'FORBIDDEN', details),
+  Forbidden: (
+    message = API_CONFIG.ERROR_MESSAGES.FORBIDDEN,
+    details?: Record<string, unknown>
+  ) =>
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.FORBIDDEN,
+      'FORBIDDEN',
+      details
+    ),
 
-  NotFound: (message = 'Not found', details?: Record<string, unknown>) =>
-    createApiError(message, 404, 'NOT_FOUND', details),
+  NotFound: (
+    message = API_CONFIG.ERROR_MESSAGES.NOT_FOUND,
+    details?: Record<string, unknown>
+  ) =>
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.NOT_FOUND,
+      'NOT_FOUND',
+      details
+    ),
 
   Conflict: (message: string, details?: Record<string, unknown>) =>
-    createApiError(message, 409, 'CONFLICT', details),
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.CONFLICT,
+      'CONFLICT',
+      details
+    ),
 
   TooManyRequests: (
-    message = 'Too many requests',
+    message = API_CONFIG.ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
     details?: Record<string, unknown>
-  ) => createApiError(message, 429, 'TOO_MANY_REQUESTS', details),
+  ) =>
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.TOO_MANY_REQUESTS,
+      'TOO_MANY_REQUESTS',
+      details
+    ),
 
   InternalServerError: (
-    message = 'Internal server error',
+    message = API_CONFIG.ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
     details?: Record<string, unknown>
-  ) => createApiError(message, 500, 'INTERNAL_SERVER_ERROR', details),
+  ) =>
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.INTERNAL_SERVER_ERROR,
+      'INTERNAL_SERVER_ERROR',
+      details
+    ),
 
   ServiceUnavailable: (
-    message = 'Service unavailable',
+    message = API_CONFIG.ERROR_MESSAGES.SERVICE_UNAVAILABLE,
     details?: Record<string, unknown>
-  ) => createApiError(message, 503, 'SERVICE_UNAVAILABLE', details),
+  ) =>
+    createApiError(
+      message,
+      API_CONFIG.STATUS_CODES.SERVICE_UNAVAILABLE,
+      'SERVICE_UNAVAILABLE',
+      details
+    ),
 };

@@ -11,7 +11,6 @@ export {
   BookOpen,
   Brain,
   // Custom icons
-  BrainIcon,
   Bug,
   CalendarIcon,
   CheckCircle,

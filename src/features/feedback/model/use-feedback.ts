@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { feedbackKeys } from '@/entities/feedback';
 import { useUser } from '@/entities/user';
 import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 import type { CreateFeedbackRequest, Feedback } from '@/shared/common/types';
 
@@ -20,7 +21,7 @@ export function useCreateFeedback() {
         throw error;
       }
 
-      const response = await fetch('/api/feedback', {
+      const response = await fetch(API_CONFIG.ENDPOINTS.FEEDBACK, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

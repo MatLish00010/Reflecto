@@ -1,12 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { type ApiContext, Errors } from '@/shared/common/lib/api';
-
-export type ApiHandler<T = unknown> = (
-  context: ApiContext,
-  request: NextRequest,
-  validatedData?: T
-) => Promise<Response | Record<string, unknown>>;
+import { Errors } from '@/shared/common/lib/api';
+import type { ApiContext } from '@/shared/common/types';
 
 export function withValidation<T extends z.ZodType>(
   schema: T,

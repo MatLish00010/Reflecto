@@ -6,6 +6,7 @@ import { noteKeys } from '@/entities/note';
 import { userKeys } from '@/entities/user';
 import { createBrowserClient } from '@/shared/client/lib/client';
 import { useAlertContext } from '@/shared/client/providers/alert-provider';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
 interface SignInRequest {
@@ -258,7 +259,7 @@ export function useSignInWithGoogle() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}${API_CONFIG.ENDPOINTS.AUTH.CALLBACK}`,
         },
       });
 

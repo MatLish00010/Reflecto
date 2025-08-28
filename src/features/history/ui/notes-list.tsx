@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from '@/shared/client/contexts/translation-context';
-import type { Note } from '@/shared/common/types/notes';
+import type { Note } from '@/shared/common/types';
 import { NoteItem } from './note-item';
 import { ShowMoreButton } from './show-more-button';
 

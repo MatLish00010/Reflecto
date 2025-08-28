@@ -1,3 +1,4 @@
 import type { Tables } from './supabase';
 
-export type Note = Tables<'notes'>;
+// Re-export Supabase Note type
+export type SupabaseNote = Tables<'notes'>;

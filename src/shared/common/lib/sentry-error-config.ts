@@ -3,17 +3,7 @@
  * This file contains all error patterns that should be ignored or filtered
  */
 
-export interface ErrorFilterConfig {
-  message: string | RegExp;
-  reason: string;
-  tags?: Record<string, string>;
-}
-
-export interface ErrorCategory {
-  name: string;
-  description: string;
-  filters: ErrorFilterConfig[];
-}
+import type { ErrorCategory, ErrorFilterConfig } from '@/shared/common/types';
 
 // Auth-related errors that are expected for non-authenticated users
 export const AUTH_ERRORS: ErrorCategory = {

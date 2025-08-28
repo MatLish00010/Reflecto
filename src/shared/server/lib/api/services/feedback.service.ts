@@ -1,39 +1,14 @@
-import type { Span } from '@sentry/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { safeSentry } from '@/shared/common/lib/sentry';
 import type { Database } from '@/shared/common/types/supabase';
 
 type SupabaseClientType = SupabaseClient<Database>;
 
-export interface FeedbackServiceOptions {
-  span?: Span;
-  operation?: string;
-}
-
-export interface Feedback {
-  id: string;
-  user_id: string | null;
-  type: string;
-  title: string;
-  description: string;
-  created_at: string | null;
-  updated_at: string | null;
-  priority: string | null;
-  status: string | null;
-}
-
-export interface CreateFeedbackParams {
-  userId: string;
-  type: 'bug' | 'feature' | 'improvement';
-  title: string;
-  description: string;
-  options?: FeedbackServiceOptions;
-}
-
-export interface FetchFeedbackParams {
-  userId: string;
-  options?: FeedbackServiceOptions;
-}
+import type {
+  CreateFeedbackParams,
+  Feedback,
+  FetchFeedbackParams,
+} from '@/shared/common/types';
 
 export class FeedbackService {
   constructor(private supabase: SupabaseClientType) {}

@@ -1,5 +1,5 @@
-import type { Span } from '@sentry/types';
 import OpenAI from 'openai';
+import { ENV } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
 // Extended types for GPT-5 API
@@ -43,40 +43,17 @@ type OpenAIClientWithGPT5 = OpenAI & {
   };
 };
 
-export interface OpenAIMessage {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
-
-export interface OpenAIServiceOptions {
-  span?: Span;
-  operation?: string;
-}
-
-export interface CallOpenAIParams {
-  messages: string;
-  prompt: string;
-  options?: OpenAIServiceOptions;
-}
-
-export interface CallOpenAIAndParseJSONParams {
-  messages: string;
-  prompt: string;
-  options?: OpenAIServiceOptions;
-}
-
-export interface ValidateAISummaryStructureParams {
-  summary: Record<string, unknown>;
-  requiredFields: string[];
-  arrayFields: string[];
-  options?: OpenAIServiceOptions;
-}
+import type {
+  CallOpenAIAndParseJSONParams,
+  CallOpenAIParams,
+  ValidateAISummaryStructureParams,
+} from '@/shared/common/types';
 
 export class OpenAIService {
   private openai: OpenAIClientWithGPT5;
 
   constructor() {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = ENV.OPENAI_API_KEY;
     if (!apiKey) {
       throw new Error('OpenAI API key is not configured');
     }

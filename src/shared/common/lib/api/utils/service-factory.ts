@@ -1,4 +1,4 @@
-import type { ApiContext } from '@/shared/common/lib/api';
+import type { ApiContext } from '@/shared/common/types';
 import {
   DailySummaryService,
   FeedbackService,

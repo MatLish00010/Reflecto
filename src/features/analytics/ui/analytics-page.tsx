@@ -9,15 +9,15 @@ import { useAnalyticsData } from '../model/use-analytics-data';
 import {
   AnalyticsCardSkeleton,
   AnalyticsChartSkeleton,
-} from './analytics-card-skeleton';
-import { AnalyticsDataLoadingSkeleton } from './analytics-data-loading-skeleton';
+} from '../shared/analytics-card-skeleton';
+import { AnalyticsDataLoadingSkeleton } from '../shared/analytics-data-loading-skeleton';
 import { AnalyticsEmptyState } from './analytics-empty-state';
 import { AnalyticsErrorState } from './analytics-error-state';
 import { AnalyticsHeader } from './analytics-header';
 
 const AnalyticsCharts = dynamic(
   () =>
-    import('./analytics-charts').then(mod => ({
+    import('../charts/analytics-charts').then(mod => ({
       default: mod.AnalyticsCharts,
     })),
   {
@@ -28,7 +28,7 @@ const AnalyticsCharts = dynamic(
 
 const AnalyticsStatsCards = dynamic(
   () =>
-    import('./analytics-stats-cards').then(mod => ({
+    import('../stats/analytics-stats-cards').then(mod => ({
       default: mod.AnalyticsStatsCards,
     })),
   {
@@ -44,7 +44,7 @@ const AnalyticsStatsCards = dynamic(
 
 const AnalyticsProductivityCards = dynamic(
   () =>
-    import('./analytics-productivity-cards').then(mod => ({
+    import('../stats/analytics-productivity-cards').then(mod => ({
       default: mod.AnalyticsProductivityCards,
     })),
   {

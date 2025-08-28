@@ -1,31 +1,20 @@
-import type { Span } from '@sentry/types';
 import Stripe from 'stripe';
+import { ENV } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
-export interface StripeServiceOptions {
-  span?: Span;
-  operation?: string;
-}
-
-export interface StripeProductsResult {
-  products: Stripe.Product[];
-  prices: Stripe.Price[];
-}
-
-export interface StripeCheckoutSessionResult {
-  url: string | null;
-}
-
-export interface StripePortalSessionResult {
-  url: string | null;
-}
+import type {
+  StripeCheckoutSessionResult,
+  StripePortalSessionResult,
+  StripeProductsResult,
+  StripeServiceOptions,
+} from '@/shared/common/types';
 
 export class StripeService {
   private stripe: Stripe | null = null;
 
   private getStripe(): Stripe {
     if (!this.stripe) {
-      const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+      const stripeSecretKey = ENV.STRIPE_SECRET_KEY;
       if (!stripeSecretKey) {
         throw new Error('STRIPE_SECRET_KEY environment variable is not set');
       }

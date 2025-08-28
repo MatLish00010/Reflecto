@@ -65,7 +65,7 @@ const TabsWithURL = React.forwardRef<
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const urlValue = searchParams.get(urlParam);
+  const urlValue = searchParams?.get(urlParam);
   const initialValue = urlValue || defaultValue || '';
 
   const [internalValue, setInternalValue] = React.useState(initialValue);
@@ -82,7 +82,7 @@ const TabsWithURL = React.forwardRef<
         onValueChange(newValue);
       }
 
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString() || '');
       params.set(urlParam, newValue);
       const newUrl = `${window.location.pathname}?${params.toString()}`;
       router.replace(newUrl, { scroll: false });

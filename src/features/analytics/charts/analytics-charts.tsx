@@ -59,7 +59,7 @@ import type {
   EmotionalData,
   TimeAnalysisDataPoint,
   WeeklyActivityDataPoint,
-} from '../types/analytics';
+} from '@/shared/common/types';
 
 interface AnalyticsChartsProps {
   activityData: ActivityDataPoint[];
@@ -196,18 +196,26 @@ export function AnalyticsCharts({
                       {day}
                     </div>
                   ))}
-                  {contentAnalysisData.weekdayActivity.map((count, index) => (
-                    <div
-                      key={`weekday-${index}`}
-                      className="h-8 rounded flex items-center justify-center text-xs"
-                      style={{
-                        backgroundColor: `rgba(0, 136, 254, ${Math.min(count / 10, 1)})`,
-                        color: count > 5 ? 'white' : 'inherit',
-                      }}
-                    >
-                      {count}
-                    </div>
-                  ))}
+                  {contentAnalysisData.weekdayActivity.map((item, index) => {
+                    const maxCount = Math.max(
+                      ...contentAnalysisData.weekdayActivity.map(i => i.count),
+                      1
+                    );
+                    const opacity =
+                      maxCount > 0 ? Math.min(item.count / maxCount, 1) : 0.1;
+                    return (
+                      <div
+                        key={`weekday-${index}`}
+                        className="h-8 rounded flex items-center justify-center text-xs"
+                        style={{
+                          backgroundColor: `rgba(0, 136, 254, ${opacity})`,
+                          color: opacity > 0.5 ? 'white' : 'inherit',
+                        }}
+                      >
+                        {item.count}
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -220,52 +228,61 @@ export function AnalyticsCharts({
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
-                  <PieChart>
-                    <Pie
-                      data={contentAnalysisData.lengthDistribution.filter(
-                        entry => entry.value > 0
-                      )}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ percent, x, y, cx, cy }) => {
-                        const radius = 150;
-                        const angle = Math.atan2(y - cy, x - cx);
-                        const labelX = cx + radius * 0.7 * Math.cos(angle);
-                        const labelY = cy + radius * 0.7 * Math.sin(angle);
+                <div className="relative">
+                  <ResponsiveContainer width="100%" height={400}>
+                    <PieChart>
+                      <Pie
+                        data={contentAnalysisData.lengthDistribution.filter(
+                          entry => entry.value > 0
+                        )}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ percent, x, y, cx, cy }) => {
+                          const radius = 150;
+                          const angle = Math.atan2(y - cy, x - cx);
+                          const labelX = cx + radius * 0.7 * Math.cos(angle);
+                          const labelY = cy + radius * 0.7 * Math.sin(angle);
 
-                        return (
-                          <text
-                            x={labelX}
-                            y={labelY}
-                            fill="white"
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                            fontSize={12}
-                            fontWeight="bold"
-                          >
-                            {`${((percent || 0) * 100).toFixed(0)}%`}
-                          </text>
-                        );
-                      }}
-                      outerRadius={150}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {contentAnalysisData.lengthDistribution
-                        .filter(entry => entry.value > 0)
-                        .map((entry, index) => (
-                          <Cell
-                            key={`cell-${entry.name}`}
-                            fill={COLORS[index % COLORS.length]}
-                          />
-                        ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
+                          return (
+                            <text
+                              x={labelX}
+                              y={labelY}
+                              fill="white"
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                              fontSize={12}
+                              fontWeight="bold"
+                            >
+                              {`${((percent || 0) * 100).toFixed(0)}%`}
+                            </text>
+                          );
+                        }}
+                        outerRadius={150}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {contentAnalysisData.lengthDistribution
+                          .filter(entry => entry.value > 0)
+                          .map((entry, index) => (
+                            <Cell
+                              key={`cell-${entry.name}`}
+                              fill={COLORS[index % COLORS.length]}
+                            />
+                          ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  {contentAnalysisData.lengthDistribution.filter(
+                    entry => entry.value > 0
+                  ).length === 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+                      {t('analytics.noDataAvailable')}
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

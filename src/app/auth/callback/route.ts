@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import {
-  type ApiContext,
   handleApiRequest,
   RATE_LIMIT_CONFIGS,
   withRateLimit,
 } from '@/shared/common/lib/api';
 import { detectUserLanguage } from '@/shared/common/lib/language-detector';
 import { safeSentry } from '@/shared/common/lib/sentry';
+import type { ApiContext } from '@/shared/common/types';
 import { createClient } from '@/shared/server/lib/supabase/server';
 
 export async function GET(request: NextRequest) {

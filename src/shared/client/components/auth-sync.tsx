@@ -2,7 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { userKeys } from '@/entities/user/model/use-user';
+import { userKeys } from '@/entities/user/model/user-keys';
 import { syncAuthSession } from '@/shared/client/lib/auth-sync';
 
 export function AuthSync() {

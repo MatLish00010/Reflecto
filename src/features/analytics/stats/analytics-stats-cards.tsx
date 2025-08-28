@@ -3,13 +3,17 @@ import { Calculator, CalendarRange, FileCheck, StickyNote } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from '@/shared/client/contexts/translation-context';
 import { CARD_COLOR_SCHEMES } from '@/shared/client/ui/summary/color-schemes';
-import type { AISummaryData } from '@/shared/common/types';
-import type { DailySummary, Note, SummaryStats } from '../types/analytics';
+import type {
+  AISummaryData,
+  AnalyticsNote,
+  DailySummary,
+  SummaryStats,
+} from '@/shared/common/types';
 import { getSummariesCount } from '../utils/analytics-calculations';
 import { AnalyticsStatCard } from './analytics-stat-card';
 
 interface AnalyticsStatsCardsProps {
-  notes: Note[];
+  notes: AnalyticsNote[];
   dailySummaries: DailySummary[];
   weeklySummaries: AISummaryData[];
   summaryStats: SummaryStats;

@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import { AnalyticsPageSkeleton } from '@/features/analytics/ui/analytics-page-skeleton';
+import { AnalyticsPageSkeleton } from '@/features/analytics/shared/analytics-page-skeleton';
 
 // Dynamic import for analytics with streaming
 const AnalyticsPage = dynamic(() =>

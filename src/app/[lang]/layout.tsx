@@ -11,7 +11,7 @@ import { UserProvider } from '@/shared/client/contexts/user-context';
 import { AlertProvider } from '@/shared/client/providers/alert-provider';
 import { QueryProvider } from '@/shared/client/providers/query-provider';
 import { ThemeProvider } from '@/shared/client/providers/theme-provider';
-import { SUPPORTED_LOCALES } from '@/shared/common/lib/language-detector';
+import { APP_CONSTANTS } from '@/shared/common/config';
 import { getDictionary } from '@/shared/server/dictionaries';
 import { getServerUser } from '@/shared/server/lib/server-auth';
 import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
@@ -47,7 +47,7 @@ const OnboardingGuide = dynamic(
 );
 
 export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map(lang => ({ lang }));
+  return APP_CONSTANTS.SUPPORTED_LOCALES.map(lang => ({ lang }));
 }
 
 export async function generateMetadata({
@@ -101,8 +101,8 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
         {/* Performance optimizations */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
 
         {/* Preload critical CSS */}
         <link rel="preload" href="/globals.css" as="style" />

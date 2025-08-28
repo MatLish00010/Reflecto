@@ -1,30 +1,18 @@
-import type { Span } from '@sentry/types';
 import OpenAI from 'openai';
+import { ENV } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
-export interface SpeechToTextServiceOptions {
-  span?: Span;
-  operation?: string;
-}
-
-export interface TranscriptionResult {
-  text: string;
-  confidence: number;
-  promptUsed?: boolean;
-}
-
-export interface TranscribeAudioParams {
-  audioFile: File;
-  prompt?: string;
-  options?: SpeechToTextServiceOptions;
-}
+import type {
+  TranscribeAudioParams,
+  TranscriptionResult,
+} from '@/shared/common/types';
 
 export class SpeechToTextService {
   private openai: OpenAI;
 
   constructor() {
     this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: ENV.OPENAI_API_KEY,
     });
   }
 

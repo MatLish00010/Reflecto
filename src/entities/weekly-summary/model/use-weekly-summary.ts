@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useUser } from '@/entities/user';
 import { createDateBasedEntityKeys } from '@/shared/client/lib/query-keys';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 import type { AISummaryData } from '@/shared/common/types';
 
@@ -20,7 +21,9 @@ export function useWeeklySummary(from: string, to: string) {
       params.append('from', from);
       params.append('to', to);
 
-      const response = await fetch(`/api/weekly-summary?${params.toString()}`);
+      const response = await fetch(
+        `${API_CONFIG.ENDPOINTS.WEEKLY_SUMMARY}?${params.toString()}`
+      );
 
       if (!response.ok) {
         const error = new Error('Failed to fetch weekly summary');
@@ -54,7 +57,7 @@ export function useWeeklySummaries(from: string, to: string) {
       params.append('to', to);
 
       const response = await fetch(
-        `/api/weekly-summaries?${params.toString()}`
+        `${API_CONFIG.ENDPOINTS.WEEKLY_SUMMARIES}?${params.toString()}`
       );
 
       if (!response.ok) {

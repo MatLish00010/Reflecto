@@ -1,23 +1,8 @@
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
+import { APP_CONSTANTS } from '@/shared/common/config';
 
-export const SUPPORTED_LOCALES = [
-  'en',
-  'ru',
-  'de',
-  'fr',
-  'es',
-  'it',
-  'pt',
-  'ja',
-  'ko',
-  'zh',
-] as const;
-
-export const supportedLocales = SUPPORTED_LOCALES;
-export const DEFAULT_LOCALE = 'ru';
-
-export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+import type { SupportedLocale } from '@/shared/common/types';
 
 export function detectUserLanguage(request: Request): SupportedLocale {
   const negotiatorHeaders: Record<string, string> = {};
@@ -27,13 +12,19 @@ export function detectUserLanguage(request: Request): SupportedLocale {
 
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
 
-  const detectedLocale = match(languages, supportedLocales, DEFAULT_LOCALE);
+  const detectedLocale = match(
+    languages,
+    APP_CONSTANTS.SUPPORTED_LOCALES,
+    APP_CONSTANTS.DEFAULT_LOCALE
+  );
 
-  return supportedLocales.includes(detectedLocale as SupportedLocale)
+  return APP_CONSTANTS.SUPPORTED_LOCALES.includes(
+    detectedLocale as SupportedLocale
+  )
     ? (detectedLocale as SupportedLocale)
-    : DEFAULT_LOCALE;
+    : APP_CONSTANTS.DEFAULT_LOCALE;
 }
 
 export function isLocaleSupported(locale: string): locale is SupportedLocale {
-  return supportedLocales.includes(locale as SupportedLocale);
+  return APP_CONSTANTS.SUPPORTED_LOCALES.includes(locale as SupportedLocale);
 }

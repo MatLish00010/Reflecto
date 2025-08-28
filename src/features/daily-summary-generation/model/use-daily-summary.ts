@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { dailySummaryKeys } from '@/entities/daily-summary';
 import { useUser } from '@/entities/user';
 import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { API_CONFIG } from '@/shared/common/config';
 import { safeSentry } from '@/shared/common/lib/sentry';
 
 export function useCreateSummary() {
@@ -26,7 +27,7 @@ export function useCreateSummary() {
         });
         throw error;
       }
-      const res = await fetch('/api/daily-summary', {
+      const res = await fetch(API_CONFIG.ENDPOINTS.DAILY_SUMMARY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes, locale: lang, from, to }),

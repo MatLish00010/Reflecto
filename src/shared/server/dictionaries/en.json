@@ -170,7 +170,8 @@
     "errorTitle": "Error Loading Analytics",
     "errorMessage": "Failed to load analytics data. Please try again later.",
     "emptyStateTitle": "No Analytics Data",
-    "emptyStateMessage": "Create some entries to see your analytics and insights."
+    "emptyStateMessage": "Create some entries to see your analytics and insights.",
+    "noDataAvailable": "No data available"
   },
   "navigation": {
     "home": "Home",

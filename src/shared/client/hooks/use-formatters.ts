@@ -2,34 +2,13 @@ import { format } from 'date-fns/format';
 import { parseISO } from 'date-fns/parseISO';
 import { useMemo } from 'react';
 import { useTranslation } from '@/shared/client/contexts/translation-context';
+import { APP_CONSTANTS } from '@/shared/common/config';
 import { getLocaleByLang } from '@/shared/common/lib/date-utils';
 
-export type DateFormatType =
-  | 'SHORT'
-  | 'LONG'
-  | 'FULL'
-  | 'TIME'
-  | 'DATETIME'
-  | 'WEEK'
-  | 'MONTH'
-  | 'YEAR'
-  | 'DAY'
-  | 'MONTH_SHORT';
+import type { DateFormatType, NumberFormatType } from '@/shared/common/types';
 
-export type NumberFormatType = 'DEFAULT' | 'CURRENCY' | 'PERCENT' | 'FILE_SIZE';
-
-const DATE_FORMAT_CONFIG: Record<DateFormatType, string> = {
-  SHORT: 'dd.MM',
-  LONG: 'dd MMMM yyyy',
-  FULL: 'PPP',
-  TIME: 'HH:mm',
-  DATETIME: 'dd.MM HH:mm',
-  WEEK: 'MMM d',
-  MONTH: 'MMMM yyyy',
-  YEAR: 'yyyy',
-  DAY: 'd',
-  MONTH_SHORT: 'MMM',
-};
+const DATE_FORMAT_CONFIG: Record<DateFormatType, string> =
+  APP_CONSTANTS.DATE_FORMATS;
 
 const NUMBER_FORMAT_CONFIG: Record<NumberFormatType, Intl.NumberFormatOptions> =
   {
