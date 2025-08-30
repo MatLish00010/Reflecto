@@ -19,16 +19,18 @@ export function Navigation() {
             pathname === `/${currentLocale}`);
 
         return (
-          <Link key={item.href} href={item.href}>
-            <Button
-              variant={isActive ? 'default' : 'outline'}
-              size="sm"
-              className="flex items-center gap-2"
-            >
+          <Button
+            key={item.href}
+            asChild
+            variant={isActive ? 'default' : 'outline'}
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <Link href={item.href}>
               <Icon className="h-4 w-4" />
               <span className="hidden sm:inline">{item.label}</span>
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         );
       })}
     </nav>

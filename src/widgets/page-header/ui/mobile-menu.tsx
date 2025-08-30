@@ -162,15 +162,16 @@ export function MobileMenu() {
                             duration: 0.2,
                           }}
                         >
-                          <Link href={item.href} onClick={handleItemClick}>
-                            <Button
-                              variant={isActive ? 'default' : 'outline'}
-                              className="w-full justify-start"
-                            >
+                          <Button
+                            asChild
+                            variant={isActive ? 'default' : 'outline'}
+                            className="w-full justify-start"
+                          >
+                            <Link href={item.href} onClick={handleItemClick}>
                               <Icon className="h-4 w-4 mr-3" />
                               {item.label}
-                            </Button>
-                          </Link>
+                            </Link>
+                          </Button>
                         </motion.div>
                       );
                     })}

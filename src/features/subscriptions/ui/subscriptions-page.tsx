@@ -20,8 +20,6 @@ export const SubscriptionsPage: React.FC = () => {
 
   const { subscription, isAuthenticated } = useUser();
 
-  console.log('subscription11:', subscription);
-
   const {
     products,
     loadingProducts,

@@ -86,11 +86,11 @@ export function HomeContent() {
             <CardTitle className="text-sm md:text-base font-normal">
               {t('home.recentNotes')}
             </CardTitle>
-            <Link href={`/${currentLocale}/history`}>
-              <Button variant="outline" size="sm">
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/${currentLocale}/history`}>
                 {t('home.viewAll')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
