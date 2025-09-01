@@ -15,7 +15,11 @@ import { APP_CONSTANTS } from '@/shared/common/config';
 import { getDictionary } from '@/shared/server/dictionaries';
 import { getServerUser } from '@/shared/server/lib/server-auth';
 import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
-import { PageHeader } from '@/widgets/page-header';
+import {
+  MobileMenuPortal,
+  MobileMenuProvider,
+  PageHeader,
+} from '@/widgets/page-header';
 
 import '../globals.css';
 
@@ -127,14 +131,19 @@ export default async function RootLayout({
                     >
                       <QueryErrorHandler />
                       <AuthSync />
-                      <div className="min-h-screen bg-background dark:bg-background p-4">
-                        <div className="max-w-4xl mx-auto">
-                          <PageHeader />
-                          <OnboardingGuide />
-                          {children}
+                      <MobileMenuProvider>
+                        <div className="min-h-screen bg-background dark:bg-background">
+                          <div className="">
+                            <PageHeader />
+                            <OnboardingGuide />
+                            <main className="mx-auto max-w-4xl pr-4 pl-4 pb-4 md:p-0 ">
+                              {children}
+                            </main>
+                          </div>
                         </div>
-                      </div>
-                      <AuthModalWrapper />
+                        <MobileMenuPortal />
+                        <AuthModalWrapper />
+                      </MobileMenuProvider>
                     </UserProvider>
                   </AuthModalProvider>
                 </AlertProvider>

@@ -1,6 +1,10 @@
 export { useNavigation } from './model/use-navigation';
 export { LogoutButton } from './ui/logout-button';
-export { MobileMenu } from './ui/mobile-menu';
+export {
+  MobileMenuButton,
+  MobileMenuPortal,
+  MobileMenuProvider,
+} from './ui/mobile-menu';
 export { MobileUserInfo } from './ui/mobile-user-info';
 export { Navigation } from './ui/navigation';
 export { PageHeader } from './ui/page-header';
