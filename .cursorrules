@@ -133,3 +133,7 @@ logger.fatal("Database connection pool exhausted", {
 Text content
 
 1. use useTransaltion hook for get t() and lang if need
+
+# Git Commits
+
+Commit messages should contain a brief description of changes made. Use clear, concise language that explains what was modified, added, or removed.

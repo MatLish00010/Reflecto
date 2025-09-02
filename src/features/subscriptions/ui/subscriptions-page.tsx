@@ -84,22 +84,20 @@ export const SubscriptionsPage: React.FC = () => {
   };
 
   return (
-    <div className=" bg-white">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
-            <Crown className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            {t('subscriptions.title')}
-          </h1>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            {t('subscriptions.description')}
-          </p>
+    <div className="py-4">
+      <div className="text-center mb-8">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+          <Crown className="w-8 h-8 text-white" />
         </div>
-
-        {renderContent()}
+        <h1 className="text-2xl font-bold text-foreground mb-2">
+          {t('subscriptions.title')}
+        </h1>
+        <p className="text-muted-foreground text-sm leading-relaxed">
+          {t('subscriptions.description')}
+        </p>
       </div>
+
+      {renderContent()}
     </div>
   );
 };

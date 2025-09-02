@@ -125,19 +125,19 @@ const PriceInfo: React.FC<{ price: Stripe.Price; savings: number | null }> = ({
 
   return (
     <div className="text-right lg:text-center">
-      <div className="text-2xl lg:text-3xl font-bold text-gray-900 lg:mb-1">
+      <div className="text-2xl lg:text-3xl font-bold text-foreground lg:mb-1">
         {formatPrice(price.unit_amount || 0)}
-        <span className="text-sm font-normal text-gray-600 lg:hidden">
+        <span className="text-sm font-normal text-muted-foreground lg:hidden">
           {' '}
           /{formatInterval(t, intervalCount)}
         </span>
       </div>
-      <div className="text-sm text-gray-600 lg:mb-2 lg:block hidden">
+      <div className="text-sm text-muted-foreground lg:mb-2 lg:block hidden">
         {formatInterval(t, intervalCount)}
       </div>
       {savings && (
         <div className="mt-1 lg:mt-0">
-          <Badge className="bg-green-100 text-green-800 text-xs pointer-events-none">
+          <Badge className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs pointer-events-none">
             {t('subscriptions.save_20').replace('$%s', formatPrice(savings))}
           </Badge>
         </div>
@@ -188,8 +188,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <Card
         className={`relative overflow-hidden h-full flex flex-col ${
           isPopular
-            ? 'bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200'
-            : 'bg-white'
+            ? 'bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 border-2 border-purple-200 dark:border-purple-700'
+            : 'bg-card'
         }`}
       >
         <CardContent className="p-4 flex flex-col flex-1">
@@ -197,7 +197,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="flex items-center gap-3 lg:flex-col lg:gap-0 lg:mb-3">
               <div className="lg:mb-3">{getPlanIcon({ intervalCount })}</div>
               <div>
-                <h3 className="font-bold text-gray-900 lg:text-lg">
+                <h3 className="font-bold text-foreground lg:text-lg">
                   {getPlanName(t, intervalCount)}
                 </h3>
               </div>
