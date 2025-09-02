@@ -51,7 +51,7 @@ export function AnalyticsStatsCards({
         subtitle: t('analytics.generated'),
         icon: CalendarRange,
         description: t('analytics.weeklySummariesDescription'),
-        color: CARD_COLOR_SCHEMES.progress.color,
+        color: CARD_COLOR_SCHEMES.recommendations.color,
       },
       {
         title: t('analytics.avgEntriesPerDay'),
