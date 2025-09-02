@@ -15,6 +15,7 @@ import { APP_CONSTANTS } from '@/shared/common/config';
 import { getDictionary } from '@/shared/server/dictionaries';
 import { getServerUser } from '@/shared/server/lib/server-auth';
 import { AuthModalWrapper } from '@/widgets/auth-modal-wrapper';
+import { MobileBottomBar } from '@/widgets/mobile-bottom-bar';
 import {
   MobileMenuPortal,
   MobileMenuProvider,
@@ -136,11 +137,12 @@ export default async function RootLayout({
                           <div className="">
                             <PageHeader />
                             <OnboardingGuide />
-                            <main className="mx-auto max-w-4xl pr-4 pl-4 pb-4 md:p-0 ">
+                            <main className="mx-auto max-w-4xl pr-4 pl-4 pb-20 md:p-0 md:pb-4">
                               {children}
                             </main>
                           </div>
                         </div>
+                        <MobileBottomBar />
                         <MobileMenuPortal />
                         <AuthModalWrapper />
                       </MobileMenuProvider>
