@@ -49,15 +49,12 @@
     "mainStory": "Основной сюжет дня",
     "keyEvents": "Ключевые события",
     "emotionalMoments": "Эмоциональные моменты",
-    "observations": "Мои наблюдения",
     "recommendations": "Рекомендации",
     "keyThemes": "Ключевые темы",
     "ideas": "Идеи",
 
     "triggers": "Триггеры",
     "stressLevel": "Уровень стресса",
-    "resources": "Ресурсы и сильные стороны",
-    "progress": "Прогресс и изменения",
 
     "conclusion": "Вывод",
     "fetchError": "Ошибка генерации summary",

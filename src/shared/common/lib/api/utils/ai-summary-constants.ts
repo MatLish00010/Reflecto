@@ -4,9 +4,6 @@ export const AI_SUMMARY_REQUIRED_FIELDS = [
   'emotionalMoments',
   'ideas',
   'triggers',
-  'resources',
-  'progress',
-  'observations',
   'recommendations',
 ];
 
@@ -15,8 +12,5 @@ export const AI_SUMMARY_ARRAY_FIELDS = [
   'emotionalMoments',
   'ideas',
   'triggers',
-  'resources',
-  'progress',
-  'observations',
   'recommendations',
 ];

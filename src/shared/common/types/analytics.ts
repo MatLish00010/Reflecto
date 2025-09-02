@@ -5,9 +5,6 @@ export interface AISummaryData {
   emotionalMoments: string[];
   ideas: string[];
   triggers: string[];
-  resources: string[];
-  progress: string[];
-  observations: string[];
   recommendations: string[];
   conclusion: string[];
 }

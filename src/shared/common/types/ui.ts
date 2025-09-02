@@ -43,9 +43,6 @@ export interface SummaryLabels {
   emotionalMoments: string;
   ideas: string;
   triggers: string;
-  resources: string;
-  progress: string;
-  observations: string;
   recommendations: string;
 }
 

@@ -10,9 +10,6 @@ const SUMMARY_FIELDS: SummaryField[] = [
   { key: 'emotionalMoments', label: 'emotionalMoments', isArray: true },
   { key: 'ideas', label: 'ideas', isArray: true },
   { key: 'triggers', label: 'triggers', isArray: true },
-  { key: 'resources', label: 'resources', isArray: true },
-  { key: 'progress', label: 'progress', isArray: true },
-  { key: 'observations', label: 'observations', isArray: true },
   { key: 'recommendations', label: 'recommendations', isArray: true },
 ];
 

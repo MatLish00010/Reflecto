@@ -24,7 +24,7 @@ export const AnalyticsProductivityCards = memo(
           subtitle: t('analytics.daysWithEntries'),
           icon: Percent,
           description: t('analytics.completionRateDescription'),
-          ...CARD_COLOR_SCHEMES.resources,
+          ...CARD_COLOR_SCHEMES.keyEvents,
         },
         {
           title: t('analytics.currentStreak'),
@@ -32,7 +32,7 @@ export const AnalyticsProductivityCards = memo(
           subtitle: t('analytics.daysInRow'),
           icon: Zap,
           description: t('analytics.currentStreakDescription'),
-          ...CARD_COLOR_SCHEMES.progress,
+          ...CARD_COLOR_SCHEMES.ideas,
         },
         {
           title: t('analytics.longestStreak'),
@@ -48,7 +48,7 @@ export const AnalyticsProductivityCards = memo(
           subtitle: t('analytics.characters'),
           icon: AlignLeft,
           description: t('analytics.longestNoteDescription'),
-          ...CARD_COLOR_SCHEMES.observations,
+          ...CARD_COLOR_SCHEMES.triggers,
         },
       ],
       [productivityStats, t]

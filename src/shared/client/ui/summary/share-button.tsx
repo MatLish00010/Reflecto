@@ -38,12 +38,6 @@ export function ShareButton({ summary }: ShareButtonProps) {
       );
     }
 
-    if (summary.observations && summary.observations.length > 0) {
-      parts.push(
-        `\n💡 ${t('aiAnalysis.observations')}:\n${summary.observations.map(obs => `• ${obs}`).join('\n')}`
-      );
-    }
-
     if (summary.recommendations && summary.recommendations.length > 0) {
       parts.push(
         `\n🎯 ${t('aiAnalysis.recommendations')}:\n${summary.recommendations.map(rec => `• ${rec}`).join('\n')}`
@@ -53,18 +47,6 @@ export function ShareButton({ summary }: ShareButtonProps) {
     if (summary.triggers && summary.triggers.length > 0) {
       parts.push(
         `\n⚡ ${t('aiAnalysis.triggers')}:\n${summary.triggers.map(trigger => `• ${trigger}`).join('\n')}`
-      );
-    }
-
-    if (summary.resources && summary.resources.length > 0) {
-      parts.push(
-        `\n🛡️ ${t('aiAnalysis.resources')}:\n${summary.resources.map(resource => `• ${resource}`).join('\n')}`
-      );
-    }
-
-    if (summary.progress && summary.progress.length > 0) {
-      parts.push(
-        `\n📈 ${t('aiAnalysis.progress')}:\n${summary.progress.map(prog => `• ${prog}`).join('\n')}`
       );
     }
 

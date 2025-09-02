@@ -49,15 +49,12 @@
     "mainStory": "Main Story of the Day",
     "keyEvents": "Key Events",
     "emotionalMoments": "Emotional Moments",
-    "observations": "My Observations",
     "recommendations": "Recommendations",
     "keyThemes": "Key Themes",
     "ideas": "Ideas",
 
     "triggers": "Triggers",
     "stressLevel": "Stress Level",
-    "resources": "Resources & Strengths",
-    "progress": "Progress & Changes",
 
     "conclusion": "Conclusion",
     "fetchError": "Error generating summary",

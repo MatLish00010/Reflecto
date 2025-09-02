@@ -77,30 +77,6 @@ export function SummaryContent({ summary }: SummaryContentProps) {
             color={CARD_COLOR_SCHEMES.emotionalMoments.color}
           />
         )}
-        {summary.observations && summary.observations.length > 0 && (
-          <SummaryCard
-            icon={Star}
-            titleKey="aiAnalysis.observations"
-            content={summary.observations}
-            color={CARD_COLOR_SCHEMES.observations.color}
-          />
-        )}
-        {summary.progress && summary.progress.length > 0 && (
-          <SummaryCard
-            icon={TrendingUp}
-            titleKey="aiAnalysis.progress"
-            content={summary.progress}
-            color={CARD_COLOR_SCHEMES.progress.color}
-          />
-        )}
-        {summary.resources && summary.resources.length > 0 && (
-          <SummaryCard
-            icon={Shield}
-            titleKey="aiAnalysis.resources"
-            content={summary.resources}
-            color={CARD_COLOR_SCHEMES.resources.color}
-          />
-        )}
       </div>
 
       <div className="flex justify-center">

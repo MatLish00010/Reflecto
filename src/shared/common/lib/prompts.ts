@@ -16,6 +16,8 @@ export const aiSummaryPrompts = {
 
 • Проверяй записи на ошибки и исправляй их — как орфографические, так и формулировки — чтобы текст звучал естественно и понятно.
 
+• Перепроверяй текст на корректность перевода, грамматику и стилистику. Убедись, что все предложения логичны и хорошо читаются.
+
 Структура анализа:
 
 1. Что произошло — опиши главные события, эмоции, идеи, повторяющиеся темы, паттерны, триггеры.
@@ -33,9 +35,6 @@ export const aiSummaryPrompts = {
 • emotionalMoments (массив строк) — эмоциональные моменты с контекстом
 • ideas (массив строк) — идеи из записей
 • triggers (массив строк) — эмоциональные триггеры
-• resources (массив строк) — сильные стороны и поддержка
-• progress (массив строк) — прогресс и позитивные изменения
-• observations (массив строк) — фактические наблюдения
 • recommendations (массив строк) — практические советы
 • conclusion (массив строк) — финальный поддерживающий анализ
 
@@ -60,13 +59,15 @@ Rules:
 
 • Check the entries for errors and correct them — both spelling and phrasing — so the text sounds natural and clear.
 
+• Double-check the text for translation accuracy, grammar, and style. Ensure all sentences are logical and well-readable.
+
 Analysis structure:
 
 1. What happened — describe main events, emotions, ideas, recurring themes, patterns, triggers.
 
 2. Deeper view — stress level, physical condition, communication, strengths, progress, context.
 
-3. What to do — observations, advice, practical steps or exercises.
+3. What to do — advice, practical steps or exercises.
 
 4. Conclusion — short, supportive analysis with clear connections between events. End with a motivating phrase.
 
@@ -77,9 +78,6 @@ JSON output format:
 • emotionalMoments (array of strings) — emotional moments with context
 • ideas (array of strings) — ideas from entries
 • triggers (array of strings) — emotional triggers
-• resources (array of strings) — strengths and supports
-• progress (array of strings) — progress and positive changes
-• observations (array of strings) — factual observations
 • recommendations (array of strings) — practical advice
 • conclusion (array of strings) — final supportive analysis
 
@@ -112,15 +110,15 @@ export const weeklySummaryPrompts = {
 
 • Избегай общих фраз ("ты часто...", "в целом..."). Используй точные ссылки ("в понедельник ты...", "к среде...").
 
+• Перепроверяй текст на корректность перевода, грамматику и стилистику. Убедись, что все предложения логичны и хорошо читаются.
+
 Структура анализа:
 
 1. Что произошло за неделю — объедини истории всех дней, выдели ключевые события по дням, отследи эмоции и повторяющиеся темы.
 
 2. Паттерны и тренды — мыслительные паттерны, реакции на стресс, эмоциональные триггеры (с датами), общение, физическое состояние.
 
-3. Ресурсы и прогресс — сильные стороны, позитивные изменения, успешные стратегии (по дням).
-
-4. Что делать — практические советы и шаги для улучшения.
+3. Что делать — практические советы и шаги для улучшения.
 
 Формат JSON ответа:
 
@@ -129,9 +127,6 @@ export const weeklySummaryPrompts = {
 • emotionalMoments (массив строк) — эмоциональные моменты с контекстом
 • ideas (массив строк) — идеи и проекты с днями развития
 • triggers (массив строк) — эмоциональные триггеры с конкретными событиями
-• resources (массив строк) — ресурсы и сильные стороны с примерами
-• progress (массив строк) — прогресс и изменения по дням
-• observations (массив строк) — профессиональные наблюдения с фактами
 • recommendations (массив строк) — рекомендации
 
 Примеры:
@@ -167,15 +162,15 @@ Rules:
 
 • Avoid general phrases ("you often…", "in general…"). Use exact references ("on Monday you…", "by Wednesday…").
 
+• Double-check the text for translation accuracy, grammar, and style. Ensure all sentences are logical and well-readable.
+
 Analysis structure:
 
 1. What happened this week — combine stories from all days, highlight key events by day, track emotions and recurring themes.
 
 2. Patterns and trends — thinking patterns, stress responses, emotional triggers (with dates), communication, physical condition.
 
-3. Resources and progress — strengths, positive changes, successful strategies (by day).
-
-4. What to do — practical advice and steps for improvement.
+3. What to do — practical advice and steps for improvement.
 
 JSON output format:
 
@@ -184,9 +179,6 @@ JSON output format:
 • emotionalMoments (array of strings) — emotional moments with context
 • ideas (array of strings) — ideas and projects with development days
 • triggers (array of strings) — emotional triggers with specific events
-• resources (array of strings) — resources and strengths with examples
-• progress (array of strings) — progress and changes by days
-• observations (array of strings) — professional observations with facts
 • recommendations (array of strings) — recommendations
 
 Examples:
@@ -219,9 +211,6 @@ export const summaryLabels = {
     emotionalMoments: 'Эмоциональные моменты',
     ideas: 'Идеи',
     triggers: 'Триггеры',
-    resources: 'Ресурсы',
-    progress: 'Прогресс',
-    observations: 'Наблюдения',
     recommendations: 'Рекомендации',
     thirdPersonPerspective: 'Мнение третьего лица',
   },
@@ -232,9 +221,6 @@ export const summaryLabels = {
     emotionalMoments: 'Emotional Moments',
     ideas: 'Ideas',
     triggers: 'Triggers',
-    resources: 'Resources',
-    progress: 'Progress',
-    observations: 'Observations',
     recommendations: 'Recommendations',
     thirdPersonPerspective: 'Third Person Perspective',
   },
