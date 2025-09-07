@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false,
+    "ignoreUnknown": true,
     "includes": ["**/*.{js,jsx,ts,tsx,json,css,md}"],
     "experimentalScannerIgnores": [
       "node_modules",
